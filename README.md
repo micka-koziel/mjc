@@ -51,6 +51,14 @@ Relancez ensuite `npm run dev` (ou `npm run build`). L'ancienne configuration es
 
 Après toute modification du contrat (`src/config/contract.mjs`) : `npm run questionnaire:build`. Un test échoue si le questionnaire n'embarque plus la version courante du contrat.
 
+## 3 bis. Démo partageable en un seul fichier
+
+```bash
+npm run build:share      # produit share/index.html (démo complète, données fictives)
+```
+
+Ce fichier unique peut être envoyé ou publié tel quel (navigation par ancre : `#mailbox`, `#todos`). La commande utilise les scripts `scripts/build-share.mjs` et `share-src/`.
+
 ## 4. Mode réel (Gmail + Firebase)
 
 > ⚠️ Ce mode a été écrit et relu, et ses fonctions serveur passent leurs tests unitaires. Il **n'a pas été exécuté** contre un vrai compte Gmail ni un vrai projet Firebase pendant la construction : l'environnement de construction n'avait pas accès à Google. Voir la section 7.

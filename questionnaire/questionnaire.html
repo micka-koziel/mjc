@@ -665,9 +665,9 @@ function brandCssVariables(cfg) {
         try {
           var cfg = JSON.parse(String(r.result));
           var res = validateConfig(cfg);
-          if (!res.valid) { alert('Fichier non reconnu :\n' + res.errors.join('\n')); return; }
+          if (!res.valid) { setSaved('Fichier non reconnu : ' + res.errors[0]); return; }
           state = cfg; step = STEPS.length - 1; save(); render();
-        } catch (e) { alert('Fichier illisible.'); }
+        } catch (e) { setSaved('Fichier illisible.'); }
       };
       r.readAsText(t.files[0]);
     }
@@ -705,8 +705,24 @@ function brandCssVariables(cfg) {
     var slug = (state.client.companyName || 'client').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     return 'khentik-config-' + slug + '.json';
   }
+  // Téléchargement : dans une page publiée sur claude.ai, le navigateur
+  // bloque les téléchargements directs ; on passe alors par la capacité
+  // « downloads » de la plateforme (le visiteur confirme). Fichier ouvert
+  // localement : téléchargement classique.
+  var platformDownloads = null;
+  if (window.claude && typeof window.claude.use === 'function') {
+    window.claude.use('downloads').then(function (d) { platformDownloads = d; }, function () {});
+  }
   function download() {
-    var blob = new Blob([JSON.stringify(exportable(), null, 2) + '\n'], { type: 'application/json' });
+    var text = JSON.stringify(exportable(), null, 2) + '\n';
+    if (platformDownloads) {
+      platformDownloads.save({ filename: fileName(), data: text }).then(
+        function () { setSaved('Fichier enregistré : ' + fileName()); },
+        function (e) { setSaved(e && e.code === 'declined' ? 'Téléchargement annulé.' : 'Téléchargement impossible ici : utilisez « Copier le contenu ».'); }
+      );
+      return;
+    }
+    var blob = new Blob([text], { type: 'application/json' });
     var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = fileName();
     document.body.appendChild(a); a.click(); a.remove(); setSaved('Fichier téléchargé : ' + fileName());
   }

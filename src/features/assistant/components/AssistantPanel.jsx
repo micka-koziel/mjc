@@ -9,6 +9,7 @@ import { computeThreadFolder } from '@/features/mailbox/lib/compute-folder';
 import { displayName } from '@/features/mailbox/lib/format-email';
 import { Button } from '@/shared/components/Button';
 import { Spinner } from '@/shared/components/Spinner';
+import { ConfirmButton } from '@/shared/components/ConfirmButton';
 
 /**
  * Assistant conversationnel de l'accueil, limité aux e-mails.
@@ -215,7 +216,6 @@ function SpamReview({ threads, onOpenThread }) {
   async function trashSelected() {
     const chosen = visible.filter((t) => selected.has(t.threadId));
     if (!chosen.length) return;
-    if (!window.confirm(`Mettre ${chosen.length} e-mail${chosen.length > 1 ? 's' : ''} à la corbeille ?`)) return;
     setBusy(true);
     let ok = 0;
     for (const t of chosen) {
@@ -260,9 +260,14 @@ function SpamReview({ threads, onOpenThread }) {
       </ul>
       {visible.length > 0 && (
         <div className="mt-2 flex items-center gap-2 px-1">
-          <Button size="sm" variant="danger" disabled={!selected.size || busy} isLoading={busy} onClick={trashSelected}>
-            Mettre à la corbeille ({selected.size})
-          </Button>
+          <ConfirmButton
+            onConfirm={trashSelected}
+            disabled={!selected.size || busy}
+            confirmLabel={`Confirmer : ${selected.size} à la corbeille`}
+            className="h-8 rounded-lg bg-danger px-3 text-sm font-medium text-danger-foreground disabled:opacity-50"
+          >
+            {busy ? 'Suppression…' : `Mettre à la corbeille (${selected.size})`}
+          </ConfirmButton>
           <button
             type="button"
             className="text-xs text-muted hover:underline"

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useNav } from '@/app-shell/nav';
 import { useApp } from '@/app-shell/AppProviders';
 import { FolderNav } from './FolderNav';
 import { ThreadList } from './ThreadList';
@@ -34,10 +34,7 @@ import { useToast } from '@/shared/hooks/useToast';
  */
 export function MailboxShell() {
   const { threads: liveThreads, messages: liveMessages, loading, error, service } = useApp();
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
-  const threadParam = searchParams?.get('thread') || null;
+  const { threadParam, openThread, clearThread } = useNav();
   const { showToast } = useToast();
   const { prefs, setFolder, setSearch, setThreadId, openThreadInFolder, hydrated } = useMailboxPrefs();
   const [showFolders, setShowFolders] = useState(false);
@@ -69,13 +66,17 @@ export function MailboxShell() {
   // Fil demandé par lien (?thread=), par exemple depuis l'Assistant IA.
   const consumedRef = useRef(null);
   useEffect(() => {
-    if (!hydrated || !threadParam || consumedRef.current === threadParam) return;
+    if (!threadParam) {
+      consumedRef.current = null;
+      return;
+    }
+    if (!hydrated || consumedRef.current === threadParam) return;
     const target = threads.find((t) => t.threadId === threadParam);
     if (!target) return;
     consumedRef.current = threadParam;
     openThreadInFolder(computeThreadFolder(target.messages), threadParam);
     markRead(target.messages);
-    router.replace(pathname, { scroll: false });
+    clearThread();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hydrated, threadParam, threads]);
 
@@ -147,7 +148,7 @@ export function MailboxShell() {
               )}
               <span className="ml-auto text-xs text-muted" aria-hidden="true">{showFolders ? '▴' : '▾'}</span>
             </button>
-            <SummaryPanel onOpenThread={(id) => router.push(`/mailbox?thread=${encodeURIComponent(id)}`)} />
+            <SummaryPanel onOpenThread={openThread} />
           </div>
           <input
             type="search"

@@ -1,4 +1,5 @@
 import './globals.css';
+import { Suspense } from 'react';
 import { AppProviders } from '@/app-shell/AppProviders';
 import { AppShell } from '@/app-shell/AppShell';
 import { brandConfig, brandVariables } from '@/features/brand/brand';
@@ -21,7 +22,10 @@ export default function RootLayout({ children }) {
     >
       <body>
         <AppProviders>
-          <AppShell>{children}</AppShell>
+          {/* Suspense : la navigation lit l'adresse (useSearchParams). */}
+          <Suspense fallback={null}>
+            <AppShell>{children}</AppShell>
+          </Suspense>
         </AppProviders>
       </body>
     </html>

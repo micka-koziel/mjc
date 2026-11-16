@@ -1,13 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { HASH_ROUTING, hrefFor, useNav } from './nav';
 import { useState } from 'react';
 import { useApp } from './AppProviders';
 import { BrandLogo } from '@/features/brand/BrandLogo';
 import { brandConfig } from '@/features/brand/brand';
 import { LoginScreen } from './LoginScreen';
 import { cn } from '@/shared/utils/cn';
+import { ConfirmButton } from '@/shared/components/ConfirmButton';
 
 /**
  * Coquille de l'application : barre latérale à EXACTEMENT trois entrées
@@ -15,9 +16,9 @@ import { cn } from '@/shared/utils/cn';
  * sans ses ~40 entrées CRM / recouvrement / système.
  */
 export const NAV = Object.freeze([
-  { label: 'Assistant IA', href: '/', icon: 'spark' },
-  { label: 'Mailbox', href: '/mailbox', icon: 'mail' },
-  { label: 'To-do', href: '/todos', icon: 'check' },
+  { label: 'Assistant IA', view: 'home', icon: 'spark' },
+  { label: 'Mailbox', view: 'mailbox', icon: 'mail' },
+  { label: 'To-do', view: 'todos', icon: 'check' },
 ]);
 
 const ICONS = {
@@ -46,7 +47,7 @@ function NavIcon({ name }) {
 
 export function AppShell({ children }) {
   const { user, mode, service } = useApp();
-  const pathname = usePathname();
+  const { view } = useNav();
   const [open, setOpen] = useState(false);
 
   if (user === undefined) {
@@ -54,24 +55,25 @@ export function AppShell({ children }) {
   }
   if (!user) return <LoginScreen />;
 
-  const isActive = (href) => (href === '/' ? pathname === '/' : pathname?.startsWith(href));
+  const isActive = (v) => v === view;
+  const NavLink = HASH_ROUTING ? 'a' : Link;
 
   const nav = (
     <nav aria-label="Navigation principale" className="flex flex-col gap-1">
       {NAV.map((item) => (
-        <Link
-          key={item.href}
-          href={item.href}
+        <NavLink
+          key={item.view}
+          href={hrefFor(item.view)}
           onClick={() => setOpen(false)}
-          aria-current={isActive(item.href) ? 'page' : undefined}
+          aria-current={isActive(item.view) ? 'page' : undefined}
           className={cn(
             'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-            isActive(item.href) ? 'bg-primary text-primary-foreground' : 'text-muted hover:bg-elevated hover:text-foreground'
+            isActive(item.view) ? 'bg-primary text-primary-foreground' : 'text-muted hover:bg-elevated hover:text-foreground'
           )}
         >
           <NavIcon name={item.icon} />
           {item.label}
-        </Link>
+        </NavLink>
       ))}
     </nav>
   );
@@ -82,15 +84,16 @@ export function AppShell({ children }) {
         <div className="rounded-lg border border-border bg-elevated px-2.5 py-2">
           <p className="font-semibold text-foreground">Mode démonstration</p>
           <p>Données fictives, rien n’est envoyé.</p>
-          <button
-            type="button"
-            onClick={() => {
-              if (window.confirm('Remettre la démonstration dans son état d’origine ?')) service.resetDemo();
-            }}
-            className="mt-1 font-semibold text-link hover:underline"
-          >
-            Réinitialiser la démo
-          </button>
+          <div className="mt-1">
+            <ConfirmButton
+              onConfirm={() => service.resetDemo()}
+              confirmLabel="Oui, réinitialiser"
+              confirmClassName="rounded-md bg-primary px-2 py-1 text-xs font-semibold text-primary-foreground"
+              className="font-semibold text-link hover:underline"
+            >
+              Réinitialiser la démo
+            </ConfirmButton>
+          </div>
         </div>
       )}
       {mode === 'firebase' && <MailboxConnection service={service} />}

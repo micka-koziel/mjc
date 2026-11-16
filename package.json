@@ -15,7 +15,8 @@
     "config:reset": "node scripts/config-cli.mjs reset",
     "questionnaire:build": "node scripts/build-questionnaire.mjs",
     "check:no-crm": "node scripts/check-no-crm.mjs",
-    "test:functions": "vitest run --config vitest.config.functions.mjs"
+    "test:functions": "vitest run --config vitest.config.functions.mjs",
+    "build:share": "SHARE_EXPORT=1 NEXT_PUBLIC_HASH_ROUTING=1 NEXT_PUBLIC_DATA_MODE=demo next build && node scripts/build-share.mjs"
   },
   "dependencies": {
     "firebase": "12.15.0",
@@ -29,6 +30,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "esbuild": "^0.25.12",
     "eslint": "^9",
     "eslint-config-next": "16.4.2",
     "eslint-config-prettier": "^10.1.8",

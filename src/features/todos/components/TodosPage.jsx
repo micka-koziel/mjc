@@ -1,10 +1,11 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import Link from 'next/link';
 import { useApp } from '@/app-shell/AppProviders';
+import { useNav } from '@/app-shell/nav';
 import { useToast } from '@/shared/hooks/useToast';
 import { Button } from '@/shared/components/Button';
+import { ConfirmButton } from '@/shared/components/ConfirmButton';
 import { formatDateShort } from '@/shared/utils/format-date';
 import { fold } from '@/shared/utils/text-fold';
 import { TODO_KINDS, TODO_RECURRENCES } from '../lib/todo-schema';
@@ -42,6 +43,7 @@ const EMPTY = { text: '', details: '', link_url: '', todo_kind: 'Ponctuel', due_
 
 export function TodosPage() {
   const { todos, todosLoading, service } = useApp();
+  const { openThread } = useNav();
   const { showToast } = useToast();
   const [search, setSearch] = useState('');
   const [editing, setEditing] = useState(null); // null | 'new' | todo
@@ -68,7 +70,6 @@ export function TodosPage() {
     await service.updateTodo(t.id, t.todo_kind === 'Récurrent' ? { last_done_occurrence: null } : { done: false });
   }
   async function remove(t) {
-    if (!window.confirm(`Supprimer « ${t.text} » ?`)) return;
     await service.deleteTodo(t.id);
     showToast({ message: 'Tâche supprimée.', variant: 'success' });
   }
@@ -143,9 +144,9 @@ export function TodosPage() {
                       </button>
                       {t.details && <p className="text-xs text-muted">{t.details}</p>}
                       {t.source_thread_id && (
-                        <Link href={`/mailbox?thread=${encodeURIComponent(t.source_thread_id)}`} className="text-xs font-semibold text-link hover:underline">
+                        <button type="button" onClick={() => openThread(t.source_thread_id)} className="text-left text-xs font-semibold text-link hover:underline">
                           E-mail lié : {t.source_subject || 'ouvrir'}
-                        </Link>
+                        </button>
                       )}
                       {t.link_url && (
                         <a href={t.link_url} target="_blank" rel="noreferrer" className="ml-2 text-xs text-link hover:underline">
@@ -174,7 +175,14 @@ export function TodosPage() {
                       ) : isDone ? (
                         <Button size="sm" variant="ghost" onClick={() => reopen(t)}>Rouvrir</Button>
                       ) : null}
-                      <Button size="sm" variant="ghost" onClick={() => remove(t)} aria-label={`Supprimer ${t.text}`}>🗑</Button>
+                      <ConfirmButton
+                        onConfirm={() => remove(t)}
+                        confirmLabel="Supprimer"
+                        ariaLabel={`Supprimer ${t.text}`}
+                        className="h-8 rounded-lg px-3 text-sm text-muted hover:bg-elevated hover:text-foreground"
+                      >
+                        🗑
+                      </ConfirmButton>
                     </td>
                   </tr>
                 );

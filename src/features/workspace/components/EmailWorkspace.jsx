@@ -244,10 +244,16 @@ function History({ messages }) {
 function CreateTodoButton({ message }) {
   const { service } = useApp();
   const { showToast } = useToast();
+  const [open, setOpen] = useState(false);
+  const [text, setText] = useState('');
   const [busy, setBusy] = useState(false);
-  async function create() {
-    const text = window.prompt('Tâche à créer :', message.analysis?.expectedAction || `Traiter : ${message.subject || ''}`);
-    if (!text || !text.trim()) return;
+  function start() {
+    setText(message.analysis?.expectedAction || `Traiter : ${message.subject || ''}`);
+    setOpen(true);
+  }
+  async function create(e) {
+    e.preventDefault();
+    if (!text.trim()) return;
     setBusy(true);
     try {
       await service.createTodo({
@@ -261,20 +267,40 @@ function CreateTodoButton({ message }) {
         source_subject: message.subject || '',
       });
       showToast({ message: 'Tâche créée (échéance aujourd’hui).', variant: 'success' });
+      setOpen(false);
     } catch (err) {
       showToast({ message: `Tâche non créée : ${err.message}`, variant: 'error' });
     } finally {
       setBusy(false);
     }
   }
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={start}
+        className="shrink-0 rounded-lg border border-border px-2.5 py-1.5 text-xs font-medium text-foreground hover:bg-elevated"
+      >
+        + Tâche
+      </button>
+    );
+  }
   return (
-    <button
-      type="button"
-      onClick={create}
-      disabled={busy}
-      className="shrink-0 rounded-lg border border-border px-2.5 py-1.5 text-xs font-medium text-foreground hover:bg-elevated disabled:opacity-50"
-    >
-      + Tâche
-    </button>
+    <form onSubmit={create} className="flex shrink-0 items-center gap-1.5">
+      <label htmlFor="new-task-text" className="sr-only">Tâche à créer</label>
+      <input
+        id="new-task-text"
+        autoFocus
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        className="h-8 w-56 rounded-lg border border-border bg-background px-2 text-xs text-foreground"
+      />
+      <button type="submit" disabled={busy} className="h-8 rounded-lg bg-primary px-2.5 text-xs font-semibold text-primary-foreground disabled:opacity-50">
+        Créer
+      </button>
+      <button type="button" onClick={() => setOpen(false)} className="h-8 px-1.5 text-xs text-muted hover:text-foreground">
+        Annuler
+      </button>
+    </form>
   );
 }
