@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Personnalisez votre messagerie — Quantique</title>
+<style>
+  :root {
+    --q: #4F46E5; --q-fg: #fff; --q-soft: #EEF0FF; --bg: #F6F7F9; --card: #fff; --fg: #111827;
+    --muted: #5B6474; --border: #E3E6EB; --danger: #BE123C; --ok: #047857;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 24px 16px 120px; }
+  header.top { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+  .mark { width: 36px; height: 36px; border-radius: 10px; background: var(--q); color: #fff; display: grid; place-items: center; font-weight: 700; }
+  header.top h1 { font-size: 18px; margin: 0; }
+  header.top p { margin: 0; color: var(--muted); font-size: 13px; }
+  .progress { height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  .progress > span { display: block; height: 100%; background: var(--q); transition: width .3s; }
+  .steps { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin: 8px 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 22px; }
+  h2 { margin: 0 0 4px; font-size: 22px; }
+  .lead { margin: 0 0 18px; color: var(--muted); }
+  label.f { display: block; font-weight: 600; font-size: 14px; margin: 14px 0 6px; }
+  .hint { font-size: 12px; color: var(--muted); font-weight: 400; }
+  input[type=text], input[type=url], textarea { width: 100%; font: inherit; font-size: 16px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; background: #fff; color: var(--fg); }
+  textarea { min-height: 84px; resize: vertical; }
+  input:focus, textarea:focus, button:focus-visible { outline: 2px solid var(--q); outline-offset: 2px; }
+  .err { color: var(--danger); font-size: 13px; margin-top: 6px; }
+  .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  .choice { border: 2px solid var(--border); border-radius: 14px; padding: 12px; background: #fff; cursor: pointer; text-align: left; font: inherit; color: var(--fg); }
+  .choice[aria-checked=true] { border-color: var(--q); background: var(--q-soft); }
+  .choice b { display: block; margin-bottom: 4px; }
+  .choice small { color: var(--muted); }
+  .swatch { width: 100%; height: 44px; border-radius: 10px; margin-bottom: 8px; border: 1px solid var(--border); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { border: 1px solid var(--border); border-radius: 99px; padding: 8px 12px; background: #fff; cursor: pointer; font: inherit; font-size: 14px; color: var(--fg); }
+  .chip[aria-pressed=true] { background: var(--q); color: var(--q-fg); border-color: var(--q); }
+  .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .colorbox { display: flex; gap: 8px; align-items: center; }
+  .colorbox input[type=color] { width: 48px; height: 44px; border: 1px solid var(--border); border-radius: 10px; padding: 2px; background: #fff; }
+  .colorbox input[type=text] { width: 130px; text-transform: uppercase; }
+  .logo-drop { border: 2px dashed var(--border); border-radius: 14px; padding: 14px; display: flex; gap: 14px; align-items: center; }
+  .logo-drop img { max-height: 48px; max-width: 160px; }
+  .logo-drop.dark { background: #171B23; color: #eee; }
+  .btn { font: inherit; font-weight: 600; border-radius: 10px; padding: 11px 18px; border: 1px solid var(--border); background: #fff; color: var(--fg); cursor: pointer; }
+  .btn.primary { background: var(--q); color: var(--q-fg); border-color: var(--q); }
+  .btn.small { padding: 6px 10px; font-size: 13px; }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+  nav.bar { position: fixed; left: 0; right: 0; bottom: 0; background: #fff; border-top: 1px solid var(--border); padding: 12px 16px; }
+  nav.bar .in { max-width: 760px; margin: 0 auto; display: flex; gap: 10px; justify-content: space-between; align-items: center; }
+  .saved { font-size: 12px; color: var(--muted); }
+  .notice { background: #FFF7ED; border: 1px solid #FED7AA; color: #7C2D12; border-radius: 12px; padding: 10px 12px; font-size: 14px; margin-bottom: 12px; }
+  .recap dl { display: grid; grid-template-columns: minmax(130px, 35%) 1fr; gap: 6px 12px; margin: 0; font-size: 14px; }
+  .recap dt { color: var(--muted); }
+  .recap section { border-top: 1px solid var(--border); padding: 14px 0; }
+  .recap h3 { display: flex; justify-content: space-between; align-items: center; margin: 0 0 8px; font-size: 15px; }
+  /* Aperçu miniature de l'application */
+  .preview { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; display: grid; grid-template-columns: 120px 1fr; min-height: 190px; font-size: 12px; }
+  .preview .side { padding: 10px; border-right: 1px solid var(--pb); background: var(--ps); }
+  .preview .nav { border-radius: 8px; padding: 6px 8px; margin-top: 6px; color: var(--pm); }
+  .preview .nav.on { background: var(--pp); color: var(--ppf); }
+  .preview .main { padding: 10px; background: var(--pbg); color: var(--pf); }
+  .preview .item { background: var(--ps); border: 1px solid var(--pb); border-radius: 8px; padding: var(--pd) 8px; margin-bottom: 6px; display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+  .preview .cta { background: var(--pp); color: var(--ppf); border-radius: 6px; padding: 3px 7px; white-space: nowrap; }
+  .preview .muted { color: var(--pm); }
+  .ok { color: var(--ok); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  @media (max-width: 560px) { .preview { grid-template-columns: 1fr; } .preview .side { display: none; } .recap dl { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="mark" aria-hidden="true">Q</div>
+    <div>
+      <h1>Personnalisez votre messagerie</h1>
+      <p>Quelques minutes · vos réponses restent sur cet appareil jusqu’à l’export</p>
+    </div>
+  </header>
+  <div class="progress" role="progressbar" aria-valuemin="1" aria-valuemax="8" id="progress" aria-label="Progression"><span id="bar"></span></div>
+  <div class="steps"><span id="stepLabel"></span><span id="stepCount"></span></div>
+  <main class="card" id="screen" tabindex="-1"></main>
+</div>
+<nav class="bar" aria-label="Navigation du questionnaire">
+  <div class="in">
+    <button class="btn" id="prev" type="button">← Précédent</button>
+    <span class="saved" id="saved" aria-live="polite"></span>
+    <button class="btn primary" id="next" type="button">Suivant →</button>
+  </div>
+</nav>
+
+<script>
+/* ===== Contrat de configuration (copié depuis src/config/contract.mjs par
+   scripts/build-questionnaire.mjs — NE PAS MODIFIER ICI) ===== */
+/* contract.mjs sha256:5589d18c8ae6 */
+/**
+ * Contrat de configuration Quantique — SOURCE UNIQUE.
+ *
+ * Ce fichier est utilisé tel quel par :
+ *  - l'application (src/features/brand) pour appliquer la marque ;
+ *  - le script agent `npm run config:apply` (scripts/config-cli.mjs) ;
+ *  - le questionnaire client : `npm run questionnaire:build` recopie ce
+ *    fichier dans questionnaire/questionnaire.html (bloc « contract »).
+ * Ne pas dupliquer ces règles ailleurs : modifier ici, puis reconstruire le
+ * questionnaire.
+ *
+ * Module PUR : aucune I/O, aucune dépendance (ni React, ni Node).
+ */
+
+const SCHEMA_VERSION = '1.0';
+
+/** Valeurs autorisées (clé technique → libellé affiché). */
+const ALLOWED = Object.freeze({
+  theme: { light: 'Clair', dark: 'Sombre', system: 'Selon l’appareil' },
+  font: { system: 'Moderne', humanist: 'Douce', serif: 'Classique' },
+  density: { comfortable: 'Aérée', compact: 'Compacte' },
+  textSize: { normal: 'Normale', large: 'Grande' },
+  tone: { cordial: 'Cordial', professional: 'Professionnel', direct: 'Direct' },
+  concision: { short: 'Court', balanced: 'Équilibré', detailed: 'Détaillé' },
+  language: { fr: 'Français', en: 'Anglais' },
+  emailTypes: {
+    customers: 'Demandes de clients',
+    orders: 'Commandes et livraisons',
+    suppliers: 'Fournisseurs',
+    quotes: 'Devis',
+    billing: 'Factures et paiements',
+    partners: 'Partenaires',
+    recruiting: 'Candidatures',
+    admin: 'Administration',
+    newsletters: 'Newsletters',
+    other: 'Autre',
+  },
+});
+
+/** Piles de polices réellement chargées (polices système, aucun téléchargement). */
+const FONT_STACKS = Object.freeze({
+  system: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+  humanist: '"Trebuchet MS", "Segoe UI", Candara, "Lucida Grande", Verdana, sans-serif',
+  serif: 'Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif',
+});
+
+/** Logo : formats et taille acceptés (la donnée est embarquée dans le JSON). */
+const LOGO_RULES = Object.freeze({
+  mimeTypes: ['image/png', 'image/jpeg', 'image/webp', 'image/svg+xml'],
+  maxBytes: 300 * 1024,
+});
+
+/**
+ * Proposition de marque Quantique — PROVISOIRE et remplaçable : la charte
+ * officielle de Quantique n'était pas disponible dans le dépôt Trendl.
+ */
+const QUANTIQUE_DEFAULT_COLORS = Object.freeze({ primary: '#4F46E5', accent: '#0EA5A4' });
+
+const DEFAULT_CONFIG = Object.freeze({
+  schemaVersion: SCHEMA_VERSION,
+  client: {
+    companyName: 'Quantique',
+    productName: 'Quantique Mail',
+    website: '',
+    isFictional: false,
+  },
+  brand: {
+    logo: { light: null, dark: null },
+    colors: { useQuantiqueDefaults: true, ...QUANTIQUE_DEFAULT_COLORS },
+  },
+  appearance: { theme: 'light', font: 'system', density: 'comfortable', textSize: 'normal' },
+  assistant: { name: 'Assistant', tone: 'cordial', concision: 'balanced', language: 'fr' },
+  context: {
+    applied: false,
+    activity: '',
+    emailTypes: [],
+    priorityExpectations: '',
+    importantSenders: '',
+    notes: '',
+  },
+  meta: { exportedAt: null, source: 'default' },
+});
+
+const HEX = /^#[0-9a-fA-F]{6}$/;
+const DATA_URL = /^data:(image\/(?:png|jpeg|webp|svg\+xml));base64,([A-Za-z0-9+/=]+)$/;
+
+function isObj(v) {
+  return v !== null && typeof v === 'object' && !Array.isArray(v);
+}
+
+function str(v) {
+  return typeof v === 'string' ? v.trim() : '';
+}
+
+/** Taille réelle (octets) d'un contenu base64. */
+function base64Bytes(b64) {
+  const s = String(b64 || '');
+  const pad = s.endsWith('==') ? 2 : s.endsWith('=') ? 1 : 0;
+  return Math.floor((s.length * 3) / 4) - pad;
+}
+
+function checkLogo(logo, path, errors) {
+  if (logo === null || logo === undefined) return;
+  if (!isObj(logo)) {
+    errors.push(`${path} : objet attendu ou null.`);
+    return;
+  }
+  const m = DATA_URL.exec(String(logo.dataUrl || ''));
+  if (!m) {
+    errors.push(
+      `${path}.dataUrl : image embarquée attendue (data:image/png|jpeg|webp|svg+xml;base64,…). ` +
+        'Un chemin de fichier ou une URL temporaire ne survit pas à l’export.'
+    );
+    return;
+  }
+  if (logo.mimeType && logo.mimeType !== m[1]) errors.push(`${path}.mimeType ne correspond pas au contenu.`);
+  if (base64Bytes(m[2]) > LOGO_RULES.maxBytes) {
+    errors.push(`${path} : ${Math.round(base64Bytes(m[2]) / 1024)} Ko, maximum ${LOGO_RULES.maxBytes / 1024} Ko.`);
+  }
+}
+
+function checkEnum(value, key, path, errors) {
+  if (!Object.prototype.hasOwnProperty.call(ALLOWED[key], value)) {
+    errors.push(`${path} : « ${value} » non autorisé (${Object.keys(ALLOWED[key]).join(', ')}).`);
+  }
+}
+
+/**
+ * Valide une configuration (telle qu'exportée par le questionnaire).
+ * @param {unknown} cfg
+ * @returns {{valid: boolean, errors: string[], warnings: string[]}}
+ */
+function validateConfig(cfg) {
+  const errors = [];
+  const warnings = [];
+  if (!isObj(cfg)) return { valid: false, errors: ['Configuration : objet JSON attendu.'], warnings };
+
+  if (cfg.schemaVersion !== SCHEMA_VERSION) {
+    errors.push(`schemaVersion : « ${cfg.schemaVersion} » reçu, « ${SCHEMA_VERSION} » attendu.`);
+  }
+
+  const c = cfg.client;
+  if (!isObj(c)) errors.push('client : section obligatoire.');
+  else {
+    if (!str(c.companyName)) errors.push('client.companyName : obligatoire.');
+    if (str(c.companyName).length > 80) errors.push('client.companyName : 80 caractères maximum.');
+    if (!str(c.productName)) errors.push('client.productName : obligatoire.');
+    if (str(c.productName).length > 40) errors.push('client.productName : 40 caractères maximum.');
+    if (str(c.website) && !/^https?:\/\/[^\s.]+\.[^\s]+$/i.test(str(c.website))) {
+      errors.push('client.website : adresse web invalide (https://…).');
+    }
+    if (typeof c.isFictional !== 'boolean') errors.push('client.isFictional : vrai ou faux attendu.');
+  }
+
+  const b = cfg.brand;
+  if (!isObj(b)) errors.push('brand : section obligatoire.');
+  else {
+    if (!isObj(b.logo)) errors.push('brand.logo : section obligatoire ({light, dark}, chacun null ou image).');
+    else {
+      checkLogo(b.logo.light, 'brand.logo.light', errors);
+      checkLogo(b.logo.dark, 'brand.logo.dark', errors);
+    }
+    const col = b.colors;
+    if (!isObj(col)) errors.push('brand.colors : section obligatoire.');
+    else {
+      if (typeof col.useQuantiqueDefaults !== 'boolean') {
+        errors.push('brand.colors.useQuantiqueDefaults : vrai ou faux attendu.');
+      }
+      for (const k of ['primary', 'accent']) {
+        if (!HEX.test(String(col[k] || ''))) errors.push(`brand.colors.${k} : code couleur #RRGGBB attendu.`);
+      }
+      if (HEX.test(String(col.primary || '')) && contrastRatio(col.primary, '#FFFFFF') < 3 && contrastRatio(col.primary, '#111827') < 3) {
+        warnings.push('brand.colors.primary : contraste faible avec le texte, lisibilité réduite.');
+      }
+    }
+  }
+
+  const a = cfg.appearance;
+  if (!isObj(a)) errors.push('appearance : section obligatoire.');
+  else {
+    checkEnum(a.theme, 'theme', 'appearance.theme', errors);
+    checkEnum(a.font, 'font', 'appearance.font', errors);
+    checkEnum(a.density, 'density', 'appearance.density', errors);
+    checkEnum(a.textSize, 'textSize', 'appearance.textSize', errors);
+  }
+
+  const s = cfg.assistant;
+  if (!isObj(s)) errors.push('assistant : section obligatoire.');
+  else {
+    if (!str(s.name)) errors.push('assistant.name : obligatoire.');
+    if (str(s.name).length > 30) errors.push('assistant.name : 30 caractères maximum.');
+    checkEnum(s.tone, 'tone', 'assistant.tone', errors);
+    checkEnum(s.concision, 'concision', 'assistant.concision', errors);
+    checkEnum(s.language, 'language', 'assistant.language', errors);
+  }
+
+  const x = cfg.context;
+  if (!isObj(x)) errors.push('context : section obligatoire.');
+  else {
+    if (x.applied !== false) errors.push('context.applied : doit valoir false (contexte non appliqué automatiquement).');
+    if (!Array.isArray(x.emailTypes)) errors.push('context.emailTypes : liste attendue.');
+    else for (const t of x.emailTypes) checkEnum(t, 'emailTypes', 'context.emailTypes', errors);
+    for (const k of ['activity', 'priorityExpectations', 'importantSenders', 'notes']) {
+      if (x[k] !== undefined && typeof x[k] !== 'string') errors.push(`context.${k} : texte attendu.`);
+      if (typeof x[k] === 'string' && x[k].length > 2000) errors.push(`context.${k} : 2 000 caractères maximum.`);
+    }
+  }
+
+  // Champs interdits : aucun secret ne doit transiter par ce contrat.
+  const flat = JSON.stringify(cfg).toLowerCase();
+  for (const forbidden of ['"password"', '"apikey"', '"api_key"', '"secret"', '"token"']) {
+    if (flat.includes(forbidden)) errors.push(`Champ interdit détecté (${forbidden}) : aucun secret dans la configuration.`);
+  }
+
+  return { valid: errors.length === 0, errors, warnings };
+}
+
+/**
+ * Complète une configuration partielle avec les valeurs par défaut (sans
+ * valider). Utile pour l'aperçu du questionnaire et le chargement dans l'app.
+ */
+function withDefaults(cfg = {}) {
+  const d = DEFAULT_CONFIG;
+  const c = isObj(cfg) ? cfg : {};
+  const colors = { ...d.brand.colors, ...(c.brand?.colors || {}) };
+  if (colors.useQuantiqueDefaults) Object.assign(colors, QUANTIQUE_DEFAULT_COLORS);
+  return {
+    schemaVersion: SCHEMA_VERSION,
+    client: { ...d.client, ...(c.client || {}) },
+    brand: {
+      logo: { ...d.brand.logo, ...(c.brand?.logo || {}) },
+      colors,
+    },
+    appearance: { ...d.appearance, ...(c.appearance || {}) },
+    assistant: { ...d.assistant, ...(c.assistant || {}) },
+    context: { ...d.context, ...(c.context || {}), applied: false },
+    meta: { ...d.meta, ...(c.meta || {}) },
+  };
+}
+
+// ---- Couleurs (dérivation des teintes appliquées à l'interface) -----------
+
+function hexToRgb(hex) {
+  const n = parseInt(String(hex).slice(1), 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+
+function rgbToHex([r, g, b]) {
+  return `#${[r, g, b].map((v) => Math.round(v).toString(16).padStart(2, '0')).join('')}`.toUpperCase();
+}
+
+/** Mélange deux couleurs (t = part de la seconde, 0..1). */
+function mix(hexA, hexB, t) {
+  const a = hexToRgb(hexA);
+  const b = hexToRgb(hexB);
+  return rgbToHex(a.map((v, i) => v + (b[i] - v) * t));
+}
+
+function luminance(hex) {
+  const [r, g, b] = hexToRgb(hex).map((v) => {
+    const c = v / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+function contrastRatio(hexA, hexB) {
+  const [l1, l2] = [luminance(hexA), luminance(hexB)].sort((x, y) => y - x);
+  return (l1 + 0.05) / (l2 + 0.05);
+}
+
+/** Texte lisible sur une couleur de fond (blanc ou quasi-noir). */
+function readableOn(hex) {
+  return contrastRatio(hex, '#FFFFFF') >= contrastRatio(hex, '#111827') ? '#FFFFFF' : '#111827';
+}
+
+/**
+ * Variables CSS dérivées de la configuration. Les thèmes clair et sombre
+ * sont fixes (neutres) ; seules les couleurs de marque varient.
+ * @returns {Record<string, string>}
+ */
+function brandCssVariables(cfg) {
+  const conf = withDefaults(cfg);
+  const { primary, accent } = conf.brand.colors;
+  return {
+    '--q-primary': primary,
+    '--q-primary-foreground': readableOn(primary),
+    '--q-primary-soft': mix(primary, '#FFFFFF', 0.86),
+    '--q-primary-strong': mix(primary, '#000000', 0.18),
+    // Variantes pour le thème sombre (fond teinté foncé, texte de lien clair).
+    '--q-primary-soft-dark': mix(primary, '#0F1218', 0.78),
+    '--q-link-light': contrastRatio(primary, '#FFFFFF') >= 4.5 ? primary : mix(primary, '#000000', 0.35),
+    '--q-link-dark': contrastRatio(primary, '#0F1218') >= 4.5 ? primary : mix(primary, '#FFFFFF', 0.55),
+    '--q-accent': accent,
+    '--q-accent-foreground': readableOn(accent),
+    '--q-font': FONT_STACKS[conf.appearance.font] || FONT_STACKS.system,
+    '--q-text-scale': conf.appearance.textSize === 'large' ? '1.125' : '1',
+    '--q-row-pad': conf.appearance.density === 'compact' ? '0.375rem' : '0.75rem',
+  };
+}
+
+</script>
+<script>
+(function () {
+  'use strict';
+  var STORE = 'quantique.questionnaire.v' + SCHEMA_VERSION;
+  var STEPS = [
+    { id: 'welcome', label: 'Bienvenue' },
+    { id: 'identity', label: 'Identité' },
+    { id: 'colors', label: 'Couleurs' },
+    { id: 'appearance', label: 'Apparence' },
+    { id: 'comfort', label: 'Confort de lecture' },
+    { id: 'assistant', label: 'Assistant' },
+    { id: 'context', label: 'Votre activité' },
+    { id: 'recap', label: 'Validation' }
+  ];
+  var PRESETS = [
+    ['#4F46E5', '#0EA5A4'], ['#1E3A8A', '#F59E0B'], ['#065F46', '#84CC16'],
+    ['#7A3E1D', '#C9822B'], ['#9D174D', '#F472B6'], ['#111827', '#6366F1']
+  ];
+
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+  var state = load();
+  var step = state.__step || 0;
+  var errors = {};
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORE);
+      if (raw) { var s = JSON.parse(raw); if (s && s.schemaVersion === SCHEMA_VERSION) return s; }
+    } catch (e) { /* stockage indisponible : on repart des valeurs par défaut */ }
+    var d = clone(DEFAULT_CONFIG);
+    d.client.companyName = ''; d.client.productName = '';
+    return d;
+  }
+  function save() {
+    state.__step = step;
+    try { localStorage.setItem(STORE, JSON.stringify(state)); setSaved('Progression enregistrée sur cet appareil'); }
+    catch (e) { setSaved('Enregistrement local impossible (le logo est peut-être trop lourd) : exportez à la fin.'); }
+  }
+  function setSaved(t) { document.getElementById('saved').textContent = t; }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function exportable() { var c = clone(state); delete c.__step; c.meta = { exportedAt: new Date().toISOString(), source: 'questionnaire' }; return c; }
+
+  // ---------- Rendu des étapes ----------
+  function choice(group, key, title, sub, extra) {
+    return '<button type="button" role="radio" class="choice" data-group="' + group + '" data-key="' + key + '" aria-checked="' + (get(group) === key) + '">' + (extra || '') + '<b>' + esc(title) + '</b><small>' + esc(sub || '') + '</small></button>';
+  }
+  function get(path) { return path.split('.').reduce(function (o, k) { return o == null ? o : o[k]; }, state); }
+  function set(path, v) { var ks = path.split('.'); var o = state; for (var i = 0; i < ks.length - 1; i++) o = o[ks[i]]; o[ks[ks.length - 1]] = v; save(); }
+  function err(field) { return errors[field] ? '<p class="err" id="err-' + field.replace(/\./g, '-') + '">' + esc(errors[field]) + '</p>' : ''; }
+  function field(path, label, hint, type, extra) {
+    var id = 'f-' + path.replace(/\./g, '-');
+    var v = get(path) || '';
+    var input = type === 'textarea'
+      ? '<textarea id="' + id + '" data-path="' + path + '" ' + (extra || '') + '>' + esc(v) + '</textarea>'
+      : '<input id="' + id + '" type="' + (type || 'text') + '" data-path="' + path + '" value="' + esc(v) + '" ' + (extra || '') + (errors[path] ? ' aria-invalid="true" aria-describedby="err-' + path.replace(/\./g, '-') + '"' : '') + '>';
+    return '<label class="f" for="' + id + '">' + label + (hint ? ' <span class="hint">' + hint + '</span>' : '') + '</label>' + input + err(path);
+  }
+  function logoBox(which, label) {
+    var l = state.brand.logo[which];
+    return '<label class="f">' + label + '</label><div class="logo-drop' + (which === 'dark' ? ' dark' : '') + '">' +
+      (l ? '<img alt="Aperçu du logo" src="' + l.dataUrl + '"><span>' + esc(l.fileName || '') + '</span>' : '<span>Aucun logo</span>') +
+      '<span style="margin-left:auto" class="row"><label class="btn small" for="logo-' + which + '">' + (l ? 'Remplacer' : 'Choisir un fichier') + '</label>' +
+      '<input class="sr" id="logo-' + which + '" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" data-logo="' + which + '">' +
+      (l ? '<button type="button" class="btn small" data-logo-remove="' + which + '">Retirer</button>' : '') + '</span></div>' + err('brand.logo.' + which);
+  }
+
+  var RENDER = {
+    welcome: function () {
+      return '<h2>Bonjour 👋</h2><p class="lead">Ces quelques questions servent à habiller votre messagerie à vos couleurs et à régler le ton de l’assistant. Comptez 5 minutes.</p>' +
+        '<p>Vous pourrez revenir en arrière à tout moment, et tout modifier avant l’export.</p>' +
+        '<div class="notice">Aucun mot de passe ni accès technique n’est demandé ici. Le raccordement à votre messagerie se fait séparément, avec votre interlocuteur.</div>' +
+        '<label class="f" for="import">Vous avez déjà un fichier exporté ? <span class="hint">(facultatif)</span></label><input id="import" type="file" accept="application/json,.json">';
+    },
+    identity: function () {
+      return '<h2>Votre identité</h2><p class="lead">Ce qui s’affichera en haut de l’application.</p>' +
+        field('client.companyName', 'Nom de votre entreprise *', '', 'text', 'maxlength="80" autocomplete="organization"') +
+        field('client.productName', 'Nom affiché du produit *', '(ex. « Dupont Mail »)', 'text', 'maxlength="40"') +
+        field('client.website', 'Site web', '(facultatif)', 'url', 'placeholder="https://"') +
+        logoBox('light', 'Logo <span class="hint">(PNG, JPG, WEBP ou SVG · 300 Ko max · facultatif)</span>') +
+        logoBox('dark', 'Logo pour fond sombre <span class="hint">(facultatif)</span>') +
+        '<label class="f"><input type="checkbox" data-path="client.isFictional" ' + (state.client.isFictional ? 'checked' : '') + '> Ceci est un exemple fictif (démonstration)</label>';
+    },
+    colors: function () {
+      var c = state.brand.colors;
+      var html = '<h2>Vos couleurs</h2><p class="lead">Elles colorent les boutons, la sélection et les éléments importants.</p><div class="choices" role="radiogroup" aria-label="Choix des couleurs">' +
+        '<button type="button" role="radio" class="choice" data-colors="quantique" aria-checked="' + c.useQuantiqueDefaults + '"><div class="swatch" style="background:linear-gradient(90deg,' + QUANTIQUE_DEFAULT_COLORS.primary + ' 60%,' + QUANTIQUE_DEFAULT_COLORS.accent + ' 60%)"></div><b>Garder la proposition Quantique</b><small>Vous pourrez changer plus tard</small></button>' +
+        '<button type="button" role="radio" class="choice" data-colors="custom" aria-checked="' + !c.useQuantiqueDefaults + '"><div class="swatch" style="background:linear-gradient(90deg,' + c.primary + ' 60%,' + c.accent + ' 60%)"></div><b>Mes couleurs</b><small>Choisir ou saisir vos codes</small></button></div>';
+      if (!c.useQuantiqueDefaults) {
+        html += '<label class="f">Suggestions</label><div class="chips">' + PRESETS.map(function (p, i) {
+          return '<button type="button" class="chip" data-preset="' + i + '" aria-label="Palette ' + (i + 1) + '"><span style="display:inline-block;width:14px;height:14px;border-radius:4px;background:' + p[0] + '"></span> <span style="display:inline-block;width:14px;height:14px;border-radius:4px;background:' + p[1] + '"></span></button>';
+        }).join('') + '</div>' +
+          '<div class="row" style="margin-top:6px"><div><label class="f" for="c-primary">Couleur principale</label><div class="colorbox"><input type="color" id="c-primary-pick" data-color="primary" value="' + c.primary + '" aria-label="Choisir la couleur principale"><input type="text" id="c-primary" data-color-text="primary" value="' + c.primary + '" maxlength="7"></div>' + err('brand.colors.primary') + '</div>' +
+          '<div><label class="f" for="c-accent">Couleur d’accent</label><div class="colorbox"><input type="color" data-color="accent" value="' + c.accent + '" aria-label="Choisir la couleur d’accent"><input type="text" id="c-accent" data-color-text="accent" value="' + c.accent + '" maxlength="7"></div>' + err('brand.colors.accent') + '</div></div>';
+        var w = validateConfig(exportable()).warnings;
+        if (w.length) html += '<p class="err">⚠ La couleur principale est peu contrastée : le texte risque d’être difficile à lire.</p>';
+      }
+      return html + '<label class="f">Aperçu</label>' + preview();
+    },
+    appearance: function () {
+      return '<h2>Apparence</h2><p class="lead">L’ambiance générale de l’écran.</p>' +
+        '<label class="f">Thème</label><div class="choices" role="radiogroup" aria-label="Thème">' +
+        choice('appearance.theme', 'light', 'Clair', 'Fond blanc', '<div class="swatch" style="background:#F6F7F9"></div>') +
+        choice('appearance.theme', 'dark', 'Sombre', 'Fond foncé, repose les yeux', '<div class="swatch" style="background:#0F1218"></div>') +
+        choice('appearance.theme', 'system', 'Selon l’appareil', 'Suit le réglage de l’ordinateur', '<div class="swatch" style="background:linear-gradient(90deg,#F6F7F9 50%,#0F1218 50%)"></div>') +
+        '</div><label class="f">Police de caractères</label><div class="choices" role="radiogroup" aria-label="Police">' +
+        ['system', 'humanist', 'serif'].map(function (k) {
+          return choice('appearance.font', k, ALLOWED.font[k], '', '<div style="font-family:' + FONT_STACKS[k].replace(/"/g, "'") + ';font-size:22px;margin-bottom:4px">Bonjour Jean</div>');
+        }).join('') + '</div>' + preview();
+    },
+    comfort: function () {
+      return '<h2>Confort de lecture</h2><p class="lead">Comment vous préférez lire la liste des e-mails.</p>' +
+        '<label class="f">Densité de la liste</label><div class="choices" role="radiogroup" aria-label="Densité">' +
+        choice('appearance.density', 'comfortable', 'Aérée', 'Plus d’espace entre les lignes') +
+        choice('appearance.density', 'compact', 'Compacte', 'Plus d’e-mails à l’écran') +
+        '</div><label class="f">Taille du texte</label><div class="choices" role="radiogroup" aria-label="Taille du texte">' +
+        choice('appearance.textSize', 'normal', 'Normale', '', '<div style="font-size:16px">Aa</div>') +
+        choice('appearance.textSize', 'large', 'Grande', '', '<div style="font-size:20px">Aa</div>') +
+        '</div>' + preview();
+    },
+    assistant: function () {
+      return '<h2>Votre assistant</h2><p class="lead">Il résume vos e-mails et vous propose des réponses, que vous relisez toujours avant l’envoi.</p>' +
+        field('assistant.name', 'Nom affiché de l’assistant *', '(ex. « Assistant », « Léa »)', 'text', 'maxlength="30"') +
+        '<label class="f">Ton des réponses proposées</label><div class="choices" role="radiogroup" aria-label="Ton">' +
+        choice('assistant.tone', 'cordial', 'Cordial', '« Bonjour Jean, … Belle journée »') +
+        choice('assistant.tone', 'professional', 'Professionnel', '« … mes salutations distinguées »') +
+        choice('assistant.tone', 'direct', 'Direct', 'Va droit au but') +
+        '</div><label class="f">Longueur des réponses</label><div class="choices" role="radiogroup" aria-label="Longueur">' +
+        choice('assistant.concision', 'short', 'Courte', 'L’essentiel en une ou deux phrases') +
+        choice('assistant.concision', 'balanced', 'Équilibrée', 'Le juste nécessaire') +
+        choice('assistant.concision', 'detailed', 'Détaillée', 'Plus de précisions') +
+        '</div><label class="f">Langue principale des réponses</label><div class="choices" role="radiogroup" aria-label="Langue">' +
+        choice('assistant.language', 'fr', 'Français', '') + choice('assistant.language', 'en', 'Anglais', '') + '</div>';
+    },
+    context: function () {
+      return '<h2>Votre activité</h2><div class="notice">Ces informations ne changent rien tout de suite : elles servent à préparer un futur réglage du classement des e-mails. Tout est facultatif.</div>' +
+        field('context.activity', 'En une phrase, que fait votre entreprise ?', '', 'textarea', 'maxlength="2000"') +
+        '<label class="f">Quels e-mails recevez-vous le plus ?</label><div class="chips">' +
+        Object.keys(ALLOWED.emailTypes).map(function (k) {
+          return '<button type="button" class="chip" data-type="' + k + '" aria-pressed="' + (state.context.emailTypes.indexOf(k) >= 0) + '">' + esc(ALLOWED.emailTypes[k]) + '</button>';
+        }).join('') + '</div>' +
+        field('context.priorityExpectations', 'Qu’est-ce qui doit passer en premier ?', '(ex. « les commandes clients avant les fournisseurs »)', 'textarea', 'maxlength="2000"') +
+        field('context.importantSenders', 'Des expéditeurs à ne jamais manquer ?', '(noms ou entreprises)', 'textarea', 'maxlength="2000"') +
+        field('context.notes', 'Autre chose à nous dire ?', '', 'textarea', 'maxlength="2000"');
+    },
+    recap: function () {
+      var cfg = exportable();
+      var r = validateConfig(cfg);
+      function sec(title, to, rows) {
+        return '<section><h3>' + title + ' <button type="button" class="btn small" data-goto="' + to + '">Modifier</button></h3><dl>' + rows.map(function (x) { return '<dt>' + x[0] + '</dt><dd>' + x[1] + '</dd>'; }).join('') + '</dl></section>';
+      }
+      var c = cfg.brand.colors;
+      return '<h2>Vérification</h2><p class="lead">Relisez, corrigez si besoin, puis exportez le fichier à transmettre.</p>' + preview() +
+        '<div class="recap">' +
+        sec('Identité', 1, [['Entreprise', esc(cfg.client.companyName) || '<span class="err">à compléter</span>'], ['Produit', esc(cfg.client.productName) || '<span class="err">à compléter</span>'], ['Site web', esc(cfg.client.website) || '—'], ['Logo', (cfg.brand.logo.light ? 'oui' : 'non') + (cfg.brand.logo.dark ? ' · variante sombre' : '')], ['Exemple fictif', cfg.client.isFictional ? 'oui' : 'non']]) +
+        sec('Couleurs', 2, [['Choix', c.useQuantiqueDefaults ? 'Proposition Quantique' : 'Mes couleurs'], ['Principale / accent', '<span style="display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:middle;background:' + (c.useQuantiqueDefaults ? QUANTIQUE_DEFAULT_COLORS.primary : c.primary) + '"></span> ' + (c.useQuantiqueDefaults ? QUANTIQUE_DEFAULT_COLORS.primary : c.primary) + ' · ' + (c.useQuantiqueDefaults ? QUANTIQUE_DEFAULT_COLORS.accent : c.accent)]]) +
+        sec('Apparence et lecture', 3, [['Thème', ALLOWED.theme[cfg.appearance.theme]], ['Police', ALLOWED.font[cfg.appearance.font]], ['Densité', ALLOWED.density[cfg.appearance.density]], ['Taille du texte', ALLOWED.textSize[cfg.appearance.textSize]]]) +
+        sec('Assistant', 5, [['Nom', esc(cfg.assistant.name)], ['Ton', ALLOWED.tone[cfg.assistant.tone]], ['Longueur', ALLOWED.concision[cfg.assistant.concision]], ['Langue', ALLOWED.language[cfg.assistant.language]]]) +
+        sec('Activité (non appliquée tout de suite)', 6, [['Activité', esc(cfg.context.activity) || '—'], ['E-mails reçus', cfg.context.emailTypes.map(function (k) { return ALLOWED.emailTypes[k]; }).join(', ') || '—'], ['Priorités', esc(cfg.context.priorityExpectations) || '—']]) +
+        '</div>' +
+        (r.valid ? '<p class="ok">✓ Tout est prêt.</p>' : '<div class="notice"><b>À corriger avant l’export :</b><ul>' + r.errors.map(function (e) { return '<li>' + esc(e) + '</li>'; }).join('') + '</ul></div>') +
+        '<div class="row" style="margin-top:12px"><button type="button" class="btn primary" id="download" ' + (r.valid ? '' : 'disabled') + '>⬇ Télécharger mon fichier</button>' +
+        '<button type="button" class="btn" id="copy" ' + (r.valid ? '' : 'disabled') + '>Copier le contenu</button></div>' +
+        '<p class="hint" style="margin-top:8px">Transmettez ce fichier à votre interlocuteur Quantique. Le logo est inclus dedans.</p>';
+    }
+  };
+
+  function preview() {
+    var cfg = withDefaults(exportable());
+    var v = brandCssVariables(cfg);
+    var dark = cfg.appearance.theme === 'dark';
+    var vars = '--pp:' + v['--q-primary'] + ';--ppf:' + v['--q-primary-foreground'] + ';--pbg:' + (dark ? '#0F1218' : '#F6F7F9') + ';--ps:' + (dark ? '#171B23' : '#fff') +
+      ';--pf:' + (dark ? '#F3F4F6' : '#111827') + ';--pm:' + (dark ? '#A3AAB8' : '#5B6474') + ';--pb:' + (dark ? '#2A303D' : '#E3E6EB') +
+      ';--pd:' + (cfg.appearance.density === 'compact' ? '3px' : '8px') + ';font-family:' + v['--q-font'].replace(/"/g, "'") + ';font-size:' + (cfg.appearance.textSize === 'large' ? '13.5px' : '12px');
+    var logo = cfg.brand.logo[dark && cfg.brand.logo.dark ? 'dark' : 'light'];
+    return '<div class="preview" style="' + vars + '" aria-label="Aperçu de l’application"><div class="side">' +
+      (logo ? '<img alt="" src="' + logo.dataUrl + '" style="max-width:100%;max-height:28px">' : '<b style="color:var(--pf)">' + esc(cfg.client.productName || 'Votre produit') + '</b>') +
+      '<div class="nav on">Assistant IA</div><div class="nav">Mailbox</div><div class="nav">To-do</div></div><div class="main"><b>À traiter</b>' +
+      '<div class="item"><span><b>Jean Exemple</b> · Société Exemple<br><span class="muted">Demande de confirmer la date de livraison.</span></span><span class="cta">Répondre</span></div>' +
+      '<div class="item"><span><b>Marie Exemple</b><br><span class="muted">Demande un devis avant vendredi.</span></span><span class="cta">Répondre</span></div>' +
+      '<div class="muted" style="margin-top:6px">' + esc(cfg.assistant.name || 'Assistant') + ' · ' + ALLOWED.tone[cfg.assistant.tone] + '</div></div></div>';
+  }
+
+  // ---------- Validation par étape ----------
+  function validateStep(id) {
+    var e = {};
+    if (id === 'identity') {
+      if (!state.client.companyName.trim()) e['client.companyName'] = 'Indiquez le nom de votre entreprise.';
+      if (!state.client.productName.trim()) e['client.productName'] = 'Indiquez le nom affiché du produit.';
+      if (state.client.website && !/^https?:\/\/[^\s.]+\.[^\s]+$/i.test(state.client.website.trim())) e['client.website'] = 'Adresse web à vérifier (elle doit commencer par https://).';
+    }
+    if (id === 'colors' && !state.brand.colors.useQuantiqueDefaults) {
+      ['primary', 'accent'].forEach(function (k) { if (!/^#[0-9a-fA-F]{6}$/.test(state.brand.colors[k])) e['brand.colors.' + k] = 'Code couleur attendu au format #RRGGBB.'; });
+    }
+    if (id === 'assistant' && !String(state.assistant.name || '').trim()) e['assistant.name'] = 'Donnez un nom à l’assistant.';
+    return e;
+  }
+
+  // ---------- Logo : embarqué en data URL, réduit si besoin ----------
+  function readLogo(file, which) {
+    delete errors['brand.logo.' + which];
+    if (LOGO_RULES.mimeTypes.indexOf(file.type) < 0) { errors['brand.logo.' + which] = 'Format non pris en charge (PNG, JPG, WEBP ou SVG).'; return render(); }
+    var reader = new FileReader();
+    reader.onload = function () {
+      var dataUrl = String(reader.result);
+      if (base64Bytes(dataUrl.split(',')[1]) <= LOGO_RULES.maxBytes) return store(dataUrl, file.type);
+      if (file.type === 'image/svg+xml') { errors['brand.logo.' + which] = 'Fichier SVG trop lourd (300 Ko max).'; return render(); }
+      // Image trop lourde : réduction à 600 px de large maximum (PNG).
+      var img = new Image();
+      img.onload = function () {
+        var scale = Math.min(1, 600 / img.width);
+        var cv = document.createElement('canvas');
+        cv.width = Math.round(img.width * scale); cv.height = Math.round(img.height * scale);
+        cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+        var out = cv.toDataURL('image/png');
+        if (base64Bytes(out.split(',')[1]) > LOGO_RULES.maxBytes) { errors['brand.logo.' + which] = 'Image trop lourde, même réduite. Essayez un fichier plus simple.'; return render(); }
+        store(out, 'image/png');
+      };
+      img.src = dataUrl;
+    };
+    reader.readAsDataURL(file);
+    function store(dataUrl, mime) {
+      state.brand.logo[which] = { dataUrl: dataUrl, mimeType: mime, fileName: file.name };
+      save(); render();
+    }
+  }
+
+  // ---------- Rendu + événements ----------
+  function render() {
+    var s = STEPS[step];
+    var el = document.getElementById('screen');
+    el.innerHTML = RENDER[s.id]();
+    document.getElementById('bar').style.width = ((step + 1) / STEPS.length * 100) + '%';
+    document.getElementById('progress').setAttribute('aria-valuenow', step + 1);
+    document.getElementById('stepLabel').textContent = s.label;
+    document.getElementById('stepCount').textContent = 'Étape ' + (step + 1) + ' sur ' + STEPS.length;
+    document.getElementById('prev').disabled = step === 0;
+    document.getElementById('next').style.visibility = step === STEPS.length - 1 ? 'hidden' : 'visible';
+    var primary = state.brand.colors.useQuantiqueDefaults ? QUANTIQUE_DEFAULT_COLORS.primary : state.brand.colors.primary;
+    document.documentElement.style.setProperty('--q', /^#[0-9a-fA-F]{6}$/.test(primary) ? primary : '#4F46E5');
+    document.documentElement.style.setProperty('--q-fg', readableOn(/^#[0-9a-fA-F]{6}$/.test(primary) ? primary : '#4F46E5'));
+    document.documentElement.style.setProperty('--q-soft', mix(/^#[0-9a-fA-F]{6}$/.test(primary) ? primary : '#4F46E5', '#FFFFFF', 0.9));
+  }
+
+  document.addEventListener('input', function (ev) {
+    var t = ev.target;
+    if (t.dataset.path && t.type !== 'checkbox') { set(t.dataset.path, t.value); delete errors[t.dataset.path]; if (STEPS[step].id === 'recap') render(); }
+    if (t.dataset.colorText) {
+      var v = t.value.trim(); if (v && v[0] !== '#') v = '#' + v;
+      state.brand.colors[t.dataset.colorText] = v.toUpperCase(); save();
+      if (/^#[0-9a-fA-F]{6}$/.test(v)) { delete errors['brand.colors.' + t.dataset.colorText]; refreshKeepFocus(t.id); }
+    }
+    if (t.dataset.color) { state.brand.colors[t.dataset.color] = t.value.toUpperCase(); save(); refreshKeepFocus(); }
+  });
+  function refreshKeepFocus(id) {
+    render();
+    if (id) { var el = document.getElementById(id); if (el) { el.focus(); el.setSelectionRange(el.value.length, el.value.length); } }
+  }
+  document.addEventListener('change', function (ev) {
+    var t = ev.target;
+    if (t.type === 'checkbox' && t.dataset.path) set(t.dataset.path, t.checked);
+    if (t.dataset.logo && t.files && t.files[0]) readLogo(t.files[0], t.dataset.logo);
+    if (t.id === 'import' && t.files && t.files[0]) {
+      var r = new FileReader();
+      r.onload = function () {
+        try {
+          var cfg = JSON.parse(String(r.result));
+          var res = validateConfig(cfg);
+          if (!res.valid) { alert('Fichier non reconnu :\n' + res.errors.join('\n')); return; }
+          state = cfg; step = STEPS.length - 1; save(); render();
+        } catch (e) { alert('Fichier illisible.'); }
+      };
+      r.readAsText(t.files[0]);
+    }
+  });
+  document.addEventListener('click', function (ev) {
+    var t = ev.target.closest('button'); if (!t) return;
+    if (t.dataset.group) { set(t.dataset.group, t.dataset.key); render(); }
+    if (t.dataset.colors) { state.brand.colors.useQuantiqueDefaults = t.dataset.colors === 'quantique'; save(); render(); }
+    if (t.dataset.preset) { var p = PRESETS[+t.dataset.preset]; state.brand.colors.primary = p[0]; state.brand.colors.accent = p[1]; errors = {}; save(); render(); }
+    if (t.dataset.type) {
+      var list = state.context.emailTypes, k = t.dataset.type, i = list.indexOf(k);
+      if (i >= 0) list.splice(i, 1); else list.push(k);
+      save(); t.setAttribute('aria-pressed', String(i < 0));
+    }
+    if (t.dataset.logoRemove) { state.brand.logo[t.dataset.logoRemove] = null; save(); render(); }
+    if (t.dataset.goto) { step = +t.dataset.goto; save(); render(); document.getElementById('screen').focus(); }
+    if (t.id === 'download') download();
+    if (t.id === 'copy') copy();
+  });
+  document.getElementById('prev').addEventListener('click', function () { if (step > 0) { step--; errors = {}; save(); render(); document.getElementById('screen').focus(); } });
+  document.getElementById('next').addEventListener('click', function () {
+    errors = validateStep(STEPS[step].id);
+    if (Object.keys(errors).length) { render(); var f = document.querySelector('[aria-invalid=true]') || document.querySelector('.err'); if (f && f.focus) f.focus(); return; }
+    if (STEPS[step].id === 'identity' && !state.client.productName) state.client.productName = state.client.companyName;
+    step = Math.min(STEPS.length - 1, step + 1); save(); render(); document.getElementById('screen').focus(); window.scrollTo(0, 0);
+  });
+  document.addEventListener('focusout', function (ev) {
+    // Nom du produit proposé à partir du nom de l'entreprise.
+    if (ev.target.id === 'f-client-companyName' && !state.client.productName && state.client.companyName.trim()) {
+      state.client.productName = state.client.companyName.trim().slice(0, 34) + ' Mail'; save(); render();
+    }
+  });
+
+  function fileName() {
+    var slug = (state.client.companyName || 'client').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    return 'quantique-config-' + slug + '.json';
+  }
+  function download() {
+    var blob = new Blob([JSON.stringify(exportable(), null, 2) + '\n'], { type: 'application/json' });
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = fileName();
+    document.body.appendChild(a); a.click(); a.remove(); setSaved('Fichier téléchargé : ' + fileName());
+  }
+  function copy() {
+    var txt = JSON.stringify(exportable(), null, 2);
+    (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function () { setSaved('Contenu copié.'); }, function () { setSaved('Copie impossible : utilisez le téléchargement.'); });
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>

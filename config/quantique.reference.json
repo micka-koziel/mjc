@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.0",
+  "client": {
+    "companyName": "Quantique",
+    "productName": "Quantique Mail",
+    "website": "",
+    "isFictional": false
+  },
+  "brand": {
+    "logo": {
+      "light": null,
+      "dark": null
+    },
+    "colors": {
+      "useQuantiqueDefaults": true,
+      "primary": "#4F46E5",
+      "accent": "#0EA5A4"
+    }
+  },
+  "appearance": {
+    "theme": "light",
+    "font": "system",
+    "density": "comfortable",
+    "textSize": "normal"
+  },
+  "assistant": {
+    "name": "Assistant",
+    "tone": "cordial",
+    "concision": "balanced",
+    "language": "fr"
+  },
+  "context": {
+    "applied": false,
+    "activity": "",
+    "emailTypes": [],
+    "priorityExpectations": "",
+    "importantSenders": "",
+    "notes": ""
+  },
+  "meta": {
+    "exportedAt": null,
+    "source": "reference-quantique"
+  }
+}

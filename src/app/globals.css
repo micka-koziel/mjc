@@ -1,0 +1,127 @@
+@import 'tailwindcss';
+
+/* ============================================================
+ * Quantique — jetons de design.
+ *
+ * Les couleurs de MARQUE (--q-primary, --q-accent…) sont posées au
+ * chargement par BrandProvider, à partir de la configuration
+ * (src/config/active.config.json). Les neutres clair / sombre sont fixes.
+ * Aucune couleur de classification métier : seules les couleurs usuelles
+ * d'interface (sélection, succès, erreur) existent.
+ * ============================================================ */
+
+@theme {
+  --color-background: var(--q-bg);
+  --color-surface: var(--q-surface);
+  --color-elevated: var(--q-elevated);
+  --color-foreground: var(--q-fg);
+  --color-muted: var(--q-muted);
+  --color-disabled: var(--q-disabled);
+  --color-border: var(--q-border);
+
+  --color-primary: var(--q-primary, #4f46e5);
+  --color-primary-foreground: var(--q-primary-foreground, #ffffff);
+  --color-primary-soft: var(--q-soft);
+  --color-link: var(--q-link);
+  --color-primary-strong: var(--q-primary-strong, #3730a3);
+  --color-secondary: var(--q-accent, #0ea5a4);
+  --color-accent: var(--q-accent, #0ea5a4);
+  --color-accent-foreground: var(--q-accent-foreground, #ffffff);
+
+  --color-success: var(--q-success);
+  --color-warning: var(--q-warning);
+  --color-danger: var(--q-danger);
+  --color-danger-foreground: #ffffff;
+
+  --font-sans: var(--q-font, system-ui, sans-serif);
+  --font-display: var(--q-font, system-ui, sans-serif);
+}
+
+/* Thème clair (par défaut) */
+:root,
+[data-theme='light'] {
+  color-scheme: light;
+  --q-bg: #f6f7f9;
+  --q-surface: #ffffff;
+  --q-elevated: #eef0f4;
+  --q-fg: #111827;
+  --q-muted: #5b6474;
+  --q-disabled: #9aa1ad;
+  --q-border: #e3e6eb;
+  --q-success: #047857;
+  --q-warning: #b45309;
+  --q-danger: #be123c;
+  --q-soft: var(--q-primary-soft, #e0e7ff);
+  --q-link: var(--q-link-light, #3730a3);
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --q-bg: #0f1218;
+  --q-surface: #171b23;
+  --q-elevated: #212734;
+  --q-fg: #f3f4f6;
+  --q-muted: #a3aab8;
+  --q-disabled: #5f6676;
+  --q-border: #2a303d;
+  --q-success: #34d399;
+  --q-warning: #fbbf24;
+  --q-danger: #fb7185;
+  --q-soft: var(--q-primary-soft-dark, #1e1b4b);
+  --q-link: var(--q-link-dark, #a5b4fc);
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme='system'] {
+    color-scheme: dark;
+    --q-bg: #0f1218;
+    --q-surface: #171b23;
+    --q-elevated: #212734;
+    --q-fg: #f3f4f6;
+    --q-muted: #a3aab8;
+    --q-disabled: #5f6676;
+    --q-border: #2a303d;
+    --q-success: #34d399;
+    --q-warning: #fbbf24;
+    --q-danger: #fb7185;
+    --q-soft: var(--q-primary-soft-dark, #1e1b4b);
+    --q-link: var(--q-link-dark, #a5b4fc);
+  }
+}
+
+html {
+  font-size: calc(16px * var(--q-text-scale, 1));
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Densité de liste configurable (Aérée / Compacte). */
+@utility row-pad {
+  padding-top: var(--q-row-pad, 0.75rem);
+  padding-bottom: var(--q-row-pad, 0.75rem);
+}
+
+/* Logo : variante claire / sombre selon le thème effectif. */
+.q-logo-dark { display: none; }
+[data-theme='dark'] .q-logo-light { display: none; }
+[data-theme='dark'] .q-logo-dark { display: block; }
+@media (prefers-color-scheme: dark) {
+  [data-theme='system'] .q-logo-light { display: none; }
+  [data-theme='system'] .q-logo-dark { display: block; }
+}

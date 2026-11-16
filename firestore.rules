@@ -1,0 +1,43 @@
+rules_version = '2';
+
+// Règles Firestore du package Quantique — refus par défaut.
+// Reprises des règles Trendl pour les collections du périmètre e-mails
+// (messages, message_drafts, todos : mêmes droits). Le rôle « admin » de
+// Trendl est remplacé par la liste des personnes autorisées de l'instance :
+// document app_settings/access, champ allowed_emails (modifiable uniquement
+// depuis la console Firebase ou l'Admin SDK, jamais depuis le navigateur).
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAllowed() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && exists(/databases/$(database)/documents/app_settings/access)
+        && request.auth.token.email.lower() in
+           get(/databases/$(database)/documents/app_settings/access).data.allowed_emails;
+    }
+
+    // E-mails : écrits uniquement par les Cloud Functions (ingestion, actions).
+    match /messages/{messageId} {
+      allow read: if isAllowed();
+      allow write: if false;
+    }
+
+    // Brouillons IA : écrits par generateReplyDraft / sendReplyDraft.
+    match /message_drafts/{draftId} {
+      allow read: if isAllowed();
+      allow write: if false;
+    }
+
+    // Tâches : lues et écrites par l'application.
+    match /todos/{todoId} {
+      allow read, write: if isAllowed();
+    }
+
+    // Tout le reste (réglages, état du watch Gmail, résumés de fils,
+    // conversations de l'assistant, budget IA…) : serveur uniquement.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

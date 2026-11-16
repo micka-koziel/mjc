@@ -1,0 +1,24 @@
+rules_version = '2';
+
+// Pièces jointes des réponses (repris de Trendl, Sprint 88) :
+// outgoing_attachments/{messageId}/{horodatage-nom}. Le navigateur dépose le
+// fichier, la fonction sendReplyDraft le récupère. 10 Mo par fichier.
+// Les droits d'accès sont vérifiés via la même liste que Firestore.
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isAllowed() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email.lower() in
+           firestore.get(/databases/(default)/documents/app_settings/access).data.allowed_emails;
+    }
+    match /outgoing_attachments/{messageId}/{fileName=**} {
+      allow read: if isAllowed();
+      allow write: if isAllowed() && request.resource.size < 10 * 1024 * 1024;
+      allow delete: if isAllowed();
+    }
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

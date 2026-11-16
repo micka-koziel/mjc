@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "1.0",
+  "client": {
+    "companyName": "Atelier Ginkgo (exemple fictif)",
+    "productName": "Ginkgo Mail",
+    "website": "https://atelier-ginkgo.example",
+    "isFictional": true
+  },
+  "brand": {
+    "logo": {
+      "light": {
+        "dataUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgNDAiPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE0IiBmaWxsPSIjN0EzRTFEIi8+PHBhdGggZD0iTTE0IDIyYzQtOCAxMC04IDEyIDAiIHN0cm9rZT0iI0YzRDlCMSIgc3Ryb2tlLXdpZHRoPSIzIiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48dGV4dCB4PSI0MiIgeT0iMjYiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLHNlcmlmIiBmb250LXNpemU9IjE2IiBmaWxsPSIjN0EzRTFEIj5BdGVsaWVyIEdpbmtnbzwvdGV4dD48L3N2Zz4=",
+        "mimeType": "image/svg+xml",
+        "fileName": "logo-fictif.svg"
+      },
+      "dark": {
+        "dataUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgNDAiPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE0IiBmaWxsPSIjRjNEOUIxIi8+PHBhdGggZD0iTTE0IDIyYzQtOCAxMC04IDEyIDAiIHN0cm9rZT0iIzdBM0UxRCIgc3Ryb2tlLXdpZHRoPSIzIiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48dGV4dCB4PSI0MiIgeT0iMjYiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLHNlcmlmIiBmb250LXNpemU9IjE2IiBmaWxsPSIjRjNEOUIxIj5BdGVsaWVyIEdpbmtnbzwvdGV4dD48L3N2Zz4=",
+        "mimeType": "image/svg+xml",
+        "fileName": "logo-fictif.svg"
+      }
+    },
+    "colors": {
+      "useQuantiqueDefaults": false,
+      "primary": "#7A3E1D",
+      "accent": "#C9822B"
+    }
+  },
+  "appearance": {
+    "theme": "light",
+    "font": "serif",
+    "density": "compact",
+    "textSize": "normal"
+  },
+  "assistant": {
+    "name": "Gaspard",
+    "tone": "cordial",
+    "concision": "short",
+    "language": "fr"
+  },
+  "context": {
+    "applied": false,
+    "activity": "Atelier artisanal fictif (exemple de démonstration).",
+    "emailTypes": [
+      "customers",
+      "orders",
+      "suppliers"
+    ],
+    "priorityExpectations": "Les commandes clients passent avant les fournisseurs.",
+    "importantSenders": "",
+    "notes": "Exemple inventé pour tester le passage questionnaire → configuration."
+  },
+  "meta": {
+    "exportedAt": "2026-11-16T10:00:00.000Z",
+    "source": "exemple-fictif"
+  }
+}

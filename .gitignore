@@ -1,0 +1,14 @@
+node_modules/
+.next/
+out/
+.env
+.env.local
+.env.*.local
+!.env.example
+functions/.env
+functions/node_modules/
+.firebaserc
+config/backups/
+firebase-debug*.log
+*.log
+.DS_Store
