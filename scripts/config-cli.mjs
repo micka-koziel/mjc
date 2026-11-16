@@ -5,7 +5,7 @@
  *   npm run config:validate -- <export.json>   Vérifie un export du questionnaire.
  *   npm run config:apply    -- <export.json>   Vérifie puis l'installe comme
  *                                              configuration active.
- *   npm run config:reset                       Revient à la référence Quantique.
+ *   npm run config:reset                       Revient à la référence KHentik.
  *
  * La configuration active est src/config/active.config.json : l'application
  * la lit au démarrage (relancer `npm run dev`, ou reconstruire en production).
@@ -19,7 +19,7 @@ import { validateConfig, withDefaults } from '../src/config/contract.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ACTIVE = path.join(ROOT, 'src/config/active.config.json');
-const REFERENCE = path.join(ROOT, 'config/quantique.reference.json');
+const REFERENCE = path.join(ROOT, 'config/khentik.reference.json');
 const BACKUPS = path.join(ROOT, 'config/backups');
 
 function readJson(file) {
@@ -69,8 +69,8 @@ try {
     install(cfg, path.basename(file));
   } else if (cmd === 'reset') {
     const cfg = readJson(REFERENCE);
-    report(cfg, 'config/quantique.reference.json');
-    install(cfg, 'quantique.reference.json');
+    report(cfg, 'config/khentik.reference.json');
+    install(cfg, 'khentik.reference.json');
   } else {
     console.log('Usage : config:validate <fichier> | config:apply <fichier> | config:reset');
     process.exit(2);

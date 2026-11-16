@@ -13,7 +13,7 @@ import { fold } from '@/shared/utils/text-fold';
 import { toMs } from '@/shared/utils/format-date';
 import { waitForUndo } from '@/shared/utils/undo-send';
 
-const STORAGE_KEY = 'quantique.demo.state.v1';
+const STORAGE_KEY = 'khentik.demo.state.v1';
 const LATENCY = 450; // ms — rend perceptibles les états « chargement »
 
 const wait = (ms = LATENCY) => new Promise((r) => setTimeout(r, ms));

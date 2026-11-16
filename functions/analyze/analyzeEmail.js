@@ -24,7 +24,7 @@ const {emailAnalysisOutputSchema} = require("../lib/validation/ai-schemas");
 const {messageDirection, isDraftMessage} = require("../lib/message-direction");
 const {SYSTEM_ANALYZE, TOOL_ANALYZE, buildAnalyzeUser} = require("../lib/prompts-generic");
 
-const MODEL_VERSION = "quantique-generic-v1";
+const MODEL_VERSION = "khentik-generic-v1";
 
 /** Faut-il analyser ce message ? Pur (exporté pour les tests). */
 function analysisDecision(m) {

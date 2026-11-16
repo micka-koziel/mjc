@@ -20,7 +20,7 @@
       }
     },
     "colors": {
-      "useQuantiqueDefaults": false,
+      "useKHentikDefaults": false,
       "primary": "#7A3E1D",
       "accent": "#C9822B"
     }

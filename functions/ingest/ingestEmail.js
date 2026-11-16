@@ -57,7 +57,7 @@ function extractNotificationHistoryId(notification) {
 
 exports.ingestEmail = onMessagePublished(
   {
-    topic: process.env.GMAIL_PUBSUB_TOPIC_NAME || "quantique-emails-inbound",
+    topic: process.env.GMAIL_PUBSUB_TOPIC_NAME || "khentik-emails-inbound",
     secrets: ["GMAIL_CLIENT_SECRET", "GMAIL_REFRESH_TOKEN"],
   },
   async (event) => {

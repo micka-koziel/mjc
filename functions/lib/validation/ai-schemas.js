@@ -2,7 +2,7 @@
  * Schémas de validation des SORTIES IA (zod) — repris de Trendl (Sprint 61).
  *
  * Toute sortie IA est validée AVANT d'être consommée ou écrite (interface
- * `generateStructured`, lib/ai-provider.js). Quantique : seuls les schémas du
+ * `generateStructured`, lib/ai-provider.js). KHentik : seuls les schémas du
  * périmètre e-mails sont conservés (les schémas CRM, prospection, médias,
  * factures… sont retirés) ; les schémas d'analyse et de synthèse sont
  * génériques (aucune catégorie métier propre à Trendl).

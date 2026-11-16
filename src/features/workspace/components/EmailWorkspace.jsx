@@ -237,7 +237,7 @@ function History({ messages }) {
 }
 
 /**
- * « Créer une tâche » depuis l'e-mail — AJOUT Quantique (découplage minimal) :
+ * « Créer une tâche » depuis l'e-mail — AJOUT KHentik (découplage minimal) :
  * dans Trendl, le lien tâche ↔ e-mail passait par les collaborations du CRM.
  * Ici la tâche garde la référence du fil (source_thread_id).
  */

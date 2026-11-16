@@ -1,7 +1,7 @@
 /**
  * admin-auth.js — contrôle d'accès des fonctions HTTP.
  *
- * Simplification Quantique de lib/admin-auth.js (Trendl) : Trendl gérait
+ * Simplification KHentik de lib/admin-auth.js (Trendl) : Trendl gérait
  * des rôles (créateur, admin, super-admin), l'impersonation et la double
  * authentification. Le package n'a qu'un profil : les personnes autorisées
  * à utiliser la boîte de l'instance. Une instance = un client = un projet

@@ -47,7 +47,7 @@ const {readResponseSettings} = require("../lib/response-settings");
 const {readThreadMessages, sortThreadChronological, toMillis} = require("../lib/thread-reader");
 const {pickQuotedMessage, pickQuotedThread, exchangesWith, withQuotedHistory, fetchThreadingHeaders} = require("../lib/reply-quote");
 const {findPlaceholders} = require("../lib/draft-facts");
-// Quantique : la branche Trendl « nouvel e-mail de prospection » (Sprint 104,
+// KHentik : la branche Trendl « nouvel e-mail de prospection » (Sprint 104,
 // création d'une négociation CRM à l'envoi) est retirée. Cette fonction ne
 // sert qu'à RÉPONDRE dans un fil existant.
 

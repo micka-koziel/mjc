@@ -5,8 +5,8 @@ import { validateConfig, withDefaults, brandCssVariables, DEFAULT_CONFIG, readab
 const read = (p) => JSON.parse(fs.readFileSync(p, 'utf8'));
 
 describe('contrat de configuration', () => {
-  it('la configuration de référence Quantique est valide', () => {
-    expect(validateConfig(read('config/quantique.reference.json')).valid).toBe(true);
+  it('la configuration de référence KHentik est valide', () => {
+    expect(validateConfig(read('config/khentik.reference.json')).valid).toBe(true);
   });
   it('l’exemple client fictif est valide et marqué comme fictif', () => {
     const ex = read('config/examples/client-fictif.atelier-ginkgo.json');
@@ -37,7 +37,7 @@ describe('contrat de configuration', () => {
     expect(validateConfig(cfg).valid).toBe(false);
   });
   it('dérive des variables CSS lisibles', () => {
-    const v = brandCssVariables(withDefaults({ brand: { colors: { useQuantiqueDefaults: false, primary: '#FFE600', accent: '#000000' } } }));
+    const v = brandCssVariables(withDefaults({ brand: { colors: { useKHentikDefaults: false, primary: '#FFE600', accent: '#000000' } } }));
     expect(v['--q-primary']).toBe('#FFE600');
     expect(v['--q-primary-foreground']).toBe('#111827');
     expect(readableOn('#1E3A8A')).toBe('#FFFFFF');

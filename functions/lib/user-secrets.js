@@ -2,7 +2,7 @@
  * user-secrets.js — résolution des secrets.
  *
  * Trendl permettait de faire tourner l'application sur les clés d'un
- * « compte exploitant » (console « Clés & accès »). Quantique : une instance
+ * « compte exploitant » (console « Clés & accès »). KHentik : une instance
  * par client, donc uniquement les secrets GLOBAUX du projet Firebase
  * (Secret Manager). Exports conservés pour les modules repris.
  */

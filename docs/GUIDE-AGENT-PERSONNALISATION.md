@@ -4,8 +4,8 @@
 
 ## Entrées
 
-1. Le package `quantique-email/`, dans un état propre (`git status` sans modification, ou une copie neuve).
-2. Le fichier exporté par le questionnaire : `quantique-config-<entreprise>.json`.
+1. Le package `khentik-email/`, dans un état propre (`git status` sans modification, ou une copie neuve).
+2. Le fichier exporté par le questionnaire : `khentik-config-<entreprise>.json`.
 
 Rien d'autre : le logo est **dans** ce fichier. Aucun secret ni accès client n'est nécessaire pour une démonstration.
 
@@ -24,7 +24,7 @@ npm install
 npm run config:reset
 
 # 1. Valider l'export (ne modifie rien)
-npm run config:validate -- /chemin/quantique-config-client.json
+npm run config:validate -- /chemin/khentik-config-client.json
 ```
 
 Si le fichier est invalide, la commande liste les erreurs (champ, valeur attendue). Deux possibilités :
@@ -35,7 +35,7 @@ Ne jamais inventer une valeur manquante.
 
 ```bash
 # 2. Appliquer (copie de sauvegarde automatique dans config/backups/)
-npm run config:apply -- /chemin/quantique-config-client.json
+npm run config:apply -- /chemin/khentik-config-client.json
 
 # 3. Vérifier le package
 npm test
@@ -60,7 +60,7 @@ npm start            # ou npm run dev — http://localhost:3000
 
 Garder une capture de l'accueil et de la Mailbox comme preuve.
 
-## Revenir à Quantique
+## Revenir à KHentik
 
 ```bash
 npm run config:reset

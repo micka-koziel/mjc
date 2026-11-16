@@ -1,4 +1,4 @@
-# Quantique Mail — Spécifications fonctionnelles
+# KHentik Email — Spécifications fonctionnelles
 
 *Version 1.0 — 16 novembre 2026. Document destiné à l'architecte. Il se lit sans connaître l'historique du projet.*
 
@@ -15,17 +15,17 @@ L'annexe technique (`ANNEXE-TECHNIQUE.md`) relie chaque fonction aux fichiers r�
 
 ## 1. Objectif du produit et premier cas d'usage
 
-Quantique Mail aide une petite entreprise à **traiter ses e-mails plus vite** :
+KHentik Email aide une petite entreprise à **traiter ses e-mails plus vite** :
 - une liste de travail priorisée, où chaque e-mail est résumé en une phrase ;
 - un espace de réponse où l'IA propose un brouillon que la personne relit, modifie et envoie ;
 - une liste de tâches.
 
-Le produit est **générique**. Il est présenté sous la marque Quantique et se personnalise (nom, logo, couleurs, apparence, ton de l'assistant) par un fichier de configuration. Aucune donnée, aucun vocabulaire ni aucune règle propre à Trendl ou à un client n'en fait partie.
+Le produit est **générique**. Il est présenté sous la marque KHentik et se personnalise (nom, logo, couleurs, apparence, ton de l'assistant) par un fichier de configuration. Aucune donnée, aucun vocabulaire ni aucune règle propre à Trendl ou à un client n'en fait partie.
 
 **Première cliente envisagée** : la dirigeante de Mon Jardin Chocolaté, chocolaterie artisanale. Elle veut commencer simplement par la gestion de ses e-mails. Le projet de commandes groupées de la chocolaterie est **distinct** et hors périmètre.
 
 **Parcours commercial visé** :
-1. démonstration directe de la version Quantique (mode démo, données fictives) ;
+1. démonstration directe de la version KHentik (mode démo, données fictives) ;
 2. questionnaire préalable rempli par la cliente ;
 3. export du questionnaire fourni à un agent avec le package ;
 4. instance personnalisée et vérifiée pour la démonstration à la cliente.
@@ -324,7 +324,7 @@ Il ne permet ni de réintroduire le CRM, ni de retirer une entrée de navigation
 | 11 | Aucune dépendance CRM ou recouvrement ; blocs Cap AI retirés. | ✅ `npm run check:no-crm` |
 | 12 | Lancement selon la documentation. | ✅ `npm install`, `npm run build`, `npm start` |
 | 13 | Questionnaire : réponses conservées entre étapes et au rechargement, export valide avec logo. | ✅ Parcours automatisé complet |
-| 14 | Export appliqué au package, effets visibles ; retour à Quantique possible. | ✅ Thème sombre, couleurs, police, densité, logo, nom « Léa » visibles ; `config:reset` |
+| 14 | Export appliqué au package, effets visibles ; retour à KHentik possible. | ✅ Thème sombre, couleurs, police, densité, logo, nom « Léa » visibles ; `config:reset` |
 | 15 | Limites et vérifications non exécutées indiquées. | ✅ § 10 et README |
 
 ## 10. Hypothèses, limites et décisions à prendre

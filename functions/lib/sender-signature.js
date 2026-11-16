@@ -20,7 +20,7 @@
  * qu'au moment de l'envoi (côté serveur).
  */
 
-// Quantique : Trendl remplaçait un bloc final signé « Maxime / Max ». Les
+// KHentik : Trendl remplaçait un bloc final signé « Maxime / Max ». Les
 // prénoms reconnus viennent désormais du paramètre DEFAULT_SIGNERS (prénoms
 // séparés par des virgules) ; vide par défaut → l'étape 3 est inactive.
 const DEFAULT_SIGNERS = String(process.env.DEFAULT_SIGNERS || "")

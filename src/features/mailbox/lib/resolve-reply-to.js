@@ -11,7 +11,7 @@
  * du corps), pas à l'expéditeur technique Resend.
  */
 
-// Quantique — marqueur générique (Trendl : « [Trendl Contact] »).
+// KHentik — marqueur générique (Trendl : « [Trendl Contact] »).
 export const CONTACT_SUBJECT_MARKER = '[Contact]';
 const EMAIL_IN_TEXT = /[^\s<>"]+@[^\s<>"]+\.[^\s<>"]+/;
 
@@ -57,7 +57,7 @@ function cleanEmail(raw) {
 
 // ─── Sprint 98 (#9) — copie d'une réponse (« répondre à tous ») ─────────────
 
-// Quantique — le domaine « interne » n'est plus figé (Trendl : trendl.agency) :
+// KHentik — le domaine « interne » n'est plus figé (Trendl : trendl.agency) :
 // on exclut le domaine des adresses de la personne connectée.
 const EMAIL_RE_G = /[a-z0-9._%+'-]+@[a-z0-9.-]+\.[a-z]{2,}/gi;
 

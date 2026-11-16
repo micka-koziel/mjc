@@ -1,6 +1,6 @@
 /**
  * Origines autorisées à appeler les fonctions HTTP.
- * Quantique : plus de domaines Trendl codés en dur ; liste donnée par le
+ * KHentik : plus de domaines Trendl codés en dur ; liste donnée par le
  * paramètre ALLOWED_ORIGINS (séparées par des virgules), + localhost en dev.
  */
 const ALLOWED_ORIGINS = [

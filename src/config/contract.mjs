@@ -1,5 +1,5 @@
 /**
- * Contrat de configuration Quantique — SOURCE UNIQUE.
+ * Contrat de configuration KHentik — SOURCE UNIQUE.
  *
  * Ce fichier est utilisé tel quel par :
  *  - l'application (src/features/brand) pour appliquer la marque ;
@@ -51,22 +51,22 @@ export const LOGO_RULES = Object.freeze({
 });
 
 /**
- * Proposition de marque Quantique — PROVISOIRE et remplaçable : la charte
- * officielle de Quantique n'était pas disponible dans le dépôt Trendl.
+ * Couleurs de marque KHentik, reprises de l'application khentik-app
+ * (src/app/globals.css : or #A9883A en thème clair, bleu nuit #0C1929).
  */
-export const QUANTIQUE_DEFAULT_COLORS = Object.freeze({ primary: '#4F46E5', accent: '#0EA5A4' });
+export const KHENTIK_DEFAULT_COLORS = Object.freeze({ primary: '#A9883A', accent: '#0C1929' });
 
 export const DEFAULT_CONFIG = Object.freeze({
   schemaVersion: SCHEMA_VERSION,
   client: {
-    companyName: 'Quantique',
-    productName: 'Quantique Mail',
+    companyName: 'KHentik',
+    productName: 'KHentik Email',
     website: '',
     isFictional: false,
   },
   brand: {
     logo: { light: null, dark: null },
-    colors: { useQuantiqueDefaults: true, ...QUANTIQUE_DEFAULT_COLORS },
+    colors: { useKHentikDefaults: true, ...KHENTIK_DEFAULT_COLORS },
   },
   appearance: { theme: 'light', font: 'system', density: 'comfortable', textSize: 'normal' },
   assistant: { name: 'Assistant', tone: 'cordial', concision: 'balanced', language: 'fr' },
@@ -163,8 +163,8 @@ export function validateConfig(cfg) {
     const col = b.colors;
     if (!isObj(col)) errors.push('brand.colors : section obligatoire.');
     else {
-      if (typeof col.useQuantiqueDefaults !== 'boolean') {
-        errors.push('brand.colors.useQuantiqueDefaults : vrai ou faux attendu.');
+      if (typeof col.useKHentikDefaults !== 'boolean') {
+        errors.push('brand.colors.useKHentikDefaults : vrai ou faux attendu.');
       }
       for (const k of ['primary', 'accent']) {
         if (!HEX.test(String(col[k] || ''))) errors.push(`brand.colors.${k} : code couleur #RRGGBB attendu.`);
@@ -223,7 +223,7 @@ export function withDefaults(cfg = {}) {
   const d = DEFAULT_CONFIG;
   const c = isObj(cfg) ? cfg : {};
   const colors = { ...d.brand.colors, ...(c.brand?.colors || {}) };
-  if (colors.useQuantiqueDefaults) Object.assign(colors, QUANTIQUE_DEFAULT_COLORS);
+  if (colors.useKHentikDefaults) Object.assign(colors, KHENTIK_DEFAULT_COLORS);
   return {
     schemaVersion: SCHEMA_VERSION,
     client: { ...d.client, ...(c.client || {}) },

@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 /* ============================================================
- * Quantique — jetons de design.
+ * KHentik — jetons de design.
  *
  * Les couleurs de MARQUE (--q-primary, --q-accent…) sont posées au
  * chargement par BrandProvider, à partir de la configuration
@@ -19,13 +19,13 @@
   --color-disabled: var(--q-disabled);
   --color-border: var(--q-border);
 
-  --color-primary: var(--q-primary, #4f46e5);
+  --color-primary: var(--q-primary, #a9883a);
   --color-primary-foreground: var(--q-primary-foreground, #ffffff);
   --color-primary-soft: var(--q-soft);
   --color-link: var(--q-link);
-  --color-primary-strong: var(--q-primary-strong, #3730a3);
-  --color-secondary: var(--q-accent, #0ea5a4);
-  --color-accent: var(--q-accent, #0ea5a4);
+  --color-primary-strong: var(--q-primary-strong, #86692b);
+  --color-secondary: var(--q-accent, #0c1929);
+  --color-accent: var(--q-accent, #0c1929);
   --color-accent-foreground: var(--q-accent-foreground, #ffffff);
 
   --color-success: var(--q-success);
@@ -51,8 +51,8 @@
   --q-success: #047857;
   --q-warning: #b45309;
   --q-danger: #be123c;
-  --q-soft: var(--q-primary-soft, #e0e7ff);
-  --q-link: var(--q-link-light, #3730a3);
+  --q-soft: var(--q-primary-soft, #f5edd3);
+  --q-link: var(--q-link-light, #86692b);
 }
 
 [data-theme='dark'] {

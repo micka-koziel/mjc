@@ -73,7 +73,7 @@ export function waitForUndo({ label = 'E-mail', seconds } = {}) {
       'flex items-center gap-4 rounded-xl border border-white/10 bg-[#111827] px-4 py-3 text-sm text-white shadow-2xl';
     const text = document.createElement('span');
     const bar = document.createElement('span');
-    bar.className = 'block h-1 rounded-full bg-[var(--q-primary,#4F46E5)] transition-all duration-1000 ease-linear';
+    bar.className = 'block h-1 rounded-full bg-[var(--q-primary,#A9883A)] transition-all duration-1000 ease-linear';
     const barWrap = document.createElement('span');
     barWrap.className = 'block h-1 w-24 overflow-hidden rounded-full bg-white/10';
     barWrap.appendChild(bar);

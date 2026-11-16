@@ -20,7 +20,7 @@ const { maskEmail } = require("../lib/log-redact");
 
 exports.startWatch = onRequest(
   {
-    // Quantique : même région que les autres fonctions HTTP (une seule URL de base).
+    // KHentik : même région que les autres fonctions HTTP (une seule URL de base).
     region: "europe-west1",
     invoker: "public",
     secrets: ["GMAIL_CLIENT_SECRET", "GMAIL_REFRESH_TOKEN"],
@@ -33,7 +33,7 @@ exports.startWatch = onRequest(
 
       const { historyId, expirationMs } = await performWatch("started");
 
-      // Quantique : réponse JSON (lue par le bouton de l'application).
+      // KHentik : réponse JSON (lue par le bouton de l'application).
       res.json({ ok: true, historyId: String(historyId), expiration: new Date(expirationMs).toISOString() });
     } catch (err) {
       const status = err.status || 500;

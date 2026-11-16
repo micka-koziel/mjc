@@ -13,11 +13,12 @@ export function BrandLogo({ compact = false }) {
     const light = logo.light?.dataUrl || logo.dark?.dataUrl;
     const dark = logo.dark?.dataUrl || light;
     return (
-      <span className="flex items-center" title={name}>
+      <span className="flex flex-col items-start" title={name}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={light} alt={name} className="q-logo-light h-8 max-w-[160px] object-contain" />
+        <img src={light} alt={name} className="q-logo-light h-8 max-w-[160px] object-contain object-left" />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={dark} alt="" aria-hidden="true" className="q-logo-dark h-8 max-w-[160px] object-contain" />
+        <img src={dark} alt="" aria-hidden="true" className="q-logo-dark h-8 max-w-[160px] object-contain object-left" />
+        {!compact && <span className="mt-0.5 text-xs font-medium text-muted">{name}</span>}
       </span>
     );
   }

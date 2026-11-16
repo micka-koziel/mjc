@@ -20,7 +20,7 @@ const { consumeState } = require("../lib/oauth-state");
 
 exports.callbackOAuth = onRequest(
   {
-    // Quantique : même région que les autres fonctions HTTP (une seule URL de base).
+    // KHentik : même région que les autres fonctions HTTP (une seule URL de base).
     region: "europe-west1",
     invoker: "public", // Google appelle cet endpoint sans auth ; gardé par le state
     secrets: ["GMAIL_CLIENT_SECRET"],

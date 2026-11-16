@@ -1,7 +1,7 @@
 /**
  * Lecture serveur des Response Settings (Sprint 26 PR4).
  *
- * Document `app_settings/response_v1` (repris de Trendl). Quantique : pas
+ * Document `app_settings/response_v1` (repris de Trendl). KHentik : pas
  * d'écran de réglage dans le package ; le ton, la longueur et la langue
  * viennent de la configuration de marque (champ `assistant`), transmise
  * par l'application. Ce document reste utile pour la signature par défaut

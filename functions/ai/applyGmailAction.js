@@ -1,7 +1,7 @@
 /**
  * Cloud Function applyGmailAction — Sync application → Gmail
  * (reprise de Trendl, Sprint 21 PR1 + atomicité Firestore PR2).
- * Quantique : action « label_opportunity » retirée (tag CRM).
+ * KHentik : action « label_opportunity » retirée (tag CRM).
  *
  * Permet aux actions one-click prises dans Trendl (Spam, Poubelle, Ignorer,
  * Opportunité) de se refléter directement dans Gmail :
@@ -54,7 +54,7 @@ const VALID_ACTIONS = new Set([
   "mark_read",
 ]);
 
-// Mapping action Gmail → triage_reason. Quantique : l'action
+// Mapping action Gmail → triage_reason. KHentik : l'action
 // « label_opportunity » (tag CRM de Trendl) est retirée.
 const TRIAGE_REASONS = {
   trash: "trash",

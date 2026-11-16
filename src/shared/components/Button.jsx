@@ -4,7 +4,7 @@ import { cn } from '@/shared/utils/cn';
 import { Spinner } from './Spinner';
 
 /**
- * Button — repris de Trendl. Quantique : le variant primary suit la couleur
+ * Button — repris de Trendl. KHentik : le variant primary suit la couleur
  * de marque configurée (variables CSS --q-*), sans effet « glow » Trendl.
  */
 

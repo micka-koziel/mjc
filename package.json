@@ -1,8 +1,8 @@
 {
-  "name": "quantique-email",
+  "name": "khentik-email",
   "version": "0.1.0",
   "private": true,
-  "description": "Quantique — package générique de gestion des e-mails (extrait de Trendl)",
+  "description": "KHentik — package générique de gestion des e-mails (extrait de Trendl)",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

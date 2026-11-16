@@ -32,7 +32,7 @@ export const PRIORITY_RULES = Object.freeze({
   familyWeights: { reply: 100, todo: 20 },
   // Fraîcheur d'un e-mail selon l'âge en jours (barème Trendl DEFAULT_RULES.fresh).
   fresh: { d0: 30, d1: 26, d2: 22, d3: 18, d4to7: 10, d8to14: 0, d15to21: -15, d22plus: -35 },
-  // Bonus quand l'IA a identifié une action attendue (ajout Quantique, provisoire).
+  // Bonus quand l'IA a identifié une action attendue (ajout KHentik, provisoire).
   expectedActionBonus: 15,
   // Catégories IA exclues de la liste (information sans action).
   excludedCategories: ['newsletter', 'spam'],

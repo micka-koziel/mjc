@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
-const STORAGE_KEY = 'quantique.mailbox.prefs.v1';
+const STORAGE_KEY = 'khentik.mailbox.prefs.v1';
 
 const DEFAULT_PREFS = {
   folder: 'inbox',

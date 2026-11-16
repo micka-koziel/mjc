@@ -13,12 +13,12 @@
 const { db, admin } = require("./firebase-admin");
 const { createGmailClientAuto, startWatch } = require("./gmail-client");
 
-// Quantique : sujet Pub/Sub construit depuis le projet de l'instance
+// KHentik : sujet Pub/Sub construit depuis le projet de l'instance
 // (Trendl : projects/trendl-app/topics/trendl-emails-inbound, codé en dur).
 const TOPIC_NAME =
   process.env.GMAIL_WATCH_TOPIC ||
   `projects/${process.env.GCLOUD_PROJECT || process.env.GOOGLE_CLOUD_PROJECT}/topics/${
-    process.env.GMAIL_PUBSUB_TOPIC_NAME || "quantique-emails-inbound"}`;
+    process.env.GMAIL_PUBSUB_TOPIC_NAME || "khentik-emails-inbound"}`;
 
 const WATCH_DOC = "system/gmail-watch";
 

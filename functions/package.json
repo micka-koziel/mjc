@@ -1,6 +1,6 @@
 {
-  "name": "quantique-email-functions",
-  "description": "Cloud Functions du package Quantique (e-mails)",
+  "name": "khentik-email-functions",
+  "description": "Cloud Functions du package KHentik (e-mails)",
   "scripts": {
     "serve": "firebase emulators:start --only functions",
     "shell": "firebase functions:shell",

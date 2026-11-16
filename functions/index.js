@@ -1,5 +1,5 @@
 /**
- * Cloud Functions du package Quantique — périmètre e-mails uniquement.
+ * Cloud Functions du package KHentik — périmètre e-mails uniquement.
  * Extraites de trendl-app/functions/index.js (environ 110 fonctions dont
  * CRM, recouvrement, créateurs, prospection, veille… non reprises).
  */

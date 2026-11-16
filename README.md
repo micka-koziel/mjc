@@ -1,4 +1,4 @@
-# Quantique Mail — package générique de gestion des e-mails
+# KHentik Email — package générique de gestion des e-mails
 
 Application web de gestion des e-mails assistée par IA, extraite de l'application Trendl et rendue générique. Elle compte trois écrans : **Assistant IA** (accueil), **Mailbox** et **To-do**. La marque, les couleurs, le logo et le ton de l'assistant se règlent par **un seul fichier de configuration**, produit par le questionnaire client.
 
@@ -8,7 +8,7 @@ Application web de gestion des e-mails assistée par IA, extraite de l'applicati
 | Fonctions serveur (Firebase Cloud Functions) | `functions/` |
 | Contrat de configuration (source unique) | `src/config/contract.mjs` |
 | Configuration active de l'instance | `src/config/active.config.json` |
-| Référence Quantique / exemple fictif | `config/quantique.reference.json`, `config/examples/` |
+| Référence KHentik / exemple fictif | `config/khentik.reference.json`, `config/examples/` |
 | Questionnaire client (fichier HTML autonome) | `questionnaire/questionnaire.html` |
 | Spécifications pour l'architecte | `docs/SPECIFICATIONS-FONCTIONNELLES.md` |
 | Annexe technique (correspondance avec Trendl) | `docs/ANNEXE-TECHNIQUE.md` |
@@ -38,9 +38,9 @@ Production locale : `npm run build && npm start`.
 ## 2. Appliquer une configuration client
 
 ```bash
-npm run config:validate -- chemin/vers/quantique-config-client.json   # vérifie seulement
-npm run config:apply    -- chemin/vers/quantique-config-client.json   # vérifie puis installe
-npm run config:reset                                                   # revient à Quantique
+npm run config:validate -- chemin/vers/khentik-config-client.json   # vérifie seulement
+npm run config:apply    -- chemin/vers/khentik-config-client.json   # vérifie puis installe
+npm run config:reset                                                   # revient à KHentik
 ```
 
 Relancez ensuite `npm run dev` (ou `npm run build`). L'ancienne configuration est sauvegardée dans `config/backups/`. Le logo est **embarqué dans le JSON** : il n'y a aucun fichier à copier à part. Le mode opératoire complet est dans `docs/GUIDE-AGENT-PERSONNALISATION.md`.
@@ -59,7 +59,7 @@ Organisation retenue : **une instance = un client = un projet Firebase**, avec u
 
 1. **Projet Firebase** (plan Blaze), région `europe-west1` : activer Firestore, Storage et Authentication (fournisseur « E-mail / mot de passe »). Créer les comptes des utilisateurs dans Authentication et **vérifier leur adresse**, car les règles exigent `email_verified`.
 2. **Liste d'accès** : créer dans Firestore le document `app_settings/access` avec le champ `allowed_emails` (tableau d'adresses **en minuscules**). Cette liste est lue par les règles Firestore et Storage et par les fonctions.
-3. **Google Cloud** : activer l'API Gmail. Créer un identifiant OAuth « Application Web ». Créer le sujet Pub/Sub `quantique-emails-inbound` et donner le rôle *Publisher* à `gmail-api-push@system.gserviceaccount.com`.
+3. **Google Cloud** : activer l'API Gmail. Créer un identifiant OAuth « Application Web ». Créer le sujet Pub/Sub `khentik-emails-inbound` et donner le rôle *Publisher* à `gmail-api-push@system.gserviceaccount.com`.
 4. **Secrets** (Secret Manager) :
    ```bash
    npx firebase-tools functions:secrets:set ANTHROPIC_API_KEY

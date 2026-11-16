@@ -24,7 +24,7 @@ export const MAX_ATTACHMENTS = 5;
  * (5 max, 10 Mo par fichier) ; envoi avec 5 s pour annuler ; alertes sur les
  * liens/adresses non vérifiés renvoyées par le serveur.
  *
- * Adaptations Quantique :
+ * Adaptations KHentik :
  *  - appels via la couche services (démo ou réel) au lieu des fetch directs ;
  *  - préférences d'assistant de la configuration (ton, concision, langue)
  *    transmises à la génération ;

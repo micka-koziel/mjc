@@ -1,8 +1,8 @@
-# Annexe technique — correspondance Trendl → Quantique Mail
+# Annexe technique — correspondance Trendl → KHentik Email
 
 Source analysée : dépôt `trendl-app`, dernier commit `ac00f40` (« Sprint 107.1 : annulation d'envoi ramenée à 5 secondes »), copié **sans secrets** (`.env`, `.secrets` et `functions/.env` exclus). Le dépôt d'origine n'a pas été modifié.
 
-Les chemins Trendl sont relatifs à `trendl-app/`, les chemins du package à `quantique-email/`.
+Les chemins Trendl sont relatifs à `trendl-app/`, les chemins du package à `khentik-email/`.
 
 ## 1. Cartographie des fonctionnalités (noms visibles → code réel)
 

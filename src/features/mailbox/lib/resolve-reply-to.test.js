@@ -6,7 +6,7 @@ import {
 } from './resolve-reply-to';
 
 const CONTACT_TEXT = [
-  'Nouveau message Quantique',
+  'Nouveau message KHentik',
   '',
   'Sujet  : Marque',
   'Nom    : Mickael KOZIEL',

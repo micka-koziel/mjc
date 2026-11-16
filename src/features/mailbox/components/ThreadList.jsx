@@ -19,7 +19,7 @@ import { fold, matchesQuery, normalizeSearch } from '@/shared/utils/text-fold';
  *  - Date courte (HH:mm aujourd'hui, sinon date)
  *  - Badge "+N" si thread > 1 message
  *
- * Quantique : la pastille de couleur de classification métier de Trendl
+ * KHentik : la pastille de couleur de classification métier de Trendl
  * (opportunité / commercial / spam / transactionnel / traité) est RETIRÉE.
  * Seules restent les couleurs d'interface (sélection, non lu, suppression).
  *
@@ -167,7 +167,7 @@ function threadHaystack(t) {
       Array.isArray(m.cc) ? m.cc.join(' ') : m.cc,
       m.snippet,
       String(m.bodyText || '').slice(0, BODY_SEARCH_CHARS),
-      // Quantique : plus d'acteurs CRM (marques, créateurs…) ; on cherche
+      // KHentik : plus d'acteurs CRM (marques, créateurs…) ; on cherche
       // aussi le nom et l'entreprise détectés par l'IA, et les pièces jointes.
       m.analysis?.senderName,
       m.analysis?.senderCompany,
@@ -202,7 +202,7 @@ export function formatDateCompact(ts) {
 }
 
 function toDate(ts) {
-  // Quantique : nombre (démo) ou Timestamp Firestore (réel), via toMs.
+  // KHentik : nombre (démo) ou Timestamp Firestore (réel), via toMs.
   const ms = toMs(ts);
   return ms === null ? null : new Date(ms);
 }

@@ -1,6 +1,6 @@
 rules_version = '2';
 
-// Règles Firestore du package Quantique — refus par défaut.
+// Règles Firestore du package KHentik — refus par défaut.
 // Reprises des règles Trendl pour les collections du périmètre e-mails
 // (messages, message_drafts, todos : mêmes droits). Le rôle « admin » de
 // Trendl est remplacé par la liste des personnes autorisées de l'instance :

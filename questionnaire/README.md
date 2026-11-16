@@ -13,7 +13,7 @@ Le questionnaire tient dans **un seul fichier** : `questionnaire.html`. Il ne d�
 - Progression enregistrée **sur l'appareil du client** (stockage du navigateur) : on peut fermer et revenir.
 - Choix visuels (couleurs, thème, police, densité), aperçu de l'application, récapitulatif modifiable.
 - Le logo est réduit si besoin et **embarqué dans le fichier exporté**.
-- Export : bouton « Télécharger mon fichier » (`quantique-config-<entreprise>.json`) ou « Copier le contenu ».
+- Export : bouton « Télécharger mon fichier » (`khentik-config-<entreprise>.json`) ou « Copier le contenu ».
 - Possibilité de reprendre un fichier déjà exporté (étape 1, « Vous avez déjà un fichier exporté ? »).
 - Aucun mot de passe, aucune clé, aucun accès technique n'est demandé.
 

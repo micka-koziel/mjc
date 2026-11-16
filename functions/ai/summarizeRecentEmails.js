@@ -47,7 +47,7 @@ const MAX_MESSAGES_AI = 50;
 
 const {ALLOWED_ORIGINS} = require("../lib/cors");
 
-// Quantique : prompt générique (Trendl : « agence d'influence », classes
+// KHentik : prompt générique (Trendl : « agence d'influence », classes
 // opportunite/spam/autre). Aucune notion métier propre à un client.
 const SYSTEM_PROMPT = `Tu es un assistant qui aide une petite entreprise à trier les e-mails reçus récemment.
 

@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Personnalisez votre messagerie — Quantique</title>
+<title>Personnalisez votre messagerie — KHentik</title>
 <style>
   :root {
-    --q: #4F46E5; --q-fg: #fff; --q-soft: #EEF0FF; --bg: #F6F7F9; --card: #fff; --fg: #111827;
+    --q: #A9883A; --q-fg: #fff; --q-soft: #EEF0FF; --bg: #F6F7F9; --card: #fff; --fg: #111827;
     --muted: #5B6474; --border: #E3E6EB; --danger: #BE123C; --ok: #047857;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   }
@@ -14,7 +14,7 @@
   body { margin: 0; background: var(--bg); color: var(--fg); }
   .wrap { max-width: 760px; margin: 0 auto; padding: 24px 16px 120px; }
   header.top { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
-  .mark { width: 36px; height: 36px; border-radius: 10px; background: var(--q); color: #fff; display: grid; place-items: center; font-weight: 700; }
+  .mark { width: 36px; height: 36px; border-radius: 10px; background: #0C1929; color: #C8A951; display: grid; place-items: center; font-weight: 700; font-family: Georgia, serif; font-size: 15px; }
   header.top h1 { font-size: 18px; margin: 0; }
   header.top p { margin: 0; color: var(--muted); font-size: 13px; }
   .progress { height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; }
@@ -74,7 +74,7 @@
 <body>
 <div class="wrap">
   <header class="top">
-    <div class="mark" aria-hidden="true">Q</div>
+    <div class="mark" aria-hidden="true">KH</div>
     <div>
       <h1>Personnalisez votre messagerie</h1>
       <p>Quelques minutes · vos réponses restent sur cet appareil jusqu’à l’export</p>
@@ -95,9 +95,9 @@
 <script>
 /* ===== Contrat de configuration (copié depuis src/config/contract.mjs par
    scripts/build-questionnaire.mjs — NE PAS MODIFIER ICI) ===== */
-/* contract.mjs sha256:5589d18c8ae6 */
+/* contract.mjs sha256:7270b8a83a5b */
 /**
- * Contrat de configuration Quantique — SOURCE UNIQUE.
+ * Contrat de configuration KHentik — SOURCE UNIQUE.
  *
  * Ce fichier est utilisé tel quel par :
  *  - l'application (src/features/brand) pour appliquer la marque ;
@@ -149,22 +149,22 @@ const LOGO_RULES = Object.freeze({
 });
 
 /**
- * Proposition de marque Quantique — PROVISOIRE et remplaçable : la charte
- * officielle de Quantique n'était pas disponible dans le dépôt Trendl.
+ * Couleurs de marque KHentik, reprises de l'application khentik-app
+ * (src/app/globals.css : or #A9883A en thème clair, bleu nuit #0C1929).
  */
-const QUANTIQUE_DEFAULT_COLORS = Object.freeze({ primary: '#4F46E5', accent: '#0EA5A4' });
+const KHENTIK_DEFAULT_COLORS = Object.freeze({ primary: '#A9883A', accent: '#0C1929' });
 
 const DEFAULT_CONFIG = Object.freeze({
   schemaVersion: SCHEMA_VERSION,
   client: {
-    companyName: 'Quantique',
-    productName: 'Quantique Mail',
+    companyName: 'KHentik',
+    productName: 'KHentik Email',
     website: '',
     isFictional: false,
   },
   brand: {
     logo: { light: null, dark: null },
-    colors: { useQuantiqueDefaults: true, ...QUANTIQUE_DEFAULT_COLORS },
+    colors: { useKHentikDefaults: true, ...KHENTIK_DEFAULT_COLORS },
   },
   appearance: { theme: 'light', font: 'system', density: 'comfortable', textSize: 'normal' },
   assistant: { name: 'Assistant', tone: 'cordial', concision: 'balanced', language: 'fr' },
@@ -261,8 +261,8 @@ function validateConfig(cfg) {
     const col = b.colors;
     if (!isObj(col)) errors.push('brand.colors : section obligatoire.');
     else {
-      if (typeof col.useQuantiqueDefaults !== 'boolean') {
-        errors.push('brand.colors.useQuantiqueDefaults : vrai ou faux attendu.');
+      if (typeof col.useKHentikDefaults !== 'boolean') {
+        errors.push('brand.colors.useKHentikDefaults : vrai ou faux attendu.');
       }
       for (const k of ['primary', 'accent']) {
         if (!HEX.test(String(col[k] || ''))) errors.push(`brand.colors.${k} : code couleur #RRGGBB attendu.`);
@@ -321,7 +321,7 @@ function withDefaults(cfg = {}) {
   const d = DEFAULT_CONFIG;
   const c = isObj(cfg) ? cfg : {};
   const colors = { ...d.brand.colors, ...(c.brand?.colors || {}) };
-  if (colors.useQuantiqueDefaults) Object.assign(colors, QUANTIQUE_DEFAULT_COLORS);
+  if (colors.useKHentikDefaults) Object.assign(colors, KHENTIK_DEFAULT_COLORS);
   return {
     schemaVersion: SCHEMA_VERSION,
     client: { ...d.client, ...(c.client || {}) },
@@ -401,7 +401,7 @@ function brandCssVariables(cfg) {
 <script>
 (function () {
   'use strict';
-  var STORE = 'quantique.questionnaire.v' + SCHEMA_VERSION;
+  var STORE = 'khentik.questionnaire.v' + SCHEMA_VERSION;
   var STEPS = [
     { id: 'welcome', label: 'Bienvenue' },
     { id: 'identity', label: 'Identité' },
@@ -413,7 +413,7 @@ function brandCssVariables(cfg) {
     { id: 'recap', label: 'Validation' }
   ];
   var PRESETS = [
-    ['#4F46E5', '#0EA5A4'], ['#1E3A8A', '#F59E0B'], ['#065F46', '#84CC16'],
+    ['#A9883A', '#0C1929'], ['#1E3A8A', '#F59E0B'], ['#065F46', '#84CC16'],
     ['#7A3E1D', '#C9822B'], ['#9D174D', '#F472B6'], ['#111827', '#6366F1']
   ];
 
@@ -483,9 +483,9 @@ function brandCssVariables(cfg) {
     colors: function () {
       var c = state.brand.colors;
       var html = '<h2>Vos couleurs</h2><p class="lead">Elles colorent les boutons, la sélection et les éléments importants.</p><div class="choices" role="radiogroup" aria-label="Choix des couleurs">' +
-        '<button type="button" role="radio" class="choice" data-colors="quantique" aria-checked="' + c.useQuantiqueDefaults + '"><div class="swatch" style="background:linear-gradient(90deg,' + QUANTIQUE_DEFAULT_COLORS.primary + ' 60%,' + QUANTIQUE_DEFAULT_COLORS.accent + ' 60%)"></div><b>Garder la proposition Quantique</b><small>Vous pourrez changer plus tard</small></button>' +
-        '<button type="button" role="radio" class="choice" data-colors="custom" aria-checked="' + !c.useQuantiqueDefaults + '"><div class="swatch" style="background:linear-gradient(90deg,' + c.primary + ' 60%,' + c.accent + ' 60%)"></div><b>Mes couleurs</b><small>Choisir ou saisir vos codes</small></button></div>';
-      if (!c.useQuantiqueDefaults) {
+        '<button type="button" role="radio" class="choice" data-colors="khentik" aria-checked="' + c.useKHentikDefaults + '"><div class="swatch" style="background:linear-gradient(90deg,' + KHENTIK_DEFAULT_COLORS.primary + ' 60%,' + KHENTIK_DEFAULT_COLORS.accent + ' 60%)"></div><b>Garder les couleurs KHentik</b><small>Vous pourrez changer plus tard</small></button>' +
+        '<button type="button" role="radio" class="choice" data-colors="custom" aria-checked="' + !c.useKHentikDefaults + '"><div class="swatch" style="background:linear-gradient(90deg,' + c.primary + ' 60%,' + c.accent + ' 60%)"></div><b>Mes couleurs</b><small>Choisir ou saisir vos codes</small></button></div>';
+      if (!c.useKHentikDefaults) {
         html += '<label class="f">Suggestions</label><div class="chips">' + PRESETS.map(function (p, i) {
           return '<button type="button" class="chip" data-preset="' + i + '" aria-label="Palette ' + (i + 1) + '"><span style="display:inline-block;width:14px;height:14px;border-radius:4px;background:' + p[0] + '"></span> <span style="display:inline-block;width:14px;height:14px;border-radius:4px;background:' + p[1] + '"></span></button>';
         }).join('') + '</div>' +
@@ -552,7 +552,7 @@ function brandCssVariables(cfg) {
       return '<h2>Vérification</h2><p class="lead">Relisez, corrigez si besoin, puis exportez le fichier à transmettre.</p>' + preview() +
         '<div class="recap">' +
         sec('Identité', 1, [['Entreprise', esc(cfg.client.companyName) || '<span class="err">à compléter</span>'], ['Produit', esc(cfg.client.productName) || '<span class="err">à compléter</span>'], ['Site web', esc(cfg.client.website) || '—'], ['Logo', (cfg.brand.logo.light ? 'oui' : 'non') + (cfg.brand.logo.dark ? ' · variante sombre' : '')], ['Exemple fictif', cfg.client.isFictional ? 'oui' : 'non']]) +
-        sec('Couleurs', 2, [['Choix', c.useQuantiqueDefaults ? 'Proposition Quantique' : 'Mes couleurs'], ['Principale / accent', '<span style="display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:middle;background:' + (c.useQuantiqueDefaults ? QUANTIQUE_DEFAULT_COLORS.primary : c.primary) + '"></span> ' + (c.useQuantiqueDefaults ? QUANTIQUE_DEFAULT_COLORS.primary : c.primary) + ' · ' + (c.useQuantiqueDefaults ? QUANTIQUE_DEFAULT_COLORS.accent : c.accent)]]) +
+        sec('Couleurs', 2, [['Choix', c.useKHentikDefaults ? 'Couleurs KHentik' : 'Mes couleurs'], ['Principale / accent', '<span style="display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:middle;background:' + (c.useKHentikDefaults ? KHENTIK_DEFAULT_COLORS.primary : c.primary) + '"></span> ' + (c.useKHentikDefaults ? KHENTIK_DEFAULT_COLORS.primary : c.primary) + ' · ' + (c.useKHentikDefaults ? KHENTIK_DEFAULT_COLORS.accent : c.accent)]]) +
         sec('Apparence et lecture', 3, [['Thème', ALLOWED.theme[cfg.appearance.theme]], ['Police', ALLOWED.font[cfg.appearance.font]], ['Densité', ALLOWED.density[cfg.appearance.density]], ['Taille du texte', ALLOWED.textSize[cfg.appearance.textSize]]]) +
         sec('Assistant', 5, [['Nom', esc(cfg.assistant.name)], ['Ton', ALLOWED.tone[cfg.assistant.tone]], ['Longueur', ALLOWED.concision[cfg.assistant.concision]], ['Langue', ALLOWED.language[cfg.assistant.language]]]) +
         sec('Activité (non appliquée tout de suite)', 6, [['Activité', esc(cfg.context.activity) || '—'], ['E-mails reçus', cfg.context.emailTypes.map(function (k) { return ALLOWED.emailTypes[k]; }).join(', ') || '—'], ['Priorités', esc(cfg.context.priorityExpectations) || '—']]) +
@@ -560,7 +560,7 @@ function brandCssVariables(cfg) {
         (r.valid ? '<p class="ok">✓ Tout est prêt.</p>' : '<div class="notice"><b>À corriger avant l’export :</b><ul>' + r.errors.map(function (e) { return '<li>' + esc(e) + '</li>'; }).join('') + '</ul></div>') +
         '<div class="row" style="margin-top:12px"><button type="button" class="btn primary" id="download" ' + (r.valid ? '' : 'disabled') + '>⬇ Télécharger mon fichier</button>' +
         '<button type="button" class="btn" id="copy" ' + (r.valid ? '' : 'disabled') + '>Copier le contenu</button></div>' +
-        '<p class="hint" style="margin-top:8px">Transmettez ce fichier à votre interlocuteur Quantique. Le logo est inclus dedans.</p>';
+        '<p class="hint" style="margin-top:8px">Transmettez ce fichier à votre interlocuteur KHentik. Le logo est inclus dedans.</p>';
     }
   };
 
@@ -588,7 +588,7 @@ function brandCssVariables(cfg) {
       if (!state.client.productName.trim()) e['client.productName'] = 'Indiquez le nom affiché du produit.';
       if (state.client.website && !/^https?:\/\/[^\s.]+\.[^\s]+$/i.test(state.client.website.trim())) e['client.website'] = 'Adresse web à vérifier (elle doit commencer par https://).';
     }
-    if (id === 'colors' && !state.brand.colors.useQuantiqueDefaults) {
+    if (id === 'colors' && !state.brand.colors.useKHentikDefaults) {
       ['primary', 'accent'].forEach(function (k) { if (!/^#[0-9a-fA-F]{6}$/.test(state.brand.colors[k])) e['brand.colors.' + k] = 'Code couleur attendu au format #RRGGBB.'; });
     }
     if (id === 'assistant' && !String(state.assistant.name || '').trim()) e['assistant.name'] = 'Donnez un nom à l’assistant.';
@@ -635,10 +635,10 @@ function brandCssVariables(cfg) {
     document.getElementById('stepCount').textContent = 'Étape ' + (step + 1) + ' sur ' + STEPS.length;
     document.getElementById('prev').disabled = step === 0;
     document.getElementById('next').style.visibility = step === STEPS.length - 1 ? 'hidden' : 'visible';
-    var primary = state.brand.colors.useQuantiqueDefaults ? QUANTIQUE_DEFAULT_COLORS.primary : state.brand.colors.primary;
-    document.documentElement.style.setProperty('--q', /^#[0-9a-fA-F]{6}$/.test(primary) ? primary : '#4F46E5');
-    document.documentElement.style.setProperty('--q-fg', readableOn(/^#[0-9a-fA-F]{6}$/.test(primary) ? primary : '#4F46E5'));
-    document.documentElement.style.setProperty('--q-soft', mix(/^#[0-9a-fA-F]{6}$/.test(primary) ? primary : '#4F46E5', '#FFFFFF', 0.9));
+    var primary = state.brand.colors.useKHentikDefaults ? KHENTIK_DEFAULT_COLORS.primary : state.brand.colors.primary;
+    document.documentElement.style.setProperty('--q', /^#[0-9a-fA-F]{6}$/.test(primary) ? primary : '#A9883A');
+    document.documentElement.style.setProperty('--q-fg', readableOn(/^#[0-9a-fA-F]{6}$/.test(primary) ? primary : '#A9883A'));
+    document.documentElement.style.setProperty('--q-soft', mix(/^#[0-9a-fA-F]{6}$/.test(primary) ? primary : '#A9883A', '#FFFFFF', 0.9));
   }
 
   document.addEventListener('input', function (ev) {
@@ -675,7 +675,7 @@ function brandCssVariables(cfg) {
   document.addEventListener('click', function (ev) {
     var t = ev.target.closest('button'); if (!t) return;
     if (t.dataset.group) { set(t.dataset.group, t.dataset.key); render(); }
-    if (t.dataset.colors) { state.brand.colors.useQuantiqueDefaults = t.dataset.colors === 'quantique'; save(); render(); }
+    if (t.dataset.colors) { state.brand.colors.useKHentikDefaults = t.dataset.colors === 'khentik'; save(); render(); }
     if (t.dataset.preset) { var p = PRESETS[+t.dataset.preset]; state.brand.colors.primary = p[0]; state.brand.colors.accent = p[1]; errors = {}; save(); render(); }
     if (t.dataset.type) {
       var list = state.context.emailTypes, k = t.dataset.type, i = list.indexOf(k);
@@ -703,7 +703,7 @@ function brandCssVariables(cfg) {
 
   function fileName() {
     var slug = (state.client.companyName || 'client').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-    return 'quantique-config-' + slug + '.json';
+    return 'khentik-config-' + slug + '.json';
   }
   function download() {
     var blob = new Blob([JSON.stringify(exportable(), null, 2) + '\n'], { type: 'application/json' });
