@@ -66,9 +66,11 @@ export const DEFAULT_CONFIG = Object.freeze({
   },
   brand: {
     logo: { light: null, dark: null },
-    colors: { useKHentikDefaults: true, ...KHENTIK_DEFAULT_COLORS },
+    // background : couleur de fond du thème clair (null = fond neutre par défaut).
+    colors: { useKHentikDefaults: true, ...KHENTIK_DEFAULT_COLORS, background: null },
   },
-  appearance: { theme: 'light', font: 'system', density: 'comfortable', textSize: 'normal' },
+  // titleFont : police des titres (null = même police que le texte).
+  appearance: { theme: 'light', font: 'system', titleFont: null, density: 'comfortable', textSize: 'normal' },
   assistant: { name: 'Assistant', tone: 'cordial', concision: 'balanced', language: 'fr' },
   context: {
     applied: false,
@@ -172,6 +174,13 @@ export function validateConfig(cfg) {
       if (HEX.test(String(col.primary || '')) && contrastRatio(col.primary, '#FFFFFF') < 3 && contrastRatio(col.primary, '#111827') < 3) {
         warnings.push('brand.colors.primary : contraste faible avec le texte, lisibilité réduite.');
       }
+      // Facultatif : absent ou null = fond neutre.
+      if (col.background !== undefined && col.background !== null) {
+        if (!HEX.test(String(col.background))) errors.push('brand.colors.background : code couleur #RRGGBB ou null attendu.');
+        else if (contrastRatio(col.background, '#111827') < 4.5) {
+          warnings.push('brand.colors.background : fond trop foncé, le texte sera difficile à lire.');
+        }
+      }
     }
   }
 
@@ -180,6 +189,8 @@ export function validateConfig(cfg) {
   else {
     checkEnum(a.theme, 'theme', 'appearance.theme', errors);
     checkEnum(a.font, 'font', 'appearance.font', errors);
+    // Facultatif : absent ou null = même police que le texte.
+    if (a.titleFont !== undefined && a.titleFont !== null) checkEnum(a.titleFont, 'font', 'appearance.titleFont', errors);
     checkEnum(a.density, 'density', 'appearance.density', errors);
     checkEnum(a.textSize, 'textSize', 'appearance.textSize', errors);
   }
@@ -281,7 +292,17 @@ export function readableOn(hex) {
  */
 export function brandCssVariables(cfg) {
   const conf = withDefaults(cfg);
-  const { primary, accent } = conf.brand.colors;
+  const { primary, accent, background } = conf.brand.colors;
+  const font = FONT_STACKS[conf.appearance.font] || FONT_STACKS.system;
+  // Fond personnalisé (thème clair) : zones en relief et bordures en dérivent
+  // pour rester dans la même famille de teintes.
+  const ground = background
+    ? {
+        '--q-bg-custom': background,
+        '--q-elevated-custom': mix(background, '#000000', 0.04),
+        '--q-border-custom': mix(background, '#000000', 0.1),
+      }
+    : {};
   return {
     '--q-primary': primary,
     '--q-primary-foreground': readableOn(primary),
@@ -293,8 +314,10 @@ export function brandCssVariables(cfg) {
     '--q-link-dark': contrastRatio(primary, '#0F1218') >= 4.5 ? primary : mix(primary, '#FFFFFF', 0.55),
     '--q-accent': accent,
     '--q-accent-foreground': readableOn(accent),
-    '--q-font': FONT_STACKS[conf.appearance.font] || FONT_STACKS.system,
+    '--q-font': font,
+    '--q-font-title': FONT_STACKS[conf.appearance.titleFont] || font,
     '--q-text-scale': conf.appearance.textSize === 'large' ? '1.125' : '1',
     '--q-row-pad': conf.appearance.density === 'compact' ? '0.375rem' : '0.75rem',
+    ...ground,
   };
 }

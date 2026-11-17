@@ -34,20 +34,21 @@
   --color-danger-foreground: #ffffff;
 
   --font-sans: var(--q-font, system-ui, sans-serif);
-  --font-display: var(--q-font, system-ui, sans-serif);
+  --font-display: var(--q-font-title, var(--q-font, system-ui, sans-serif));
 }
 
 /* Thème clair (par défaut) */
 :root,
 [data-theme='light'] {
   color-scheme: light;
-  --q-bg: #f6f7f9;
+  /* Fond, relief et bordures : personnalisables (brand.colors.background). */
+  --q-bg: var(--q-bg-custom, #f6f7f9);
   --q-surface: #ffffff;
-  --q-elevated: #eef0f4;
+  --q-elevated: var(--q-elevated-custom, #eef0f4);
   --q-fg: #111827;
   --q-muted: #5b6474;
   --q-disabled: #9aa1ad;
-  --q-border: #e3e6eb;
+  --q-border: var(--q-border-custom, #e3e6eb);
   --q-success: #047857;
   --q-warning: #b45309;
   --q-danger: #be123c;
@@ -98,6 +99,13 @@ body {
   color: var(--color-foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+}
+
+/* Titres : police dédiée (appearance.titleFont), sinon celle du texte. */
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
 }
 
 ::selection {

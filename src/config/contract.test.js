@@ -42,4 +42,34 @@ describe('contrat de configuration', () => {
     expect(v['--q-primary-foreground']).toBe('#111827');
     expect(readableOn('#1E3A8A')).toBe('#FFFFFF');
   });
+  it('fond et police des titres : facultatifs, valeurs neutres par défaut', () => {
+    const v = brandCssVariables(withDefaults({}));
+    expect(v['--q-bg-custom']).toBeUndefined();
+    expect(v['--q-font-title']).toBe(v['--q-font']);
+    const ancien = structuredClone(DEFAULT_CONFIG);
+    delete ancien.brand.colors.background;
+    delete ancien.appearance.titleFont;
+    expect(validateConfig(ancien).valid).toBe(true);
+  });
+  it('applique un fond et une police des titres personnalisés', () => {
+    const v = brandCssVariables(
+      withDefaults({ brand: { colors: { background: '#F7F1EC' } }, appearance: { titleFont: 'serif' } })
+    );
+    expect(v['--q-bg-custom']).toBe('#F7F1EC');
+    expect(v['--q-elevated-custom']).toMatch(/^#[0-9A-F]{6}$/);
+    expect(v['--q-font-title']).toMatch(/Georgia/);
+  });
+  it('refuse un fond ou une police des titres invalides, alerte sur un fond trop foncé', () => {
+    const cfg = structuredClone(DEFAULT_CONFIG);
+    cfg.brand.colors.background = 'crème';
+    cfg.appearance.titleFont = 'gothique';
+    const r = validateConfig(cfg);
+    expect(r.errors.some((e) => e.includes('brand.colors.background'))).toBe(true);
+    expect(r.errors.some((e) => e.includes('appearance.titleFont'))).toBe(true);
+    cfg.brand.colors.background = '#251815';
+    cfg.appearance.titleFont = null;
+    const r2 = validateConfig(cfg);
+    expect(r2.valid).toBe(true);
+    expect(r2.warnings.some((w) => w.includes('fond trop foncé'))).toBe(true);
+  });
 });

@@ -22,8 +22,10 @@ Le format est un JSON en UTF-8. Le fichier exporté par le questionnaire s'appel
 | `brand.colors.useKHentikDefaults` | booléen | oui | `true` | | `true` = couleurs KHentik, quelles que soient les valeurs saisies |
 | `brand.colors.primary` | texte | oui | `#A9883A` | `#RRGGBB` ; un contraste faible déclenche un avertissement | Boutons, sélection, navigation |
 | `brand.colors.accent` | texte | oui | `#0C1929` | `#RRGGBB` | Couleur secondaire |
+| `brand.colors.background` | texte ou null | non | `null` | `#RRGGBB` | Fond du thème clair ; zones en relief et bordures en dérivent. `null` = fond neutre. Alerte si trop foncé |
 | `appearance.theme` | texte | oui | `light` | `light`, `dark`, `system` | Thème |
 | `appearance.font` | texte | oui | `system` | `system` (Moderne), `humanist` (Douce), `serif` (Classique) | Police (polices système, sans téléchargement) |
+| `appearance.titleFont` | texte ou null | non | `null` | `system`, `humanist`, `serif` | Police des titres. `null` = même police que le texte |
 | `appearance.density` | texte | oui | `comfortable` | `comfortable`, `compact` | Espacement des listes |
 | `appearance.textSize` | texte | oui | `normal` | `normal`, `large` (+12,5 %) | Taille du texte |
 | `assistant.name` | texte | oui | `Assistant` | 1 à 30 caractères | Nom de l'assistant (accueil, chat, chargement) |
