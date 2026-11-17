@@ -9,17 +9,14 @@ import { brandConfig } from '@/features/brand/brand';
 import { LoginScreen } from './LoginScreen';
 import { cn } from '@/shared/utils/cn';
 import { ConfirmButton } from '@/shared/components/ConfirmButton';
+import { enabledModules, showModuleTitles } from '@/modules/registry';
 
 /**
- * Coquille de l'application : barre latérale à EXACTEMENT trois entrées
- * métier, dans l'ordre demandé. Reprend la structure de AdminSidebar (Trendl)
- * sans ses ~40 entrées CRM / recouvrement / système.
+ * Coquille de l'application : barre latérale construite depuis le registre
+ * des modules (src/modules/registry.js). Un titre par module n'apparaît
+ * qu'à partir de deux modules actifs. Reprend la structure de AdminSidebar
+ * (Trendl) sans ses ~40 entrées CRM / recouvrement / système.
  */
-export const NAV = Object.freeze([
-  { label: 'Assistant IA', view: 'home', icon: 'spark' },
-  { label: 'Mailbox', view: 'mailbox', icon: 'mail' },
-  { label: 'To-do', view: 'todos', icon: 'check' },
-]);
 
 const ICONS = {
   spark: <path d="m12 3 1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4z" />,
@@ -59,21 +56,28 @@ export function AppShell({ children }) {
   const NavLink = HASH_ROUTING ? 'a' : Link;
 
   const nav = (
-    <nav aria-label="Navigation principale" className="flex flex-col gap-1">
-      {NAV.map((item) => (
-        <NavLink
-          key={item.view}
-          href={hrefFor(item.view)}
-          onClick={() => setOpen(false)}
-          aria-current={isActive(item.view) ? 'page' : undefined}
-          className={cn(
-            'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-            isActive(item.view) ? 'bg-primary text-primary-foreground' : 'text-muted hover:bg-elevated hover:text-foreground'
+    <nav aria-label="Navigation principale" className="flex flex-col gap-4">
+      {enabledModules().map((mod) => (
+        <div key={mod.id} className="flex flex-col gap-1">
+          {showModuleTitles() && (
+            <p className="px-3 text-[10px] font-semibold uppercase tracking-wider text-muted">{mod.label}</p>
           )}
-        >
-          <NavIcon name={item.icon} />
-          {item.label}
-        </NavLink>
+          {mod.nav.map((item) => (
+            <NavLink
+              key={item.view}
+              href={hrefFor(item.view)}
+              onClick={() => setOpen(false)}
+              aria-current={isActive(item.view) ? 'page' : undefined}
+              className={cn(
+                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+                isActive(item.view) ? 'bg-primary text-primary-foreground' : 'text-muted hover:bg-elevated hover:text-foreground'
+              )}
+            >
+              <NavIcon name={item.icon} />
+              {item.label}
+            </NavLink>
+          ))}
+        </div>
       ))}
     </nav>
   );
