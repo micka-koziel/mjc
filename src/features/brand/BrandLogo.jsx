@@ -3,7 +3,8 @@
 import { brandConfig } from './brand';
 
 /**
- * Logo de l'instance : image embarquée de la configuration (variante sombre
+ * Logo de l’instance : image embarquée de la configuration, hauteur 48 px max
+ * et largeur 160 px max (s’adapte aux logos larges comme aux logos hauts ; variante sombre
  * si le thème est sombre et qu'elle existe), sinon pastille + nom du produit.
  */
 export function BrandLogo({ compact = false }) {
@@ -15,9 +16,9 @@ export function BrandLogo({ compact = false }) {
     return (
       <span className="flex flex-col items-start" title={name}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={light} alt={name} className="q-logo-light h-8 max-w-[160px] object-contain object-left" />
+        <img src={light} alt={name} className="q-logo-light h-auto max-h-12 w-auto max-w-[160px] object-contain object-left" />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={dark} alt="" aria-hidden="true" className="q-logo-dark h-8 max-w-[160px] object-contain object-left" />
+        <img src={dark} alt="" aria-hidden="true" className="q-logo-dark h-auto max-h-12 w-auto max-w-[160px] object-contain object-left" />
         {!compact && <span className="mt-0.5 text-xs font-medium text-muted">{name}</span>}
       </span>
     );
