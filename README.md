@@ -1,6 +1,6 @@
-# KHentik Email — package générique de gestion des e-mails
+# MJC — l'application de Mon Jardin Chocolaté
 
-Application web de gestion des e-mails assistée par IA, extraite de l'application Trendl et rendue générique. Elle compte trois écrans : **Assistant IA** (accueil), **Mailbox** et **To-do**. La marque, les couleurs, le logo et le ton de l'assistant se règlent par **un seul fichier de configuration**, produit par le questionnaire client.
+Application de Mon Jardin Chocolaté, construite par modules. Le premier module, **E-mail**, reprend le package générique KHentik Email (gestion des e-mails assistée par IA, extraite de l'application Trendl). D'autres modules pourront s'ajouter (voir `src/modules/registry.js`). Le module E-mail compte trois écrans : **Assistant IA** (accueil), **Mailbox** et **To-do**. La marque, les couleurs, le logo et le ton de l'assistant se règlent par **un seul fichier de configuration**, produit par le questionnaire client.
 
 | Élément | Où |
 |---|---|

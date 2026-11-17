@@ -1,6 +1,6 @@
 {
-  "name": "khentik-email-functions",
-  "description": "Cloud Functions du package KHentik (e-mails)",
+  "name": "mjc-functions",
+  "description": "Cloud Functions de l'application MJC (module e-mail)",
   "scripts": {
     "serve": "firebase emulators:start --only functions",
     "shell": "firebase functions:shell",

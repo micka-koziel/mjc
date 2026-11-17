@@ -1,8 +1,8 @@
 {
-  "name": "khentik-email",
+  "name": "mjc",
   "version": "0.1.0",
   "private": true,
-  "description": "KHentik — package générique de gestion des e-mails (extrait de Trendl)",
+  "description": "MJC — application de Mon Jardin Chocolaté (module e-mail, issu de KHentik Email)",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
