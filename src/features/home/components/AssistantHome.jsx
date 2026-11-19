@@ -36,7 +36,9 @@ export function AssistantHome() {
     [threads, todos, now]
   );
   const openThread = openThreadId ? threads.find((t) => t.threadId === openThreadId) : null;
-  const firstName = (user?.displayName || '').split(' ')[0];
+  // La boîte est celle de sa titulaire (ex. Carine) : c'est elle qu'on accueille,
+  // quel que soit le compte de démonstration connecté.
+  const firstName = brandConfig.client.ownerFirstName || (user?.displayName || '').split(' ')[0];
   const today = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).format(now);
 
   async function markTodoDone(item) {

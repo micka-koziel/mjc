@@ -29,7 +29,7 @@ export const FONTS = Object.freeze({ ...ALLOWED.font, worksans: 'Work Sans' });
 /** Apparence neutre du produit, quand une valeur manque. */
 export const DEFAULT_UI = Object.freeze({
   instanceVersion: INSTANCE_VERSION,
-  client: { companyName: 'KHentik', productName: 'KHentik Email', website: '', isFictional: false },
+  client: { companyName: 'KHentik', productName: 'KHentik Email', website: '', isFictional: false, ownerFirstName: '' },
   brand: {
     logo: { light: null, dark: null },
     colors: { primary: '#A9883A', accent: '#0C1929', background: null, text: null, link: null, success: null },
@@ -160,6 +160,8 @@ export function buildInstance(answers, overrides = {}) {
       productName: a.client.productName.trim(),
       website: String(a.client.website || '').trim(),
       isFictional: a.client.isFictional === true,
+      // Prénom de la titulaire de la boîte (arbitrage) : accueil « Bonjour Carine ».
+      ownerFirstName: String(a.client.ownerFirstName || '').trim().slice(0, 40),
     },
     brand: {
       logo: logoPaths,

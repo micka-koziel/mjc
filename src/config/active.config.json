@@ -4,7 +4,8 @@
     "companyName": "Mon jardin chocolaté",
     "productName": "Mon jardin chocolaté",
     "website": "https://www.monjardinchocolate.com",
-    "isFictional": false
+    "isFictional": false,
+    "ownerFirstName": "Carine"
   },
   "brand": {
     "logo": {
