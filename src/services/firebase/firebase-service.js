@@ -90,7 +90,8 @@ export function createFirebaseService() {
       // onIdTokenChanged (et non onAuthStateChanged) : prévenu aussi quand le
       // jeton est renouvelé après la vérification de l'adresse e-mail.
       return onIdTokenChanged(auth, (u) =>
-        cb(u ? { uid: u.uid, email: u.email, displayName: u.displayName || u.email, emailVerified: u.emailVerified } : null)
+        // displayName : le prénom saisi à l'invitation (vide sinon) ; l'adresse reste dans `email`.
+        cb(u ? { uid: u.uid, email: u.email, displayName: u.displayName || '', emailVerified: u.emailVerified } : null)
       );
     },
     // Les règles d'accès exigent une adresse vérifiée : envoi du lien, puis
