@@ -26,6 +26,7 @@
  * Secrets  : GMAIL_CLIENT_SECRET, GMAIL_REFRESH_TOKEN.
  */
 
+const { isSimulatedMailbox } = require("../lib/simulated-mailbox");
 const { onSchedule } = require("firebase-functions/v2/scheduler");
 const { logger } = require("firebase-functions");
 const { db, admin } = require("../lib/firebase-admin");
@@ -64,6 +65,7 @@ exports.checkIngestionHealth = onSchedule(
     secrets: ["GMAIL_CLIENT_SECRET", "GMAIL_REFRESH_TOKEN"],
   },
   async () => {
+    if (isSimulatedMailbox()) return; // boîte de démonstration : pas de Gmail
     try {
       const snap = await db.doc(WATCH_DOC).get();
       const data = snap.exists ? snap.data() : {};

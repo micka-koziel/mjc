@@ -13,6 +13,7 @@
 const { onSchedule } = require("firebase-functions/v2/scheduler");
 const { logger } = require("firebase-functions");
 const { performWatch } = require("../lib/watch-helpers");
+const { isSimulatedMailbox } = require("../lib/simulated-mailbox");
 
 exports.renewWatch = onSchedule(
   {
@@ -21,6 +22,7 @@ exports.renewWatch = onSchedule(
     secrets: ["GMAIL_CLIENT_SECRET", "GMAIL_REFRESH_TOKEN"],
   },
   async () => {
+    if (isSimulatedMailbox()) return; // boîte de démonstration : pas de Gmail
     try {
       const { expirationMs } = await performWatch("renewed");
       logger.info("Watch renewed", {

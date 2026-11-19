@@ -9,23 +9,22 @@ setGlobalOptions({maxInstances: 10});
 
 require("./lib/sentry").initSentry();
 
-const {isSimulatedMailbox} = require("./lib/simulated-mailbox");
+// Boîte de DÉMONSTRATION (MAILBOX_PROVIDER=simulated) : jeu d'e-mails fictifs
+// du client, remis à neuf à la demande. Refusé sur une vraie boîte.
+// Les fonctions Gmail restent toujours exportées : le choix de la boîte se
+// fait à l'exécution (l'outil de déploiement ne lit pas functions/.env au
+// moment de lister les fonctions) ; en mode simulé, elles ne font rien.
+exports.resetDemoMailbox = require("./demo/resetDemoMailbox").resetDemoMailbox;
 
-if (isSimulatedMailbox()) {
-  // Boîte de DÉMONSTRATION (MAILBOX_PROVIDER=simulated) : pas de Gmail ;
-  // jeu d'e-mails fictifs du client, remis à neuf à la demande.
-  exports.resetDemoMailbox = require("./demo/resetDemoMailbox").resetDemoMailbox;
-} else {
-  // Connexion Gmail (OAuth) — repris
-  exports.initOAuth = require("./oauth/initOAuth").initOAuth;
-  exports.callbackOAuth = require("./oauth/callbackOAuth").callbackOAuth;
+// Connexion Gmail (OAuth) — repris
+exports.initOAuth = require("./oauth/initOAuth").initOAuth;
+exports.callbackOAuth = require("./oauth/callbackOAuth").callbackOAuth;
 
-  // Réception des e-mails (Pub/Sub Gmail) — repris
-  exports.ingestEmail = require("./ingest/ingestEmail").ingestEmail;
-  exports.startWatch = require("./ingest/startWatch").startWatch;
-  exports.renewWatch = require("./schedule/renewWatch").renewWatch;
-  exports.checkIngestionHealth = require("./schedule/checkIngestionHealth").checkIngestionHealth;
-}
+// Réception des e-mails (Pub/Sub Gmail) — repris
+exports.ingestEmail = require("./ingest/ingestEmail").ingestEmail;
+exports.startWatch = require("./ingest/startWatch").startWatch;
+exports.renewWatch = require("./schedule/renewWatch").renewWatch;
+exports.checkIngestionHealth = require("./schedule/checkIngestionHealth").checkIngestionHealth;
 
 // Analyse IA générique de chaque e-mail — adapté
 exports.analyzeEmail = require("./analyze/analyzeEmail").analyzeEmail;
