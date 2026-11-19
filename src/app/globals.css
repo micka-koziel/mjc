@@ -151,3 +151,29 @@ html[data-contrast='high'] {
   [data-theme='system'] .q-logo-light { display: none; }
   [data-theme='system'] .q-logo-dark { display: block; }
 }
+
+/* Avatar de l'assistant « vivant » : halo qui respire + pastille en ligne. */
+@media (prefers-reduced-motion: no-preference) {
+  .assistant-live {
+    animation: assistant-halo 4.2s ease-in-out infinite;
+  }
+  .assistant-live-ping {
+    animation: assistant-ping 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+}
+@keyframes assistant-halo {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-accent, #ad7c59) 0%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-accent, #ad7c59) 28%, transparent);
+  }
+}
+@keyframes assistant-ping {
+  75%,
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}

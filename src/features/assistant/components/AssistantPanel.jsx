@@ -102,10 +102,10 @@ export function AssistantPanel({ onOpenThread, workList = [] }) {
 
   return (
     <aside aria-label={name} className="flex min-h-[420px] flex-col gap-3 rounded-2xl border border-primary/30 bg-primary-soft/40 p-3 xl:min-h-0">
-      <div className="flex items-center gap-3">
-        <AssistantAvatar size="lg" />
+      <div className="flex items-center gap-4">
+        <AssistantAvatar size="xl" live />
         <div>
-          <p className="font-semibold text-foreground">{name}</p>
+          <p className="text-lg font-semibold text-foreground">{name}</p>
           <p className="text-xs text-muted">{brandConfig.assistant.tagline}{mode === 'demo' ? ' · démo' : ''}</p>
         </div>
       </div>
@@ -133,7 +133,6 @@ export function AssistantPanel({ onOpenThread, workList = [] }) {
       <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto rounded-xl bg-surface p-2" aria-live="polite">
         {entries.length === 0 && (
           <div className="m-auto flex max-w-[17rem] flex-col items-center gap-2 text-center">
-            <AssistantAvatar size="lg" />
             <p className="text-sm font-semibold text-foreground">{brandConfig.assistant.welcome || `Bonjour, je suis ${name} !`}</p>
             <p className="text-xs text-muted">Posez-moi une question sur vos e-mails, ou utilisez une commande ci-dessus.</p>
           </div>

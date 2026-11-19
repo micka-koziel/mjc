@@ -1,4 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Alice">
+  <!-- Animations : seulement quand l'image est affichée en grand (≥ 80 px)
+       et si l'utilisateur n'a pas demandé à réduire les animations. -->
+  <style>
+    .head, .body, .eyes, .pupils, .strand, .splash, .grain, .badge { transform-box: view-box; }
+    @media (min-width: 80px) and (prefers-reduced-motion: no-preference) {
+      .body   { animation: breathe 4.2s ease-in-out infinite; }
+      .head   { transform-origin: 48px 64px; animation: sway 7s ease-in-out infinite; }
+      .eyes   { transform-origin: 48px 44.3px; animation: blink 5.3s infinite; }
+      .pupils { animation: glance 9s ease-in-out infinite; }
+      .strand { transform-origin: 48px 20px; animation: wind 3.6s ease-in-out infinite; }
+      .s2     { animation-delay: -1.4s; }
+      .splash { animation: drift 11s ease-in-out infinite alternate; }
+      .grain  { animation: flicker .9s steps(3) infinite; }
+      .badge  { transform-origin: 23px 83px; animation: pulse 3s ease-in-out infinite; }
+    }
+    @keyframes breathe { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-.9px); } }
+    @keyframes sway    { 0%,100% { transform: rotate(0deg) translateY(0); } 30% { transform: rotate(-1.6deg) translateY(-.6px); } 65% { transform: rotate(1.2deg) translateY(-.3px); } }
+    @keyframes blink   { 0%,92%,100% { transform: scaleY(1); } 95% { transform: scaleY(.08); } }
+    @keyframes glance  { 0%,30%,100% { transform: translateX(0); } 38%,55% { transform: translateX(-1.1px); } 62%,80% { transform: translateX(1px); } }
+    @keyframes wind    { 0%,100% { transform: rotate(0deg); } 50% { transform: rotate(3deg); } }
+    @keyframes drift   { from { transform: translate(0,0); } to { transform: translate(3px,-2px); } }
+    @keyframes flicker { 0% { opacity: .42; } 50% { opacity: .5; } 100% { opacity: .38; } }
+    @keyframes pulse   { 0%,100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+  </style>
   <defs>
     <clipPath id="c"><circle cx="48" cy="48" r="48"/></clipPath>
     <pattern id="plaid" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(8)">
@@ -12,49 +36,61 @@
   <g clip-path="url(#c)">
     <rect width="96" height="96" fill="#5A3324"/>
     <!-- éclaboussures et griffures -->
-    <circle cx="16" cy="22" r="9" fill="#AD7C59" opacity=".35"/>
-    <circle cx="27" cy="12" r="2.5" fill="#AD7C59" opacity=".45"/>
-    <circle cx="80" cy="30" r="5" fill="#338811" opacity=".35"/>
-    <circle cx="86" cy="18" r="1.8" fill="#338811" opacity=".55"/>
-    <path d="M6 60l18-6M70 8l20 10M74 62l16-4" stroke="#AD7C59" stroke-width="1.2" opacity=".5"/>
-    <!-- chemise à carreaux ouverte sur un t-shirt noir déchiré -->
-    <path d="M4 96c3-18 19-28 44-28s41 10 44 28z" fill="url(#plaid)"/>
-    <path d="M34 70c4 4 9 6 14 6s10-2 14-6l4 26H30z" fill="#0E0806"/>
-    <path d="M40 84l3 3 2-2 3 3 3-3 2 2 3-3" stroke="#3A2A24" stroke-width="1.2" fill="none"/>
-    <path d="M34 70l-6 26M62 70l6 26" stroke="#2A1610" stroke-width="1.5"/>
-    <!-- cou + collier ras du cou -->
-    <path d="M42 56h12v14c-4 2-8 2-12 0z" fill="#D9A383"/>
-    <path d="M41.5 63.5c4 2 9 2 13 0" stroke="#0E0806" stroke-width="2.2" fill="none"/>
-    <circle cx="48" cy="66.3" r="1.2" fill="#C9B8A8"/>
-    <!-- cheveux longs en bataille (arrière) -->
-    <path d="M22 72c-6-16-4-34 6-44 6-7 14-10 21-10 10 0 19 5 23 14 5 11 4 28-3 40l-6-14-4 12-3-16H33l-2 14-4-10z" fill="#24120B"/>
-    <!-- visage -->
-    <path d="M34 38c0-9 6-15 14-15s14 6 14 15v7c0 9-6 16-14 16s-14-7-14-16z" fill="#E4AE8B"/>
-    <!-- frange déstructurée, mèches kraft -->
-    <path d="M30 46c-1-12 5-24 18-26 11-1 18 6 19 18l-4-3-3 6-2-8-4 7-3-9-4 8-3-7-4 9-2-4z" fill="#24120B"/>
-    <path d="M44 20c-3 6-4 12-3 18l2-8z" fill="#AD7C59"/>
-    <path d="M58 24c2 5 3 10 2 15l-2-7z" fill="#AD7C59" opacity=".8"/>
-    <!-- regard charbonneux -->
-    <path d="M37 44.5c2.5-2.6 6-2.6 8.4 0-2.5 1.8-5.9 1.8-8.4 0z" fill="#F4ECE6"/>
-    <path d="M50.6 44.5c2.5-2.6 6-2.6 8.4 0-2.5 1.8-5.9 1.8-8.4 0z" fill="#F4ECE6"/>
-    <circle cx="41.2" cy="44.3" r="1.8" fill="#2C160C"/>
-    <circle cx="54.8" cy="44.3" r="1.8" fill="#2C160C"/>
-    <circle cx="41.7" cy="43.7" r=".5" fill="#FFF"/><circle cx="55.3" cy="43.7" r=".5" fill="#FFF"/>
-    <path d="M36.4 43.6c2.8-1.6 7.2-1.6 9.6.4M50 44c2.4-2 6.8-2 9.6-.4" stroke="#0E0806" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-    <path d="M37 43.4h8.6M50.6 43.4h8.6" stroke="#E4AE8B" stroke-width="1.6"/>
-    <path d="M36.5 45.8c2.5 2 6 2.2 9 .8M50.5 46.6c3 1.4 6.5 1.2 9-.8" stroke="#4A2A22" stroke-width="1.1" fill="none" opacity=".8"/>
-    <path d="M45.6 44.2l2-1.6M60 44.2l-2-1.6" stroke="#0E0806" stroke-width="1.4" stroke-linecap="round"/>
-    <!-- anneau au nez, lèvres foncées en moue -->
-    <path d="M47.8 52.2a1.6 1.6 0 1 0 1.8 1.2" stroke="#C9B8A8" stroke-width="1" fill="none"/>
-    <path d="M43.8 56.4h8.6" stroke="#5E1F1C" stroke-width="2" stroke-linecap="round"/>
-    <!-- oreille : anneaux et clou -->
-    <circle cx="62.5" cy="51" r="2.6" fill="none" stroke="#C9B8A8" stroke-width="1.2"/>
-    <circle cx="62.8" cy="46.5" r=".9" fill="#C9B8A8"/>
-    <!-- badge épinglé : brin vert -->
-    <circle cx="23" cy="83" r="5.5" fill="#338811" stroke="#0E0806" stroke-width="1"/>
-    <path d="M21 85.5c1-3 3-4.5 5-5.5" stroke="#E8F3E1" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-    <ellipse cx="24.8" cy="81.6" rx="1.9" ry=".9" transform="rotate(-35 24.8 81.6)" fill="#E8F3E1"/>
+    <g class="splash">
+      <circle cx="16" cy="22" r="9" fill="#AD7C59" opacity=".35"/>
+      <circle cx="27" cy="12" r="2.5" fill="#AD7C59" opacity=".45"/>
+      <circle cx="80" cy="30" r="5" fill="#338811" opacity=".35"/>
+      <circle cx="86" cy="18" r="1.8" fill="#338811" opacity=".55"/>
+      <path d="M6 60l18-6M70 8l20 10M74 62l16-4" stroke="#AD7C59" stroke-width="1.2" opacity=".5"/>
+    </g>
+    <g class="body">
+      <!-- chemise à carreaux ouverte sur un t-shirt noir déchiré -->
+      <path d="M4 98c3-18 19-30 44-30s41 12 44 30z" fill="url(#plaid)"/>
+      <path d="M34 70c4 4 9 6 14 6s10-2 14-6l4 28H30z" fill="#0E0806"/>
+      <path d="M40 84l3 3 2-2 3 3 3-3 2 2 3-3" stroke="#3A2A24" stroke-width="1.2" fill="none"/>
+      <path d="M34 70l-6 28M62 70l6 28" stroke="#2A1610" stroke-width="1.5"/>
+      <!-- cou + collier ras du cou -->
+      <path d="M42 56h12v14c-4 2-8 2-12 0z" fill="#D9A383"/>
+      <path d="M41.5 63.5c4 2 9 2 13 0" stroke="#0E0806" stroke-width="2.2" fill="none"/>
+      <circle cx="48" cy="66.3" r="1.2" fill="#C9B8A8"/>
+      <!-- badge épinglé : brin vert -->
+      <g class="badge">
+        <circle cx="23" cy="83" r="5.5" fill="#338811" stroke="#0E0806" stroke-width="1"/>
+        <path d="M21 85.5c1-3 3-4.5 5-5.5" stroke="#E8F3E1" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+        <ellipse cx="24.8" cy="81.6" rx="1.9" ry=".9" transform="rotate(-35 24.8 81.6)" fill="#E8F3E1"/>
+      </g>
+    </g>
+    <g class="head">
+      <!-- cheveux longs en bataille (arrière) -->
+      <path d="M22 72c-6-16-4-34 6-44 6-7 14-10 21-10 10 0 19 5 23 14 5 11 4 28-3 40l-6-14-4 12-3-16H33l-2 14-4-10z" fill="#24120B"/>
+      <!-- visage -->
+      <path d="M34 38c0-9 6-15 14-15s14 6 14 15v7c0 9-6 16-14 16s-14-7-14-16z" fill="#E4AE8B"/>
+      <!-- frange déstructurée, mèches kraft -->
+      <path d="M30 46c-1-12 5-24 18-26 11-1 18 6 19 18l-4-3-3 6-2-8-4 7-3-9-4 8-3-7-4 9-2-4z" fill="#24120B"/>
+      <path class="strand" d="M44 20c-3 6-4 12-3 18l2-8z" fill="#AD7C59"/>
+      <path class="strand s2" d="M58 24c2 5 3 10 2 15l-2-7z" fill="#AD7C59" opacity=".8"/>
+      <!-- regard charbonneux : le blanc et les pupilles clignent sous le trait -->
+      <g class="eyes">
+        <path d="M37 44.5c2.5-2.6 6-2.6 8.4 0-2.5 1.8-5.9 1.8-8.4 0z" fill="#F4ECE6"/>
+        <path d="M50.6 44.5c2.5-2.6 6-2.6 8.4 0-2.5 1.8-5.9 1.8-8.4 0z" fill="#F4ECE6"/>
+        <g class="pupils">
+          <circle cx="41.2" cy="44.3" r="1.8" fill="#2C160C"/>
+          <circle cx="54.8" cy="44.3" r="1.8" fill="#2C160C"/>
+          <circle cx="41.7" cy="43.7" r=".5" fill="#FFF"/><circle cx="55.3" cy="43.7" r=".5" fill="#FFF"/>
+        </g>
+      </g>
+      <path d="M36.4 43.6c2.8-1.6 7.2-1.6 9.6.4M50 44c2.4-2 6.8-2 9.6-.4" stroke="#0E0806" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <path d="M37 43.4h8.6M50.6 43.4h8.6" stroke="#E4AE8B" stroke-width="1.6"/>
+      <path d="M36.5 45.8c2.5 2 6 2.2 9 .8M50.5 46.6c3 1.4 6.5 1.2 9-.8" stroke="#4A2A22" stroke-width="1.1" fill="none" opacity=".8"/>
+      <path d="M45.6 44.2l2-1.6M60 44.2l-2-1.6" stroke="#0E0806" stroke-width="1.4" stroke-linecap="round"/>
+      <!-- anneau au nez, lèvres foncées, bouche droite -->
+      <path d="M47.8 52.2a1.6 1.6 0 1 0 1.8 1.2" stroke="#C9B8A8" stroke-width="1" fill="none"/>
+      <path d="M43.8 56.4h8.6" stroke="#5E1F1C" stroke-width="2" stroke-linecap="round"/>
+      <!-- oreille : anneaux et clou -->
+      <circle cx="62.5" cy="51" r="2.6" fill="none" stroke="#C9B8A8" stroke-width="1.2"/>
+      <circle cx="62.8" cy="46.5" r=".9" fill="#C9B8A8"/>
+    </g>
     <!-- grain grunge -->
-    <rect width="96" height="96" fill="#000" filter="url(#grain)" opacity=".45"/>
+    <rect class="grain" width="96" height="96" fill="#000" filter="url(#grain)" opacity=".45"/>
   </g>
 </svg>
