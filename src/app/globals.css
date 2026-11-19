@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 /* ============================================================
- * KHentik — jetons de design.
+ * Jetons de design de l'instance.
  *
  * Les couleurs de MARQUE (--q-primary, --q-accent…) sont posées au
  * chargement par BrandProvider, à partir de la configuration
@@ -45,11 +45,12 @@
   --q-bg: var(--q-bg-custom, #f6f7f9);
   --q-surface: #ffffff;
   --q-elevated: var(--q-elevated-custom, #eef0f4);
-  --q-fg: #111827;
-  --q-muted: #5b6474;
+  /* Texte et texte secondaire : personnalisables (brand.colors.text). */
+  --q-fg: var(--q-fg-custom, #111827);
+  --q-muted: var(--q-muted-custom, #5b6474);
   --q-disabled: #9aa1ad;
   --q-border: var(--q-border-custom, #e3e6eb);
-  --q-success: #047857;
+  --q-success: var(--q-success-custom, #047857);
   --q-warning: #b45309;
   --q-danger: #be123c;
   --q-soft: var(--q-primary-soft, #f5edd3);
@@ -117,6 +118,23 @@ h3 {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
   border-radius: 4px;
+}
+
+/* Angles « discrets » (appearance.corners = square) : rayons réduits partout. */
+html[data-corners='square'] {
+  --radius-xs: 1px;
+  --radius-sm: 2px;
+  --radius-md: 2px;
+  --radius-lg: 3px;
+  --radius-xl: 4px;
+  --radius-2xl: 4px;
+  --radius-3xl: 5px;
+}
+
+/* Contraste renforcé (appearance.contrast = high) : textes secondaires et bordures plus marqués. */
+html[data-contrast='high'] {
+  --q-muted: var(--q-fg);
+  --q-border: color-mix(in srgb, var(--q-fg) 40%, transparent);
 }
 
 /* Densité de liste configurable (Aérée / Compacte). */

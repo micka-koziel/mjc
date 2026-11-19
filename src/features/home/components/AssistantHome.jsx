@@ -30,7 +30,10 @@ export function AssistantHome() {
   const { showToast } = useToast();
   const [openThreadId, setOpenThreadId] = useState(null);
   const [now] = useState(() => Date.now());
-  const list = useMemo(() => buildWorkList({ threads, todos, now }), [threads, todos, now]);
+  const list = useMemo(
+    () => buildWorkList({ threads, todos, now, importantSenders: brandConfig.priorities.importantSenders }),
+    [threads, todos, now]
+  );
   const openThread = openThreadId ? threads.find((t) => t.threadId === openThreadId) : null;
   const firstName = (user?.displayName || '').split(' ')[0];
   const today = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).format(now);

@@ -8,6 +8,11 @@ import {
 import { cn } from '@/shared/utils/cn';
 import { toMs } from '@/shared/utils/format-date';
 import { fold, matchesQuery, normalizeSearch } from '@/shared/utils/text-fold';
+import { brandConfig } from '@/features/brand/brand';
+
+/** Aperçu du message (appearance.messagePreview) : une ligne, deux lignes ou masqué. */
+const PREVIEW_CLASS = { one: 'truncate', two: 'line-clamp-2' };
+const previewClass = PREVIEW_CLASS[brandConfig.appearance.messagePreview] ?? null;
 
 /**
  * ThreadList — Liste des threads d'un folder, format Gmail-like.
@@ -15,7 +20,7 @@ import { fold, matchesQuery, normalizeSearch } from '@/shared/utils/text-fold';
  * Chaque ligne montre :
  *  - Avatar circulaire avec initiales du sender
  *  - Nom du sender en gras
- *  - Subject + snippet (1 ligne tronquée)
+ *  - Subject + snippet (1 ou 2 lignes, ou masqué : appearance.messagePreview)
  *  - Date courte (HH:mm aujourd'hui, sinon date)
  *  - Badge "+N" si thread > 1 message
  *
@@ -113,7 +118,7 @@ export function ThreadList({
                 <p className="truncate text-sm text-foreground">
                   {thread.lastSubject || '(sans sujet)'}
                 </p>
-                <p className="truncate text-xs text-muted">{thread.lastSnippet}</p>
+                {previewClass && <p className={cn(previewClass, 'text-xs text-muted')}>{thread.lastSnippet}</p>}
               </div>
             </button>
             {onTrash && (

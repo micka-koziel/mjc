@@ -46,6 +46,8 @@ export function AppShell({ children }) {
   const { user, mode, service } = useApp();
   const { view } = useNav();
   const [open, setOpen] = useState(false);
+  // Barre latérale réduite (appearance.sidebar = collapsed) : icônes seules, dépliable à la demande.
+  const [collapsed, setCollapsed] = useState(brandConfig.appearance.sidebar === 'collapsed');
 
   if (user === undefined) {
     return <div className="flex min-h-screen items-center justify-center text-sm text-muted">Chargement…</div>;
@@ -55,11 +57,11 @@ export function AppShell({ children }) {
   const isActive = (v) => v === view;
   const NavLink = HASH_ROUTING ? 'a' : Link;
 
-  const nav = (
+  const renderNav = (compact) => (
     <nav aria-label="Navigation principale" className="flex flex-col gap-4">
       {enabledModules().map((mod) => (
         <div key={mod.id} className="flex flex-col gap-1">
-          {showModuleTitles() && (
+          {showModuleTitles() && !compact && (
             <p className="px-3 text-[10px] font-semibold uppercase tracking-wider text-muted">{mod.label}</p>
           )}
           {mod.nav.map((item) => (
@@ -68,13 +70,15 @@ export function AppShell({ children }) {
               href={hrefFor(item.view)}
               onClick={() => setOpen(false)}
               aria-current={isActive(item.view) ? 'page' : undefined}
+              title={compact ? item.label : undefined}
               className={cn(
-                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+                'flex items-center gap-3 rounded-lg py-2 text-sm font-medium transition-colors',
+                compact ? 'justify-center px-2' : 'px-3',
                 isActive(item.view) ? 'bg-primary text-primary-foreground' : 'text-muted hover:bg-elevated hover:text-foreground'
               )}
             >
               <NavIcon name={item.icon} />
-              {item.label}
+              <span className={compact ? 'sr-only' : undefined}>{item.label}</span>
             </NavLink>
           ))}
         </div>
@@ -131,21 +135,36 @@ export function AppShell({ children }) {
             role="presentation"
           >
             <BrandLogo />
-            {nav}
+            {renderNav(false)}
             {footer}
           </aside>
         </div>
       )}
       {/* Desktop : barre latérale fixe */}
-      <aside className="sticky top-0 hidden h-screen w-56 shrink-0 flex-col gap-6 border-r border-border bg-surface p-4 lg:flex">
-        <div className="px-1">
-          <BrandLogo />
-          {brandConfig.client.isFictional && (
+      <aside
+        className={cn(
+          'sticky top-0 hidden h-screen shrink-0 flex-col gap-6 border-r border-border bg-surface lg:flex',
+          collapsed ? 'w-16 items-center px-2 py-4' : 'w-56 p-4'
+        )}
+      >
+        <div className={collapsed ? undefined : 'px-1'}>
+          <BrandLogo compact={collapsed} />
+          {brandConfig.client.isFictional && !collapsed && (
             <p className="mt-1 text-[10px] uppercase tracking-wider text-muted">Exemple fictif</p>
           )}
         </div>
-        {nav}
-        {footer}
+        {renderNav(collapsed)}
+        {collapsed ? <div className="mt-auto" /> : footer}
+        <button
+          type="button"
+          onClick={() => setCollapsed((v) => !v)}
+          aria-expanded={!collapsed}
+          aria-label={collapsed ? 'Déplier la barre latérale' : 'Réduire la barre latérale'}
+          title={collapsed ? 'Déplier' : 'Réduire'}
+          className="self-center rounded-lg px-2 py-1 text-xs text-muted hover:bg-elevated hover:text-foreground"
+        >
+          {collapsed ? '»' : '«'}
+        </button>
       </aside>
       <div className="flex min-w-0 flex-1 flex-col">{children}</div>
     </div>

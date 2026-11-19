@@ -10,6 +10,10 @@
  * Score = poids de la famille
  *       + e-mail : fraîcheur du dernier message reçu (barème Trendl `fresh`)
  *       + e-mail : bonus si l'analyse IA a détecté une action attendue
+ *       + e-mail : bonus si l'expéditeur figure parmi les expéditeurs
+ *         importants du client (questionnaire, context.importantSenders)
+ *       + e-mail : bonus si l'IA l'a jugé prioritaire au regard des règles
+ *         du client (priorités et situations à escalader du questionnaire)
  *       + tâche  : retard en jours (barème Trendl agePerDay / ageMax)
  *
  * Familles : « reply » (fil dont le DERNIER message est entrant, en boîte de
@@ -25,6 +29,7 @@ import { directionOf } from '@/features/mailbox/lib/threads';
 import { todoDueState } from '@/features/todos/lib/todo-occurrence';
 import { calendarDaysSince } from '@/shared/utils/calendar-days';
 import { toMs } from '@/shared/utils/format-date';
+import { fold } from '@/shared/utils/text-fold';
 
 export const PRIORITY_RULES = Object.freeze({
   // Poids de base par famille (Trendl, questionnaire S106 : mails à répondre
@@ -34,6 +39,9 @@ export const PRIORITY_RULES = Object.freeze({
   fresh: { d0: 30, d1: 26, d2: 22, d3: 18, d4to7: 10, d8to14: 0, d15to21: -15, d22plus: -35 },
   // Bonus quand l'IA a identifié une action attendue (ajout KHentik, provisoire).
   expectedActionBonus: 15,
+  // Bonus : expéditeur important (questionnaire) et priorité détectée par l'IA (règles du client).
+  importantSenderBonus: 25,
+  urgentBonus: 20,
   // Catégories IA exclues de la liste (information sans action).
   excludedCategories: ['newsletter', 'spam'],
   // Retard d'une tâche : points par jour, plafond (barème Trendl).
@@ -68,11 +76,20 @@ export function threadAwaitsReply(thread, rules = PRIORITY_RULES) {
   return true;
 }
 
+/** L'expéditeur figure-t-il dans la liste des expéditeurs importants (nom ou adresse, sans accents ni casse) ? */
+export function isImportantSender(from, importantSenders = []) {
+  const who = fold(from);
+  return Boolean(who) && importantSenders.some((s) => {
+    const key = fold(s).trim();
+    return key.length >= 3 && who.includes(key);
+  });
+}
+
 /**
- * @param {{threads: object[], todos: object[], now: number, rules?: object}} p
+ * @param {{threads: object[], todos: object[], now: number, rules?: object, importantSenders?: string[]}} p
  * @returns {Array<{key: string, kind: 'email'|'todo', score: number, reasons: string[], thread?: object, todo?: object, due?: object}>}
  */
-export function buildWorkList({ threads = [], todos = [], now = Date.now(), rules = PRIORITY_RULES }) {
+export function buildWorkList({ threads = [], todos = [], now = Date.now(), rules = PRIORITY_RULES, importantSenders = [] }) {
   const items = [];
   const todayISO = new Date(now).toISOString().slice(0, 10);
 
@@ -81,9 +98,17 @@ export function buildWorkList({ threads = [], todos = [], now = Date.now(), rule
     const last = thread.messages[thread.messages.length - 1];
     const ageDays = calendarDaysSince(toMs(last.receivedAt), now);
     const hasAction = Boolean(last.analysis?.expectedAction);
+    const important = isImportantSender(last.from, importantSenders);
+    const urgent = last.analysis?.urgent === true;
     const score =
-      rules.familyWeights.reply + freshnessPoints(ageDays, rules) + (hasAction ? rules.expectedActionBonus : 0);
+      rules.familyWeights.reply +
+      freshnessPoints(ageDays, rules) +
+      (hasAction ? rules.expectedActionBonus : 0) +
+      (important ? rules.importantSenderBonus : 0) +
+      (urgent ? rules.urgentBonus : 0);
     const reasons = [ageDays === 0 ? 'reçu aujourd’hui' : ageDays === 1 ? 'reçu hier' : `reçu il y a ${ageDays} j`];
+    if (urgent) reasons.push(last.analysis?.urgentReason ? `prioritaire : ${last.analysis.urgentReason}` : 'prioritaire');
+    if (important) reasons.push('expéditeur important');
     if (hasAction) reasons.push('action attendue');
     items.push({ key: `email:${thread.threadId}`, kind: 'email', score, reasons, thread, lastMessage: last });
   }

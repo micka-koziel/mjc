@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildWorkList, freshnessPoints, threadAwaitsReply, PRIORITY_RULES } from './work-list';
+import { buildWorkList, freshnessPoints, isImportantSender, threadAwaitsReply, PRIORITY_RULES } from './work-list';
 import { groupByThread } from '@/features/mailbox/lib/threads';
 import { buildDemoMessages, buildDemoTodos } from '@/services/demo/demo-data';
 
@@ -35,5 +35,31 @@ describe('work-list (règle provisoire)', () => {
     expect(freshnessPoints(0)).toBe(PRIORITY_RULES.fresh.d0);
     expect(freshnessPoints(30)).toBe(PRIORITY_RULES.fresh.d22plus);
     expect(threadAwaitsReply({ messages: [] })).toBe(false);
+  });
+
+  it('reconnaît un expéditeur important par son nom ou son adresse, sans accents ni casse', () => {
+    expect(isImportantSender('Annie Dô <annie@exemple.fr>', ['annie do'])).toBe(true);
+    expect(isImportantSender('bastien.frappart@exemple.fr', ['frappart'])).toBe(true);
+    expect(isImportantSender('Jean <jean@exemple.fr>', ['annie do'])).toBe(false);
+    expect(isImportantSender('Do <x@y.fr>', ['do'])).toBe(false); // clé trop courte : ignorée
+  });
+
+  it('remonte les expéditeurs importants et les messages jugés prioritaires par l’IA', () => {
+    const candidat = threads.find((t) => t.threadId === 't-candidat');
+    const from = candidat.messages[candidat.messages.length - 1].from;
+    const boosted = buildWorkList({ threads, todos, now: NOW, importantSenders: [from.toLowerCase()] });
+    const item = boosted.find((i) => i.key === 'email:t-candidat');
+    const base = list.find((i) => i.key === 'email:t-candidat');
+    expect(item.score - base.score).toBe(PRIORITY_RULES.importantSenderBonus);
+    expect(item.reasons).toContain('expéditeur important');
+
+    const urgentThreads = threads.map((t) =>
+      t.threadId !== 't-candidat'
+        ? t
+        : { ...t, messages: t.messages.map((m, i, arr) => (i === arr.length - 1 ? { ...m, analysis: { ...m.analysis, urgent: true, urgentReason: 'réclamation' } } : m)) }
+    );
+    const u = buildWorkList({ threads: urgentThreads, todos, now: NOW }).find((i) => i.key === 'email:t-candidat');
+    expect(u.score - base.score).toBe(PRIORITY_RULES.urgentBonus);
+    expect(u.reasons).toContain('prioritaire : réclamation');
   });
 });
