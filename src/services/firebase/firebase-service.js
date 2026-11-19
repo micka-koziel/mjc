@@ -29,7 +29,13 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
-import { onIdTokenChanged, sendEmailVerification, signInWithEmailAndPassword, signOut as fbSignOut } from 'firebase/auth';
+import {
+  onIdTokenChanged,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  signOut as fbSignOut,
+} from 'firebase/auth';
 import { ref as storageRef, uploadBytes } from 'firebase/storage';
 import { getFirebase } from './firebase-app';
 import { waitForUndo } from '@/shared/utils/undo-send';
@@ -99,6 +105,17 @@ export function createFirebaseService() {
       await auth.currentUser.reload();
       await auth.currentUser.getIdToken(true);
       return auth.currentUser.emailVerified;
+    },
+    // Accès à l'application (administrateur seulement, voir functions/admin/manageAccess.js).
+    manageAccess(action, payload = {}) {
+      return call('manageAccess', { action, ...payload });
+    },
+    // E-mail Firebase « choisir votre mot de passe » : la personne invitée fixe
+    // elle-même son mot de passe ; il ne passe jamais par l'administrateur.
+    async sendPasswordSetup(email) {
+      const { auth } = getFirebase();
+      auth.languageCode = 'fr';
+      await sendPasswordResetEmail(auth, email);
     },
     // Boîte de démonstration (fonctions déployées avec MAILBOX_PROVIDER=simulated).
     resetDemo() {

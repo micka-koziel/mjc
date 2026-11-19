@@ -2,12 +2,13 @@
 
 import Link from 'next/link';
 import { HASH_ROUTING, hrefFor, useNav } from './nav';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useApp } from './AppProviders';
 import { BrandLogo } from '@/features/brand/BrandLogo';
 import { brandConfig } from '@/features/brand/brand';
 import { LoginScreen } from './LoginScreen';
 import { VerifyEmailScreen } from './VerifyEmailScreen';
+import { AccessDialog } from './AccessDialog';
 import { SIMULATED_MAILBOX } from '@/services';
 import { cn } from '@/shared/utils/cn';
 import { ConfirmButton } from '@/shared/components/ConfirmButton';
@@ -50,6 +51,20 @@ export function AppShell({ children }) {
   const [open, setOpen] = useState(false);
   // Barre latérale réduite (appearance.sidebar = collapsed) : icônes seules, dépliable à la demande.
   const [collapsed, setCollapsed] = useState(brandConfig.appearance.sidebar === 'collapsed');
+  // « Gérer les accès » : proposé seulement si le serveur reconnaît un administrateur.
+  const [isAccessAdmin, setIsAccessAdmin] = useState(false);
+  const [accessOpen, setAccessOpen] = useState(false);
+  useEffect(() => {
+    if (!user || user.emailVerified === false || !service?.manageAccess) return undefined;
+    let alive = true;
+    service
+      .manageAccess('list')
+      .then(() => alive && setIsAccessAdmin(true))
+      .catch(() => alive && setIsAccessAdmin(false));
+    return () => {
+      alive = false;
+    };
+  }, [service, user]);
 
   if (user === undefined) {
     return <div className="flex min-h-screen items-center justify-center text-sm text-muted">Chargement…</div>;
@@ -108,7 +123,15 @@ export function AppShell({ children }) {
         </div>
       )}
       {mode === 'firebase' && !SIMULATED_MAILBOX && <MailboxConnection service={service} />}
-      <p className="truncate" title={user.email}>{user.displayName || user.email}</p>
+      {isAccessAdmin && (
+        <button type="button" onClick={() => setAccessOpen(true)} className="block font-semibold text-link hover:underline">
+          Gérer les accès
+        </button>
+      )}
+      {/* Boîte de démonstration : on n'affiche pas l'adresse de connexion (les e-mails sont fictifs). */}
+      <p className="truncate" title={SIMULATED_MAILBOX ? undefined : user.email}>
+        {user.displayName || (SIMULATED_MAILBOX ? 'Compte de démonstration' : user.email)}
+      </p>
       <button type="button" onClick={() => service.signOut()} className="font-semibold text-foreground hover:underline">
         Se déconnecter
       </button>
@@ -170,6 +193,7 @@ export function AppShell({ children }) {
         </button>
       </aside>
       <div className="flex min-w-0 flex-1 flex-col">{children}</div>
+      {accessOpen && <AccessDialog service={service} onClose={() => setAccessOpen(false)} />}
     </div>
   );
 }

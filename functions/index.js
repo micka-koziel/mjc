@@ -16,6 +16,9 @@ require("./lib/sentry").initSentry();
 // moment de lister les fonctions) ; en mode simulé, elles ne font rien.
 exports.resetDemoMailbox = require("./demo/resetDemoMailbox").resetDemoMailbox;
 
+// Accès à l'application : l'administrateur (ADMIN_EMAILS) invite ou retire des personnes.
+exports.manageAccess = require("./admin/manageAccess").manageAccess;
+
 // Connexion Gmail (OAuth) — repris
 exports.initOAuth = require("./oauth/initOAuth").initOAuth;
 exports.callbackOAuth = require("./oauth/callbackOAuth").callbackOAuth;
