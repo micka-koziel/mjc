@@ -1,19 +1,20 @@
 # MJC — l'application de Mon Jardin Chocolaté
 
-Application de Mon Jardin Chocolaté, construite par modules. Le premier module, **E-mail**, reprend le package générique KHentik Email (gestion des e-mails assistée par IA, extraite de l'application Trendl). D'autres modules pourront s'ajouter (voir `src/modules/registry.js`). Le module E-mail compte trois écrans : **Assistant IA** (accueil), **Mailbox** et **To-do**. La marque, les couleurs, le logo et le ton de l'assistant se règlent par **un seul fichier de configuration**, produit par le questionnaire client.
+Application de Mon Jardin Chocolaté, construite par modules. Le premier module, **E-mail**, reprend le package générique KHentik Email (gestion des e-mails assistée par IA, extraite de l'application Trendl). D'autres modules pourront s'ajouter (voir `src/modules/registry.js`). Le module E-mail compte trois écrans : **Assistant IA** (accueil), **Mailbox** et **To-do**. La marque, les couleurs, le logo, le style d'écriture de l'assistant et le contexte métier viennent du **questionnaire client (version 2)**, installé par une commande.
 
 | Élément | Où |
 |---|---|
 | Application (Next.js) | `src/` |
 | Fonctions serveur (Firebase Cloud Functions) | `functions/` |
-| Contrat de configuration (source unique) | `src/config/contract.mjs` |
-| Configuration active de l'instance | `src/config/active.config.json` |
+| Règles du questionnaire v2 et passage vers l'instance | `src/config/questionnaire-v2.mjs`, `src/config/instance.mjs` |
+| Configuration active (interface) / profil IA (serveur) | `src/config/active.config.json`, `functions/config/ai-profile.json` |
+| Dossiers clients (réponses Excel, arbitrages) | `config/clients/<client>/` |
 | Référence KHentik / exemple fictif | `config/khentik.reference.json`, `config/examples/` |
-| Questionnaire client (fichier HTML autonome) | `questionnaire/questionnaire.html` |
+| Questionnaire client v2 (fichier HTML autonome) | `questionnaire/questionnaire-v2.html` |
 | Spécifications pour l'architecte | `docs/SPECIFICATIONS-FONCTIONNELLES.md` |
 | Annexe technique (correspondance avec Trendl) | `docs/ANNEXE-TECHNIQUE.md` |
 | Guide de personnalisation par un agent | `docs/GUIDE-AGENT-PERSONNALISATION.md` |
-| Description du contrat de configuration | `docs/CONTRAT-CONFIGURATION.md` |
+| Configuration client : où va chaque réponse | `docs/CONTRAT-CONFIGURATION.md` |
 
 ---
 
@@ -37,19 +38,19 @@ Production locale : `npm run build && npm start`.
 
 ## 2. Appliquer une configuration client
 
+Placer l'export Excel du client dans `config/clients/<client>/questionnaire.xlsx` (et, si besoin, ses arbitrages dans `overrides.json`), puis :
+
 ```bash
-npm run config:validate -- chemin/vers/khentik-config-client.json   # vérifie seulement
-npm run config:apply    -- chemin/vers/khentik-config-client.json   # vérifie puis installe
-npm run config:reset                                                   # revient à KHentik
+npm run config:validate -- config/clients/<client>   # vérifie seulement
+npm run config:apply    -- config/clients/<client>   # vérifie puis installe
+npm run config:reset                                  # revient à l'apparence KHentik neutre
 ```
 
-Relancez ensuite `npm run dev` (ou `npm run build`). L'ancienne configuration est sauvegardée dans `config/backups/`. Le logo est **embarqué dans le JSON** : il n'y a aucun fichier à copier à part. Le mode opératoire complet est dans `docs/GUIDE-AGENT-PERSONNALISATION.md`.
+Relancez ensuite `npm run dev` (ou reconstruisez), et redéployez les fonctions pour que l'IA utilise le nouveau profil. Les anciennes versions sont sauvegardées dans `config/backups/`. Détail : `docs/CONTRAT-CONFIGURATION.md` ; mode opératoire : `docs/GUIDE-AGENT-PERSONNALISATION.md`.
 
 ## 3. Questionnaire client
 
-`questionnaire/questionnaire.html` est un fichier unique qui fonctionne hors ligne : on l'ouvre dans un navigateur, ou on l'envoie par e-mail ou par lien de partage de fichier. **Ce n'est pas un service hébergé** : pour obtenir un lien web public, il faut le déposer sur un hébergement statique (Netlify, Drive public, etc.). Voir `questionnaire/README.md`.
-
-Après toute modification du contrat (`src/config/contract.mjs`) : `npm run questionnaire:build`. Un test échoue si le questionnaire n'embarque plus la version courante du contrat.
+`questionnaire/questionnaire-v2.html` : fichier unique, hors ligne, qui exporte les réponses en Excel. Seule la version 2 est acceptée. Voir `questionnaire/README.md`.
 
 ## 3 bis. Démo partageable en un seul fichier
 

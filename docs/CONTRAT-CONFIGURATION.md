@@ -1,58 +1,67 @@
-# Contrat de configuration — version 1.0
+# Configuration client — questionnaire v2 → instance
 
-**Source unique** : `src/config/contract.mjs` (règles, valeurs autorisées, valeurs par défaut, validation).
-Cette même source est utilisée :
-- par l'application, pour appliquer la marque ;
-- par le questionnaire, qui en embarque une copie contrôlée par un test ;
-- par l'outil `npm run config:*`.
+Seul le **questionnaire version 2** est accepté (`questionnaireVersion: "2.0"`). La version 1 est obsolète et a été retirée.
 
-Le format est un JSON en UTF-8. Le fichier exporté par le questionnaire s'appelle `khentik-config-<entreprise>.json`.
+## Le chemin d'une réponse
 
-## Champs
+```
+questionnaire/questionnaire-v2.html   (rempli par le client, export Excel)
+        │
+        ▼
+config/clients/<client>/questionnaire.xlsx  +  overrides.json (arbitrages, facultatif)
+        │   npm run config:apply -- config/clients/<client>
+        ▼
+src/config/instance.mjs : buildInstance()
+        ├─ src/config/active.config.json    interface : couleurs, logo, apparence, nom de l'assistant
+        ├─ functions/config/ai-profile.json style d'écriture et contexte métier (serveur uniquement)
+        ├─ public/brand/logo-*.{png,jpg,…}  logos
+        └─ config/clients/<client>/documents/  documents joints (non versionnés, non embarqués)
+```
 
-| Champ | Type | Obligatoire | Défaut | Valeurs / règles | Effet |
-|---|---|---|---|---|---|
-| `schemaVersion` | texte | oui | `"1.0"` | exactement `"1.0"` | Version du contrat |
-| `client.companyName` | texte | oui | `KHentik` | 1 à 80 caractères | Nom de l'entreprise |
-| `client.productName` | texte | oui | `KHentik Email` | 1 à 40 caractères | Nom affiché (barre latérale, onglet du navigateur) |
-| `client.website` | texte | non | `""` | `https://…` | Information |
-| `client.isFictional` | booléen | oui | `false` | | Mention « Exemple fictif » sous le logo |
-| `brand.logo.light` | objet ou `null` | oui (peut être `null`) | `null` | `{dataUrl, mimeType, fileName}` ; PNG, JPEG, WEBP ou SVG ; **300 Ko au plus** ; image **embarquée** en `data:…;base64,` | Logo sur fond clair |
-| `brand.logo.dark` | objet ou `null` | oui (peut être `null`) | `null` | idem | Logo sur fond sombre (sinon, le logo clair) |
-| `brand.colors.useKHentikDefaults` | booléen | oui | `true` | | `true` = couleurs KHentik, quelles que soient les valeurs saisies |
-| `brand.colors.primary` | texte | oui | `#A9883A` | `#RRGGBB` ; un contraste faible déclenche un avertissement | Boutons, sélection, navigation |
-| `brand.colors.accent` | texte | oui | `#0C1929` | `#RRGGBB` | Couleur secondaire |
-| `brand.colors.background` | texte ou null | non | `null` | `#RRGGBB` | Fond du thème clair ; zones en relief et bordures en dérivent. `null` = fond neutre. Alerte si trop foncé |
-| `appearance.theme` | texte | oui | `light` | `light`, `dark`, `system` | Thème |
-| `appearance.font` | texte | oui | `system` | `system` (Moderne), `humanist` (Douce), `serif` (Classique) | Police (polices système, sans téléchargement) |
-| `appearance.titleFont` | texte ou null | non | `null` | `system`, `humanist`, `serif` | Police des titres. `null` = même police que le texte |
-| `appearance.density` | texte | oui | `comfortable` | `comfortable`, `compact` | Espacement des listes |
-| `appearance.textSize` | texte | oui | `normal` | `normal`, `large` (+12,5 %) | Taille du texte |
-| `assistant.name` | texte | oui | `Assistant` | 1 à 30 caractères | Nom de l'assistant (accueil, chat, chargement) |
-| `assistant.tone` | texte | oui | `cordial` | `cordial`, `professional`, `direct` | Ton des brouillons |
-| `assistant.concision` | texte | oui | `balanced` | `short`, `balanced`, `detailed` | Longueur des brouillons |
-| `assistant.language` | texte | oui | `fr` | `fr`, `en` | Langue des brouillons et des réponses du chat |
-| `context.applied` | booléen | oui | `false` | **toujours `false`** | Indique que le contexte n'est pas appliqué |
-| `context.activity` | texte | non | `""` | 2 000 caractères au plus | **Non appliqué**, réservé à un futur réglage |
-| `context.emailTypes` | liste | oui (peut être vide) | `[]` | `customers`, `orders`, `suppliers`, `quotes`, `billing`, `partners`, `recruiting`, `admin`, `newsletters`, `other` | **Non appliqué** |
-| `context.priorityExpectations` | texte | non | `""` | 2 000 caractères au plus | **Non appliqué** |
-| `context.importantSenders` | texte | non | `""` | 2 000 caractères au plus | **Non appliqué** |
-| `context.notes` | texte | non | `""` | 2 000 caractères au plus | **Non appliqué** |
-| `meta` | objet | non | | `exportedAt`, `source`, `appliedAt`, `appliedFrom` | Traçabilité |
+| Fichier source | Rôle |
+|---|---|
+| `src/config/questionnaire-v2.mjs` | Valeurs autorisées (recopiées du questionnaire HTML, vérifiées par un test) et validation des réponses |
+| `src/config/instance.mjs` | Passage réponses → configuration d'interface et profil IA ; arbitrages |
+| `src/config/brand-css.mjs` | Variables CSS (couleurs lisibles, polices) |
+| `scripts/read-answers.mjs` | Lecture de l'Excel (onglet « Donnees JSON », fragments recollés) ou d'un JSON |
+| `scripts/config-cli.mjs` | Commandes `config:validate`, `config:apply`, `config:reset` |
+| `functions/lib/ai-profile.js` | Consignes IA construites à partir du profil |
 
-## Refus systématiques
+## Où va chaque réponse
 
-La validation refuse :
-- tout champ nommé `password`, `apiKey`, `api_key`, `secret` ou `token` (aucun secret dans ce fichier) ;
-- un logo donné par chemin de fichier, par URL `blob:` ou par URL web : il ne survivrait pas au transfert ;
-- toute valeur hors des listes ci-dessus ;
-- `context.applied` différent de `false`.
+| Réponse | Utilisation |
+|---|---|
+| `client.companyName`, `productName`, `website` | Interface (titre, logo) et profil IA |
+| `brand.logo.light` / `dark` | Fichiers `public/brand/` (2 Mo max, comme le questionnaire) |
+| `brand.colors.primary`, `accent` | Boutons et accents. **`useKHentikDefaults` est ignoré** : les couleurs KHentik ne s'appliquent jamais à un client |
+| `brand.extra.surface` | Fond du thème clair |
+| `brand.extra.links` | Liens (assombris automatiquement jusqu'à un contraste de 4,5) |
+| `brand.extra.secondary`, `brand.extra.style`, `appearance.layout` | Lus, **pas encore appliqués** (signalés à l'import) |
+| `appearance.theme`, `font`, `density`, `textSize` | Interface |
+| `appearance.corners` (`soft` / `square`) | Rayon des angles |
+| `appearance.messagePreview` (`one` / `two` / `none`) | Aperçu des messages dans la Mailbox |
+| `appearance.sidebar` (`expanded` / `collapsed`) | Barre latérale ouverte ou réduite (dépliable) |
+| `appearance.contrast` (`standard` / `high`) | Textes secondaires et bordures renforcés |
+| `assistant.name`, `tone`, `concision`, `language` | Interface et IA (le profil serveur fait foi) |
+| `assistant.formality`, `greeting`, `empathy`, `clarify`, `avoidPromises`, `instructions`, `forbiddenTerms`, `exampleResponse` | Brouillons de réponse (IA) |
+| `assistant.signatureText` (si `signature = custom`) | Fin des brouillons ; exclue du contrôle des « faits inventés » |
+| `context.activity`, `businessDescription`, `audience`, `emailTypes`, `vocabulary` | Contexte de toutes les consignes IA |
+| `context.priorityExpectations`, `priorityRules`, `escalationRules` | Analyse des e-mails : champ `urgent` → bonus dans la liste « À traiter » |
+| `context.importantSenders` | Liste « À traiter » (bonus, nom ou adresse, sans accents ni casse) et IA |
+| `documents` | Rangés dans `config/clients/<client>/documents/`. **Jamais envoyés à l'IA**, sauf un document texte nommé dans `overrides.json` (`ai.referenceDocuments`), avec l'accord du client : le questionnaire lui annonce que ses documents ne sont pas transmis à une IA |
+| `feedback` | Non utilisé (lecture humaine) |
 
-## Ce que le contrat ne permet pas
+## Les arbitrages (`overrides.json`)
 
-Il ne permet ni de réactiver le CRM, ni de masquer ou d'ajouter une entrée de navigation, ni d'activer une fonction non livrée. La navigation et le comportement métier ne sont pas configurables.
+Fusionnés **par-dessus** les réponses, avant validation. Ils servent à appliquer une décision prise avec le client sans modifier son fichier. Toujours renseigner `note` (qui, quand, pourquoi) : elle est affichée à chaque import.
 
-## Exemples
+Clés propres à l'instance (absentes du questionnaire) :
 
-- `config/khentik.reference.json` : référence KHentik. Couleurs reprises de l'application khentik-app (or `#A9883A`, bleu nuit `#0C1929`). Logo tiré de « Logo HD KHentik.png » : la variante pour fond sombre est le logo d'origine recadré ; la variante pour fond clair en est **dérivée** (lettres argent passées en bleu nuit, H doré conservé), car l'original argenté est peu lisible sur fond blanc.
-- `config/examples/client-fictif.atelier-ginkgo.json` : client **fictif**, avec logo SVG inventé, thème clair, police classique, densité compacte, assistant « Gaspard ».
+| Clé | Rôle |
+|---|---|
+| `brand.colors.text` | Couleur des textes (assombrie si nécessaire pour rester lisible) |
+| `brand.colors.success` | Couleur des confirmations |
+| `appearance.font: "worksans"`, `appearance.titleFont` | Police de charte (Work Sans, embarquée) et police des titres |
+| `ai.referenceDocuments` | Noms de documents **texte** à transmettre à l'IA comme guide d'écriture (24 000 caractères au total) |
+
+Exemple : `config/clients/mjc/overrides.json`.

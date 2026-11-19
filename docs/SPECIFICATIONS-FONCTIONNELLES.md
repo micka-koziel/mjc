@@ -241,7 +241,7 @@ Conséquence : **les e-mails passent avant les tâches**, puis à égalité le p
 
 Ce n'est **pas** une priorisation IA aboutie. Options pour la suite :
 - (a) un score d'importance par l'IA à l'analyse ;
-- (b) des expéditeurs ou domaines prioritaires saisis par le client (le questionnaire collecte déjà cette information, sans l'appliquer) ;
+- (b) des expéditeurs ou domaines prioritaires saisis par le client (appliqué : bonus « expéditeur important », et champ « urgent » de l'analyse IA selon les règles du client) ;
 - (c) un mélange tâches / e-mails par échéance plutôt que par famille.
 
 ## 5. Règles de gestion vérifiées dans le code
@@ -288,7 +288,7 @@ Ce n'est **pas** une priorisation IA aboutie. Options pour la suite :
 
 ## 8. Personnalisation et contrat de configuration
 
-Une seule source de vérité : `src/config/contract.mjs`. Elle est utilisée **à l'identique** par l'application, le questionnaire (copie vérifiée par un test) et l'outil de l'agent. Le détail des champs est dans `CONTRAT-CONFIGURATION.md`.
+Seul le questionnaire **version 2** (export Excel) est accepté. Ses règles sont dans `src/config/questionnaire-v2.mjs` (valeurs vérifiées contre le questionnaire HTML par un test) et leur traduction en configuration dans `src/config/instance.mjs`. Le détail de chaque réponse est dans `CONTRAT-CONFIGURATION.md`.
 
 | Section | Effet immédiat |
 |---|---|

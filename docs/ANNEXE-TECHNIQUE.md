@@ -50,7 +50,7 @@ Les chemins Trendl sont relatifs à `trendl-app/`, les chemins du package à `kh
 | `shared/utils/*` (cn, text-fold, format-date, calendar-days), `shared/components/*` (Button, Spinner, ToastProvider) | idem | Repris | Button : variante primaire aux couleurs de marque |
 | `services/*` | `features/mailbox/lib/*-actions.js`, `lib/firebase.js`, `lib/cloud-functions.js` | Adapté | Couche démo / réel ; URL des fonctions par variable d'environnement |
 | `services/demo/*` | — | Ajouté | Données fictives, IA simulée |
-| `config/contract.mjs`, `features/brand/*` | — | Ajouté | Contrat de configuration, application de la marque |
+| `config/questionnaire-v2.mjs`, `config/instance.mjs`, `config/brand-css.mjs`, `features/brand/*` | — | Ajouté | Questionnaire v2, configuration d'instance, application de la marque |
 
 **Non repris (front)** : `ThreadReader`, `MailboxAiActions`, `ThreadActionsBar`, `ThreadPartiesBanner`, `EmailInvoicePanel`, `NewEmailDrawer` (prospection), `MessageBadges`, `IngestionHealthBanner`, `AlfredCompanion` / `AlfredWorkspace` (chat flottant à cartes CRM), `AlfredSession`, et toutes les rubriques CRM, recouvrement, créateurs, système et site vitrine.
 

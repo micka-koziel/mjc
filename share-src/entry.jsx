@@ -6,11 +6,11 @@ import { createRoot } from 'react-dom/client';
 import { AppProviders } from '@/app-shell/AppProviders';
 import { AppShell } from '@/app-shell/AppShell';
 import HomePage from '@/app/page';
-import { brandConfig, brandVariables } from '@/features/brand/brand';
+import { brandConfig, brandDataset, brandVariables } from '@/features/brand/brand';
 
 const html = document.documentElement;
 html.lang = brandConfig.assistant.language === 'en' ? 'en' : 'fr';
-html.dataset.theme = brandConfig.appearance.theme;
+for (const [k, v] of Object.entries(brandDataset)) html.setAttribute(k, v);
 for (const [k, v] of Object.entries(brandVariables)) html.style.setProperty(k, v);
 document.title = `${brandConfig.client.productName} — démonstration`;
 

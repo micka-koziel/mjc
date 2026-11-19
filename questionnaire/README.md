@@ -1,26 +1,9 @@
-# Questionnaire client
+# Questionnaire client (version 2)
 
-Le questionnaire tient dans **un seul fichier** : `questionnaire.html`. Il ne dépend d'aucun service en ligne.
+`questionnaire-v2.html` est le questionnaire fourni par l'équipe KHentik : un fichier unique qui fonctionne hors ligne. Le client le remplit dans son navigateur et télécharge ses réponses au format **Excel** (`khentik-email-<entreprise>-reponses.xlsx`).
 
-## Le faire remplir
+Ce fichier est une **copie de référence** : les valeurs autorisées de `src/config/questionnaire-v2.mjs` doivent correspondre à ses choix (un test le vérifie). Pour le faire évoluer, mettre à jour les deux.
 
-- **Par e-mail ou partage de fichier** : envoyer `questionnaire.html`. Le client l'ouvre dans son navigateur (double-clic), sur ordinateur ou sur mobile.
-- **Par lien web** : déposer le fichier sur un hébergement statique (Netlify Drop, page GitHub, espace web). Tant que ce n'est pas fait, **il n'existe pas de lien public**.
+Pour installer les réponses d'un client : voir `docs/GUIDE-AGENT-PERSONNALISATION.md`.
 
-## Ce qu'il fait
-
-- 8 étapes courtes, barre de progression, retour en arrière sans perte.
-- Progression enregistrée **sur l'appareil du client** (stockage du navigateur) : on peut fermer et revenir.
-- Choix visuels (couleurs, thème, police, densité), aperçu de l'application, récapitulatif modifiable.
-- Le logo est réduit si besoin et **embarqué dans le fichier exporté**.
-- Export : bouton « Télécharger mon fichier » (`khentik-config-<entreprise>.json`) ou « Copier le contenu ».
-- Possibilité de reprendre un fichier déjà exporté (étape 1, « Vous avez déjà un fichier exporté ? »).
-- Aucun mot de passe, aucune clé, aucun accès technique n'est demandé.
-
-## Le mettre à jour
-
-Le fichier est **généré** : ne pas le modifier à la main. Modifier `questionnaire/src/questionnaire.template.html` ou `src/config/contract.mjs`, puis :
-
-```bash
-npm run questionnaire:build
-```
+Point connu à corriger dans le questionnaire : la case « couleurs KHentik » est cochée par défaut. Elle est ignorée à l'import (jamais de couleurs KHentik chez un client).

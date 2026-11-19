@@ -1,8 +1,12 @@
+// Police de charte (Work Sans), embarquée avec l'application : aucun appel à un service externe.
+import '@fontsource/work-sans/300.css';
+import '@fontsource/work-sans/400.css';
+import '@fontsource/work-sans/600.css';
 import './globals.css';
 import { Suspense } from 'react';
 import { AppProviders } from '@/app-shell/AppProviders';
 import { AppShell } from '@/app-shell/AppShell';
-import { brandConfig, brandVariables } from '@/features/brand/brand';
+import { brandConfig, brandDataset, brandVariables } from '@/features/brand/brand';
 
 export const metadata = {
   title: brandConfig.client.productName,
@@ -17,7 +21,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang={brandConfig.assistant.language === 'en' ? 'en' : 'fr'}
-      data-theme={brandConfig.appearance.theme}
+      {...brandDataset}
       style={brandVariables}
     >
       <body>

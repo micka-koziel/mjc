@@ -1,0 +1,9 @@
+{
+  "note": "Charte officielle « MJC - Image de marque » plutôt que le vert du questionnaire (arbitrage de Mickaël du 19/11/2026) : boutons et textes marron, kraft en secondaire, vert en petites touches, fond blanc, police Work Sans.",
+  "brand": {
+    "colors": { "primary": "#4F2C1D", "accent": "#AD7C59", "text": "#4F2C1D", "success": "#338811" },
+    "extra": { "surface": "#FFFFFF", "links": "#AD7C59" }
+  },
+  "appearance": { "font": "worksans", "titleFont": "worksans" },
+  "ai": { "referenceDocuments": [] }
+}
