@@ -10,10 +10,11 @@
  * (lib/mail-assistant-tools.js) ; aucun aperçu CRM ; aucune action proposée
  * ni exécutée (alfredExecute n'est pas repris) ; consignes génériques
  * tenant compte du nom et du style d'assistant de la configuration ;
- * réponse en texte simple (pas de flux d'étapes).
+ * réponse courte et actionnable : un résumé + au plus 5 actions
+ * (lib/assistant-answer.js : validée, sans mise en forme, liens vérifiés).
  *
  * Body : {question, conversationId?, assistant?: {name, tone, concision, language}}
- * Réponse : {conversationId, message: {role, text, at}}
+ * Réponse : {conversationId, message: {role, text, actions, at}}
  */
 const {onRequest} = require("firebase-functions/v2/https");
 const {logger} = require("firebase-functions");
@@ -28,6 +29,7 @@ const {MAIL_TOOLS, FINAL_TOOL, createMailToolbox} = require("../lib/mail-assista
 const {buildAssistantSystem} = require("../lib/prompts-generic");
 const {loadAiProfile} = require("../lib/ai-profile");
 const {readAssistantSettings, effectiveProfile} = require("../lib/assistant-settings");
+const {normalizeAnswer, answerAsText, collectThreadIds} = require("../lib/assistant-answer");
 
 const CONVERSATIONS = "assistant_conversations";
 const MAX_HISTORY = 20;
@@ -71,6 +73,14 @@ exports.assistantChat = onRequest(
           readThread: (threadId) => readThreadMessages(db, threadId, 40),
           loadTodos: () => db.collection("todos").limit(300).get().then((s) => s.docs.map((d) => ({id: d.id, ...d.data()}))),
         });
+        // Fils vus par les outils, ou cités dans les réponses précédentes.
+        const seenThreads = new Set();
+        for (const m of conv.messages || []) for (const hit of String(m.text || "").matchAll(/\[fil ([^\]\s]+)\]/g)) seenThreads.add(hit[1]);
+        const executeTool = async (name, input) => {
+          const out = await toolbox.execute(name, input);
+          collectThreadIds(out, seenThreads);
+          return out;
+        };
         const client = await getAnthropicClient();
         const result = await runToolAgent(client, {
           model: MODEL_HAIKU,
@@ -82,15 +92,16 @@ exports.assistantChat = onRequest(
           history: (conv.messages || []).slice(-MAX_HISTORY),
           user: question,
           tools: MAIL_TOOLS,
-          executeTool: toolbox.execute,
+          executeTool,
           terminalTool: FINAL_TOOL,
           maxTurns: 6,
-          maxTokens: 1200,
+          maxTokens: 900,
           label: "assistantChat",
         });
-        const text = String(result.final?.answer || result.text || "Je n'ai pas trouvé de réponse.").slice(0, 4000);
+        const answer = normalizeAnswer(result.final, {knownThreads: seenThreads, fallbackText: result.text || "Je n'ai pas trouvé de réponse."});
         const at = new Date().toISOString();
-        const reply = {role: "assistant", text, at};
+        const reply = {role: "assistant", text: answerAsText(answer), at};
+        const message = {role: "assistant", text: answer.text, actions: answer.actions, at};
         const messages = [...(conv.messages || []), {role: "user", text: question, at}, reply].slice(-MAX_HISTORY * 2);
         await convRef.set({
           owner_uid: principal.uid,
@@ -100,7 +111,7 @@ exports.assistantChat = onRequest(
           updated_at: admin.firestore.FieldValue.serverTimestamp(),
         }, {merge: true});
         logger.info("assistantChat: tour", {conversationId: convRef.id, turns: result.turns, tools: result.toolLog.map((t) => t.name)});
-        return res.status(200).json({conversationId: convRef.id, message: reply});
+        return res.status(200).json({conversationId: convRef.id, message});
       } catch (err) {
         logger.error("assistantChat: échec", {error: err.message});
         const pub = publicAiError(err);

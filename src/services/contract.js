@@ -27,7 +27,7 @@
  * @property {(todo: object) => Promise<string>} createTodo
  * @property {(id: string, patch: object) => Promise<void>} updateTodo
  * @property {(id: string) => Promise<void>} deleteTodo
- * @property {(p: {question: string, conversationId?: string, assistant?: object}) => Promise<{conversationId: string, text: string}>} askAssistant
+ * @property {(p: {question: string, conversationId?: string, assistant?: object}) => Promise<{conversationId: string, text: string, actions?: {title: string, threadId: string|null, due: string|null, kind: 'repondre'|'ouvrir'|'tache'}[]}>} askAssistant
  * @property {() => void} [resetDemo]          démo uniquement
  */
 

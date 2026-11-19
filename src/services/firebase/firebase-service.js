@@ -256,7 +256,7 @@ export function createFirebaseService() {
 
     async askAssistant({ question, conversationId, assistant }) {
       const data = await call('assistantChat', { question, conversationId, assistant });
-      return { conversationId: data.conversationId, text: data.message?.text || '' };
+      return { conversationId: data.conversationId, text: data.message?.text || '', actions: Array.isArray(data.message?.actions) ? data.message.actions : [] };
     },
   };
 }

@@ -47,8 +47,29 @@ const MAIL_TOOLS = [
   },
   {
     name: FINAL_TOOL,
-    description: "RÉPONSE FINALE, toujours par cet outil, une seule fois, en dernier. Texte bref, listes courtes si utile.",
-    input_schema: {type: "object", properties: {answer: {type: "string"}}, required: ["answer"]},
+    description: "RÉPONSE FINALE, toujours par cet outil, une seule fois, en dernier. Un résumé d'une phrase, puis les actions concrètes à faire, sans mise en forme.",
+    input_schema: {
+      type: "object",
+      properties: {
+        resume: {type: "string", description: "Une phrase, 160 caractères au plus. Texte brut : pas d'astérisques, pas de titres, pas d'émojis."},
+        actions: {
+          type: "array",
+          maxItems: 5,
+          description: "0 à 5 actions, de la plus urgente à la moins urgente. Vide si la question n'appelle aucune action.",
+          items: {
+            type: "object",
+            properties: {
+              titre: {type: "string", description: "Verbe à l'infinitif + quoi + qui, 90 caractères au plus. Ex. : « Envoyer les heures sup. à Bastien Frappart »."},
+              thread_id: {type: "string", description: "thread_id du fil concerné, tel que renvoyé par chercher_mails ou lire_fil. Jamais inventé."},
+              echeance: {type: "string", description: "Échéance courte si connue (« vendredi midi », « avant le 12/12 »)."},
+              type: {type: "string", enum: ["repondre", "ouvrir", "tache"], description: "repondre = il faut répondre à ce fil ; ouvrir = le lire ; tache = à faire hors e-mail."},
+            },
+            required: ["titre", "type"],
+          },
+        },
+      },
+      required: ["resume"],
+    },
   },
 ];
 

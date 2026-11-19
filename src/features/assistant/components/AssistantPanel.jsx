@@ -5,6 +5,7 @@ import { useApp } from '@/app-shell/AppProviders';
 import { useToast } from '@/shared/hooks/useToast';
 import { brandConfig } from '@/features/brand/brand';
 import { AssistantAvatar } from './AssistantAvatar';
+import { AssistantAnswer } from './AssistantAnswer';
 import { SummaryPanel } from '@/features/mailbox/components/SummaryPanel';
 import { computeThreadFolder } from '@/features/mailbox/lib/compute-folder';
 import { displayName } from '@/features/mailbox/lib/format-email';
@@ -57,11 +58,12 @@ export function AssistantPanel({ onOpenThread, workList = [] }) {
         {
           role: 'assistant',
           text: emails.length
-            ? `${emails.length} e-mail${emails.length > 1 ? 's attendent' : ' attend'} votre réponse, du plus prioritaire au moins prioritaire :`
+            ? `${emails.length} e-mail${emails.length > 1 ? 's attendent' : ' attend'} votre réponse. Du plus urgent au moins urgent :`
             : 'Aucun e-mail n’attend votre réponse.',
-          links: emails.slice(0, 6).map((i) => ({
+          actions: emails.slice(0, 5).map((i) => ({
+            title: `${i.lastMessage.analysis?.senderName || displayName(i.lastMessage.from)} — ${i.lastMessage.subject}`,
             threadId: i.thread.threadId,
-            label: `${i.lastMessage.analysis?.senderName || displayName(i.lastMessage.from)} — ${i.lastMessage.subject}`,
+            kind: 'repondre',
           })),
         }
       );
@@ -71,9 +73,14 @@ export function AssistantPanel({ onOpenThread, workList = [] }) {
         { role: 'user', text: 'Quelles sont mes tâches du jour ?' },
         {
           role: 'assistant',
-          text: todos.length
-            ? `Tâches à faire aujourd’hui :\n${todos.map((t) => `• ${t.todo.text} (${t.reasons.join(', ')})`).join('\n')}`
-            : 'Aucune tâche à faire aujourd’hui.',
+          text: todos.length ? `${todos.length} tâche${todos.length > 1 ? 's' : ''} pour aujourd’hui :` : 'Aucune tâche à faire aujourd’hui.',
+          actions: todos.slice(0, 8).map((t) => ({
+            title: t.todo.text,
+            due: t.reasons[0] || null,
+            todoId: t.todo.id,
+            threadId: t.todo.source_thread_id || null,
+            kind: 'ouvrir',
+          })),
         }
       );
     }
@@ -89,7 +96,7 @@ export function AssistantPanel({ onOpenThread, workList = [] }) {
     try {
       const r = await service.askAssistant({ question, conversationId, assistant: brandConfig.assistant });
       if (r.conversationId) setConversationId(r.conversationId);
-      push({ role: 'assistant', text: r.text });
+      push({ role: 'assistant', text: r.text, actions: r.actions || [] });
     } catch (err) {
       push({ role: 'assistant', text: `Je ne peux pas répondre pour le moment (${err.message}).`, error: true });
     } finally {
@@ -142,27 +149,14 @@ export function AssistantPanel({ onOpenThread, workList = [] }) {
             <SpamReview key={i} threads={threads} onOpenThread={onOpenThread} />
           ) : (
             <div key={i} className={en.role === 'user' ? 'flex justify-end' : 'flex items-start gap-2'}>
-            {en.role !== 'user' && <AssistantAvatar size="sm" className="mt-0.5" />}
-            <div
-              className={
-                en.role === 'user'
-                  ? 'ml-6 rounded-xl bg-primary px-3 py-2 text-sm text-primary-foreground'
-                  : `mr-6 whitespace-pre-wrap rounded-xl border px-3 py-2 text-sm ${en.error ? 'border-danger/40 text-danger' : 'border-border bg-background text-foreground'}`
-              }
-            >
-              {en.text}
-              {en.links?.length > 0 && (
-                <ul className="mt-1 space-y-1">
-                  {en.links.map((l) => (
-                    <li key={l.threadId}>
-                      <button type="button" onClick={() => onOpenThread(l.threadId)} className="text-left text-xs font-semibold text-link hover:underline">
-                        {l.label}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
+              {en.role === 'user' ? (
+                <div className="ml-6 whitespace-pre-wrap rounded-xl bg-primary px-3 py-2 text-sm text-primary-foreground">{en.text}</div>
+              ) : (
+                <>
+                  <AssistantAvatar size="sm" className="mt-0.5" />
+                  <AssistantAnswer text={en.text} actions={en.actions} error={en.error} onOpenThread={onOpenThread} />
+                </>
               )}
-            </div>
             </div>
           )
         )}
