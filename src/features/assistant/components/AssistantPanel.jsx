@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { useApp } from '@/app-shell/AppProviders';
 import { useToast } from '@/shared/hooks/useToast';
 import { brandConfig } from '@/features/brand/brand';
+import { AssistantAvatar } from './AssistantAvatar';
 import { SummaryPanel } from '@/features/mailbox/components/SummaryPanel';
 import { computeThreadFolder } from '@/features/mailbox/lib/compute-folder';
 import { displayName } from '@/features/mailbox/lib/format-email';
@@ -102,12 +103,10 @@ export function AssistantPanel({ onOpenThread, workList = [] }) {
   return (
     <aside aria-label={name} className="flex min-h-[420px] flex-col gap-3 rounded-2xl border border-primary/30 bg-primary-soft/40 p-3 xl:min-h-0">
       <div className="flex items-center gap-3">
-        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-lg text-primary-foreground" aria-hidden="true">
-          ✦
-        </span>
+        <AssistantAvatar size="lg" />
         <div>
           <p className="font-semibold text-foreground">{name}</p>
-          <p className="text-xs text-muted">Votre assistant pour les e-mails{mode === 'demo' ? ' · démo' : ''}</p>
+          <p className="text-xs text-muted">{brandConfig.assistant.tagline}{mode === 'demo' ? ' · démo' : ''}</p>
         </div>
       </div>
 
@@ -133,19 +132,22 @@ export function AssistantPanel({ onOpenThread, workList = [] }) {
 
       <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto rounded-xl bg-surface p-2" aria-live="polite">
         {entries.length === 0 && (
-          <p className="m-auto max-w-[16rem] text-center text-xs text-muted">
-            Posez une question sur vos e-mails, ou utilisez une commande ci-dessus.
-          </p>
+          <div className="m-auto flex max-w-[17rem] flex-col items-center gap-2 text-center">
+            <AssistantAvatar size="lg" />
+            <p className="text-sm font-semibold text-foreground">Bonjour, je suis {name} !</p>
+            <p className="text-xs text-muted">Posez-moi une question sur vos e-mails, ou utilisez une commande ci-dessus.</p>
+          </div>
         )}
         {entries.map((en, i) =>
           en.spam ? (
             <SpamReview key={i} threads={threads} onOpenThread={onOpenThread} />
           ) : (
+            <div key={i} className={en.role === 'user' ? 'flex justify-end' : 'flex items-start gap-2'}>
+            {en.role !== 'user' && <AssistantAvatar size="sm" className="mt-0.5" />}
             <div
-              key={i}
               className={
                 en.role === 'user'
-                  ? 'ml-6 self-end rounded-xl bg-primary px-3 py-2 text-sm text-primary-foreground'
+                  ? 'ml-6 rounded-xl bg-primary px-3 py-2 text-sm text-primary-foreground'
                   : `mr-6 whitespace-pre-wrap rounded-xl border px-3 py-2 text-sm ${en.error ? 'border-danger/40 text-danger' : 'border-border bg-background text-foreground'}`
               }
             >
@@ -162,11 +164,12 @@ export function AssistantPanel({ onOpenThread, workList = [] }) {
                 </ul>
               )}
             </div>
+            </div>
           )
         )}
         {busy && (
           <p className="flex items-center gap-2 text-xs text-muted">
-            <Spinner className="h-3 w-3" /> {name} réfléchit…
+            <AssistantAvatar size="sm" /> <Spinner className="h-3 w-3" /> {name} réfléchit…
           </p>
         )}
         <div ref={endRef} />

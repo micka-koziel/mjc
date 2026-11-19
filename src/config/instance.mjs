@@ -46,7 +46,14 @@ export const DEFAULT_UI = Object.freeze({
     corners: 'soft',
     contrast: 'standard',
   },
-  assistant: { name: 'Assistant', tone: 'cordial', concision: 'balanced', language: 'fr' },
+  assistant: {
+    name: 'Assistant',
+    tagline: 'Votre assistant pour les e-mails',
+    avatar: null,
+    tone: 'cordial',
+    concision: 'balanced',
+    language: 'fr',
+  },
   priorities: { importantSenders: [] },
   meta: { source: 'default' },
 });
@@ -103,6 +110,12 @@ function checkOverrides(ov, errors) {
     const v = ov.appearance?.[k];
     if (v !== undefined && v !== null && !FONTS[v]) errors.push(`overrides appearance.${k} : « ${v} » inconnue (${Object.keys(FONTS).join(', ')}).`);
   }
+  const av = ov.assistant?.avatarFile;
+  if (av !== undefined && !/^[\w.-]+\.(svg|png|jpe?g|webp)$/i.test(String(av))) {
+    errors.push('overrides assistant.avatarFile : nom de fichier image attendu (svg, png, jpg, webp), dans le dossier du client.');
+  }
+  const tag = ov.assistant?.tagline;
+  if (tag !== undefined && (typeof tag !== 'string' || tag.length > 80)) errors.push('overrides assistant.tagline : texte de 80 caractères maximum.');
   const refs = ov.ai?.referenceDocuments;
   if (refs !== undefined && !Array.isArray(refs)) errors.push('overrides ai.referenceDocuments : liste de noms de fichiers attendue.');
 }
@@ -166,6 +179,9 @@ export function buildInstance(answers, overrides = {}) {
     },
     assistant: {
       name: a.assistant.name.trim(),
+      tagline: String(a.assistant.tagline || DEFAULT_UI.assistant.tagline).trim(),
+      // Avatar : fichier image du dossier client (arbitrage), copié dans public/brand/.
+      avatar: a.assistant.avatarFile ? `/brand/assistant-avatar${String(a.assistant.avatarFile).slice(String(a.assistant.avatarFile).lastIndexOf('.'))}` : null,
       tone: a.assistant.tone || 'cordial',
       concision: a.assistant.concision || 'balanced',
       language: a.assistant.language || 'fr',
@@ -242,7 +258,8 @@ export function buildInstance(answers, overrides = {}) {
     if (v !== undefined && v !== null && v !== '' && v !== neutral) warnings.push(`${p} = « ${v} » : lu, pas encore appliqué par l’application.`);
   }
   if (note) warnings.push(`Arbitrage appliqué : ${note}`);
-  return { valid: true, errors: [], warnings, ui, ai, logos, documents };
+  const assistantAvatar = a.assistant.avatarFile ? { source: String(a.assistant.avatarFile), fileName: ui.assistant.avatar.slice('/brand/'.length) } : null;
+  return { valid: true, errors: [], warnings, ui, ai, logos, documents, assistantAvatar };
 }
 
 /** Les polices propres à l'instance ne passent pas la validation du questionnaire : on les retire avant. */

@@ -86,8 +86,13 @@ function install({ result, clientDir, answersFile }) {
   fs.writeFileSync(OUT.ai, `${JSON.stringify({ ...result.ai, appliedFrom }, null, 2)}\n`);
 
   fs.mkdirSync(OUT.brand, { recursive: true });
-  for (const f of fs.readdirSync(OUT.brand)) if (f.startsWith('logo-')) fs.rmSync(path.join(OUT.brand, f));
+  for (const f of fs.readdirSync(OUT.brand)) if (f.startsWith('logo-') || f.startsWith('assistant-avatar')) fs.rmSync(path.join(OUT.brand, f));
   for (const logo of result.logos) fs.writeFileSync(path.join(OUT.brand, logo.fileName), Buffer.from(logo.base64, 'base64'));
+  if (result.assistantAvatar) {
+    const src = path.join(clientDir || path.dirname(answersFile), result.assistantAvatar.source);
+    if (!fs.existsSync(src)) throw new Error(`Avatar de l'assistant introuvable : ${src}`);
+    fs.copyFileSync(src, path.join(OUT.brand, result.assistantAvatar.fileName));
+  }
 
   // Boîte de démonstration du client (sinon : aucune, pour ne jamais garder celle d'un autre client).
   const demoSrc = clientDir ? path.join(clientDir, 'demo-mailbox.json') : null;

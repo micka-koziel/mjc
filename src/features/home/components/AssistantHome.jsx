@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { useApp } from '@/app-shell/AppProviders';
 import { useToast } from '@/shared/hooks/useToast';
 import { brandConfig } from '@/features/brand/brand';
+import { AssistantAvatar } from '@/features/assistant/components/AssistantAvatar';
 import { buildWorkList } from '../lib/work-list';
 import { displayName } from '@/features/mailbox/lib/format-email';
 import { todoDoneFields } from '@/features/todos/lib/todo-occurrence';
@@ -61,7 +62,9 @@ export function AssistantHome() {
             <span className="text-xs text-muted">par priorité · règle provisoire</span>
           </div>
           {loading ? (
-            <p className="px-1 py-3 text-sm text-muted">{brandConfig.assistant.name} prépare votre liste…</p>
+            <p className="flex items-center gap-2 px-1 py-3 text-sm text-muted">
+              <AssistantAvatar size="sm" /> {brandConfig.assistant.name} prépare votre liste…
+            </p>
           ) : list.length === 0 ? (
             <p className="rounded-xl bg-background px-4 py-6 text-center text-sm text-muted">Rien à traiter pour le moment. Belle journée !</p>
           ) : (

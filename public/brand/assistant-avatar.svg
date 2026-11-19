@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Alice">
+  <defs><clipPath id="c"><circle cx="48" cy="48" r="48"/></clipPath></defs>
+  <g clip-path="url(#c)">
+    <rect width="96" height="96" fill="#F4E9DF"/>
+    <circle cx="80" cy="16" r="22" fill="#E9D8C8"/>
+    <!-- buste et tablier -->
+    <path d="M14 96c2-18 16-28 34-28s32 10 34 28z" fill="#AD7C59"/>
+    <path d="M36 96V74c4 3 8 4 12 4s8-1 12-4v22z" fill="#4F2C1D"/>
+    <path d="M42 74l6 6 6-6" fill="none" stroke="#F4E9DF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- cou -->
+    <rect x="42" y="56" width="12" height="14" rx="5" fill="#E8B998"/>
+    <!-- cheveux (arrière) -->
+    <circle cx="48" cy="20" r="9" fill="#4F2C1D"/>
+    <path d="M24 44c0-16 10-26 24-26s24 10 24 26c0 6-2 10-4 13H28c-2-3-4-7-4-13z" fill="#4F2C1D"/>
+    <!-- visage -->
+    <ellipse cx="48" cy="45" rx="17" ry="19" fill="#F1C7A6"/>
+    <path d="M31 40c4-10 10-14 17-14s14 4 17 13c-6-5-12-7-17-7-6 0-12 3-17 8z" fill="#4F2C1D"/>
+    <circle cx="41.5" cy="46" r="2.2" fill="#4F2C1D"/>
+    <circle cx="54.5" cy="46" r="2.2" fill="#4F2C1D"/>
+    <circle cx="37" cy="52" r="3" fill="#E9A487" opacity=".55"/>
+    <circle cx="59" cy="52" r="3" fill="#E9A487" opacity=".55"/>
+    <path d="M42.5 54.5c3 3 8 3 11 0" fill="none" stroke="#4F2C1D" stroke-width="2" stroke-linecap="round"/>
+    <!-- brin végétal dans les cheveux -->
+    <path d="M58 22c6-6 12-8 18-7" fill="none" stroke="#338811" stroke-width="1.8" stroke-linecap="round"/>
+    <ellipse cx="64" cy="15" rx="4.5" ry="2.2" transform="rotate(-35 64 15)" fill="#338811"/>
+    <ellipse cx="71" cy="20" rx="4.5" ry="2.2" transform="rotate(10 71 20)" fill="#338811"/>
+    <ellipse cx="74" cy="12" rx="3.8" ry="1.9" transform="rotate(-60 74 12)" fill="#5FA83A"/>
+  </g>
+</svg>

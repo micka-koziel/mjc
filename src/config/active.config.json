@@ -33,7 +33,9 @@
     "contrast": "standard"
   },
   "assistant": {
-    "name": "Alfred",
+    "name": "Alice",
+    "tagline": "Votre assistante pour les e-mails",
+    "avatar": "/brand/assistant-avatar.svg",
     "tone": "direct",
     "concision": "short",
     "language": "fr"

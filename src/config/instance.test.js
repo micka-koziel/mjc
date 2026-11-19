@@ -62,6 +62,14 @@ describe('configuration d’instance', () => {
     a.assistant.signature = 'custom';
     expect(buildInstance(a).ai.assistant.signatureText).toBe('Carine');
   });
+  it('arbitrage : nom, phrase d’accroche et avatar de l’assistant', () => {
+    const r = buildInstance(example(), { assistant: { name: 'Alice', tagline: 'Votre assistante', avatarFile: 'alice.svg' } });
+    expect(r.ui.assistant).toMatchObject({ name: 'Alice', tagline: 'Votre assistante', avatar: '/brand/assistant-avatar.svg' });
+    expect(r.ai.assistant.name).toBe('Alice');
+    expect(r.assistantAvatar).toEqual({ source: 'alice.svg', fileName: 'assistant-avatar.svg' });
+    expect(buildInstance(example()).ui.assistant.avatar).toBeNull();
+    expect(buildInstance(example(), { assistant: { avatarFile: '../secret.txt' } }).valid).toBe(false);
+  });
   it('outils', () => {
     expect(splitList('a; B\n c,,')).toEqual(['a', 'b', 'c']);
     expect(withInstanceDefaults({ appearance: { corners: 'square' } }).appearance).toMatchObject({ corners: 'square', theme: 'light' });

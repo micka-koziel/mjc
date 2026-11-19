@@ -1,9 +1,27 @@
 {
-  "note": "Charte officielle « MJC - Image de marque » plutôt que le vert du questionnaire (arbitrage de Mickaël du 19/11/2026) : boutons et textes marron, kraft en secondaire, vert en petites touches, fond blanc, police Work Sans.",
+  "note": "Charte officielle « MJC - Image de marque » plutôt que le vert du questionnaire (arbitrage de Mickaël du 19/11/2026) : boutons et textes marron, kraft en secondaire, vert en petites touches, fond blanc, police Work Sans. Assistant renommée « Alice », avec un avatar illustré (demande de Mickaël du 19/11/2026).",
   "brand": {
-    "colors": { "primary": "#4F2C1D", "accent": "#AD7C59", "text": "#4F2C1D", "success": "#338811" },
-    "extra": { "surface": "#FFFFFF", "links": "#AD7C59" }
+    "colors": {
+      "primary": "#4F2C1D",
+      "accent": "#AD7C59",
+      "text": "#4F2C1D",
+      "success": "#338811"
+    },
+    "extra": {
+      "surface": "#FFFFFF",
+      "links": "#AD7C59"
+    }
   },
-  "appearance": { "font": "worksans", "titleFont": "worksans" },
-  "ai": { "referenceDocuments": [] }
+  "appearance": {
+    "font": "worksans",
+    "titleFont": "worksans"
+  },
+  "ai": {
+    "referenceDocuments": []
+  },
+  "assistant": {
+    "name": "Alice",
+    "tagline": "Votre assistante pour les e-mails",
+    "avatarFile": "assistant-avatar.svg"
+  }
 }
