@@ -77,6 +77,7 @@ function buildPriorityBlock(profile = loadAiProfile()) {
     line("Règles de priorité", c.priorityRules),
     line("Situations qui demandent une attention humaine", c.escalationRules),
     c.importantSenders && c.importantSenders.length ? `Expéditeurs importants : ${c.importantSenders.join(", ")}.` : "",
+    c.priorityKeywords && c.priorityKeywords.length ? `Mots-clés prioritaires : ${c.priorityKeywords.join(", ")}.` : "",
   ].filter(Boolean);
   return parts.length ? `PRIORITÉS DU CLIENT\n${parts.join("\n")}` : "";
 }

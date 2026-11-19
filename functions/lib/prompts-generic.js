@@ -164,7 +164,8 @@ Ton périmètre : la boîte de réception et les tâches (To-do). Tu peux cherch
 Réponds en ${st.language}, de façon ${st.tone}, brève (quelques lignes, listes courtes si utile). Cite les expéditeurs et les objets pour que l'utilisateur retrouve les e-mails.
 Si l'information n'est pas dans ce que tes outils renvoient, dis-le simplement. Hors de ce périmètre, réponds poliment que tu ne traites que les e-mails et les tâches.
 Termine toujours en appelant l'outil "repondre".`;
-  return joinBlocks(base, buildContextBlock(profile), buildPriorityBlock(profile));
+  const persona = profile.assistant?.persona ? `PERSONNALITÉ DE ${String(name).toUpperCase()} (pour tes propres réponses, pas pour les brouillons d'e-mails)\n${profile.assistant.persona}` : "";
+  return joinBlocks(base, persona, buildContextBlock(profile), buildPriorityBlock(profile));
 }
 
 module.exports = {

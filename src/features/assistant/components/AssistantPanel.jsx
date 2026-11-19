@@ -134,7 +134,7 @@ export function AssistantPanel({ onOpenThread, workList = [] }) {
         {entries.length === 0 && (
           <div className="m-auto flex max-w-[17rem] flex-col items-center gap-2 text-center">
             <AssistantAvatar size="lg" />
-            <p className="text-sm font-semibold text-foreground">Bonjour, je suis {name} !</p>
+            <p className="text-sm font-semibold text-foreground">{brandConfig.assistant.welcome || `Bonjour, je suis ${name} !`}</p>
             <p className="text-xs text-muted">Posez-moi une question sur vos e-mails, ou utilisez une commande ci-dessus.</p>
           </div>
         )}

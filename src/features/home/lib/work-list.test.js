@@ -50,7 +50,7 @@ describe('work-list (règle provisoire)', () => {
     const boosted = buildWorkList({ threads, todos, now: NOW, importantSenders: [from.toLowerCase()] });
     const item = boosted.find((i) => i.key === 'email:t-candidat');
     const base = list.find((i) => i.key === 'email:t-candidat');
-    expect(item.score - base.score).toBe(PRIORITY_RULES.importantSenderBonus);
+    expect(item.score - base.score).toBe(PRIORITY_RULES.levelWeights.important);
     expect(item.reasons).toContain('expéditeur important');
 
     const urgentThreads = threads.map((t) =>
@@ -61,5 +61,24 @@ describe('work-list (règle provisoire)', () => {
     const u = buildWorkList({ threads: urgentThreads, todos, now: NOW }).find((i) => i.key === 'email:t-candidat');
     expect(u.score - base.score).toBe(PRIORITY_RULES.urgentBonus);
     expect(u.reasons).toContain('prioritaire : réclamation');
+  });
+
+  it('applique les réglages de l’utilisatrice : niveaux, mots-clés, exclusions, nombre', async () => {
+    const { normalizePriorities } = await import('@/features/settings/lib/assistant-settings');
+    const candidat = threads.find((t) => t.threadId === 't-candidat');
+    const last = candidat.messages[candidat.messages.length - 1];
+    const base = list.find((i) => i.key === 'email:t-candidat');
+    const low = buildWorkList({ threads, todos, now: NOW, rules: normalizePriorities({ senders: [{ match: last.from, level: 'low' }] }) })
+      .find((i) => i.key === 'email:t-candidat');
+    expect(low.score - base.score).toBe(-25);
+    expect(low.reasons).toContain('expéditeur bas de liste');
+    const word = (last.subject || '').split(/\s+/).find((w) => w.length >= 4).toLowerCase();
+    const kw = buildWorkList({ threads, todos, now: NOW, rules: normalizePriorities({ keywords: [word], keywordBonus: 7 }) })
+      .find((i) => i.key === 'email:t-candidat');
+    expect(kw.score - base.score).toBe(7);
+    const few = buildWorkList({ threads, todos, now: NOW, rules: normalizePriorities({ maxItems: 3 }) });
+    expect(few).toHaveLength(3);
+    const withNews = buildWorkList({ threads, todos, now: NOW, rules: normalizePriorities({ excludedCategories: ['spam'] }) });
+    expect(withNews.some((i) => i.key === 'email:t-news')).toBe(true);
   });
 });

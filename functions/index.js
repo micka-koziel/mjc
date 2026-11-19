@@ -19,6 +19,9 @@ exports.resetDemoMailbox = require("./demo/resetDemoMailbox").resetDemoMailbox;
 // Accès à l'application : l'administrateur (ADMIN_EMAILS) invite ou retire des personnes.
 exports.manageAccess = require("./admin/manageAccess").manageAccess;
 
+// Réglages de l'assistant (priorités, réponses), modifiables dans l'application.
+exports.assistantSettings = require("./settings/assistantSettings").assistantSettings;
+
 // Connexion Gmail (OAuth) — repris
 exports.initOAuth = require("./oauth/initOAuth").initOAuth;
 exports.callbackOAuth = require("./oauth/callbackOAuth").callbackOAuth;

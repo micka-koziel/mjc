@@ -49,6 +49,12 @@ describe("consignes IA : profil du client (questionnaire v2)", () => {
     expect(sys.startsWith(SYSTEM_ANALYZE)).toBe(true);
     expect(TOOL_ANALYZE.input_schema.required).toContain("urgent");
   });
+  it("l'assistant a sa propre personnalité, distincte du style des brouillons", () => {
+    const sys = buildAssistantSystem({}, {today: "2026-11-19"}, {...PROFILE, assistant: {...PROFILE.assistant, persona: "Rockeuse, cash, zéro bla-bla."}});
+    expect(sys).toContain("PERSONNALITÉ DE ALFRED");
+    expect(sys).toContain("zéro bla-bla");
+    expect(buildReplySystem({}, {}, {...PROFILE, assistant: {...PROFILE.assistant, persona: "Rockeuse"}})).not.toContain("Rockeuse");
+  });
   it("l'assistant porte le nom choisi par le client", () => {
     expect(buildAssistantSystem({name: "Assistant"}, {today: "2026-11-19"}, PROFILE)).toContain("Tu es Alfred");
   });

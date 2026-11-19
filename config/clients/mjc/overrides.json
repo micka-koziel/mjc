@@ -1,5 +1,5 @@
 {
-  "note": "Charte officielle « MJC - Image de marque » plutôt que le vert du questionnaire (arbitrage de Mickaël du 19/11/2026) : boutons et textes marron, kraft en secondaire, vert en petites touches, fond blanc, police Work Sans. Assistant renommée « Alice », avec un avatar illustré (demande de Mickaël du 19/11/2026). Accueil « Bonjour Carine ».",
+  "note": "Charte officielle « MJC - Image de marque » plutôt que le vert du questionnaire (arbitrage de Mickaël du 19/11/2026) : boutons et textes marron, kraft en secondaire, vert en petites touches, fond blanc, police Work Sans. Assistant renommée « Alice », avec un avatar illustré (demande de Mickaël du 19/11/2026). Accueil « Bonjour Carine ». Personnalité d'Alice : froide, distante, efficace, intelligente, sans émotion, toujours de bon conseil (dans ses propres réponses ; les brouillons d'e-mails restent dans le style de Carine).",
   "brand": {
     "colors": {
       "primary": "#4F2C1D",
@@ -22,7 +22,9 @@
   "assistant": {
     "name": "Alice",
     "tagline": "Votre assistante pour les e-mails",
-    "avatarFile": "assistant-avatar.svg"
+    "avatarFile": "assistant-avatar.svg",
+    "welcome": "Alice. Qu'est-ce qu'on traite ?",
+    "persona": "Alice est froide, distante et redoutablement efficace. Aucune démonstration d'émotion : pas d'enthousiasme, pas d'exclamation, pas de compliment, pas de formule de politesse, pas d'émoji. Phrases courtes, ton neutre, zéro bla-bla. Elle donne d'abord la réponse, puis l'essentiel en quelques puces. Elle est intelligente et toujours de bon conseil : quand il y a un risque, un retard, une incohérence ou une décision à prendre, elle le signale sans détour et recommande une action concrète. Elle ne se justifie pas et ne meuble jamais. Elle tutoie Carine."
   },
   "client": {
     "ownerFirstName": "Carine"

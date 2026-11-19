@@ -49,6 +49,7 @@ export const DEFAULT_UI = Object.freeze({
   assistant: {
     name: 'Assistant',
     tagline: 'Votre assistant pour les e-mails',
+    welcome: '',
     avatar: null,
     tone: 'cordial',
     concision: 'balanced',
@@ -113,6 +114,10 @@ function checkOverrides(ov, errors) {
   const av = ov.assistant?.avatarFile;
   if (av !== undefined && !/^[\w.-]+\.(svg|png|jpe?g|webp)$/i.test(String(av))) {
     errors.push('overrides assistant.avatarFile : nom de fichier image attendu (svg, png, jpg, webp), dans le dossier du client.');
+  }
+  for (const [k, max] of [['welcome', 120], ['persona', 1500]]) {
+    const v = ov.assistant?.[k];
+    if (v !== undefined && (typeof v !== 'string' || v.length > max)) errors.push(`overrides assistant.${k} : texte de ${max} caractères maximum.`);
   }
   const tag = ov.assistant?.tagline;
   if (tag !== undefined && (typeof tag !== 'string' || tag.length > 80)) errors.push('overrides assistant.tagline : texte de 80 caractères maximum.');
@@ -182,6 +187,8 @@ export function buildInstance(answers, overrides = {}) {
     assistant: {
       name: a.assistant.name.trim(),
       tagline: String(a.assistant.tagline || DEFAULT_UI.assistant.tagline).trim(),
+      // Phrase d'accueil du panneau (arbitrage) ; vide = « Bonjour, je suis <nom> ! ».
+      welcome: String(a.assistant.welcome || '').trim(),
       // Avatar : fichier image du dossier client (arbitrage), copié dans public/brand/.
       avatar: a.assistant.avatarFile ? `/brand/assistant-avatar${String(a.assistant.avatarFile).slice(String(a.assistant.avatarFile).lastIndexOf('.'))}` : null,
       tone: a.assistant.tone || 'cordial',
@@ -224,6 +231,8 @@ export function buildInstance(answers, overrides = {}) {
     website: ui.client.website,
     assistant: {
       name: ui.assistant.name,
+      // Personnalité de l'assistant dans SES réponses (pas dans les brouillons d'e-mails).
+      persona: String(s.persona || '').trim(),
       tone: ui.assistant.tone,
       concision: ui.assistant.concision,
       language: ui.assistant.language,

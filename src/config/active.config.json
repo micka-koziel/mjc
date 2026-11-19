@@ -36,6 +36,7 @@
   "assistant": {
     "name": "Alice",
     "tagline": "Votre assistante pour les e-mails",
+    "welcome": "Alice. Qu'est-ce qu'on traite ?",
     "avatar": "/brand/assistant-avatar.svg",
     "tone": "direct",
     "concision": "short",

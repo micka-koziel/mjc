@@ -23,6 +23,8 @@ const {generateStructured} = require("../lib/ai-provider");
 const {emailAnalysisOutputSchema} = require("../lib/validation/ai-schemas");
 const {messageDirection, isDraftMessage} = require("../lib/message-direction");
 const {buildAnalyzeSystem, TOOL_ANALYZE, buildAnalyzeUser} = require("../lib/prompts-generic");
+const {loadAiProfile} = require("../lib/ai-profile");
+const {readAssistantSettings, effectiveProfile} = require("../lib/assistant-settings");
 
 // v2 : contexte et priorités du client (questionnaire v2), champ « urgent ».
 const MODEL_VERSION = "khentik-generic-v2";
@@ -61,7 +63,7 @@ exports.analyzeEmail = onDocumentWritten(
         const client = await getAnthropicClient();
         const out = await generateStructured(client, {
           model: MODEL_HAIKU,
-          system: buildAnalyzeSystem(),
+          system: buildAnalyzeSystem(effectiveProfile(loadAiProfile(), await readAssistantSettings().catch(() => ({})))),
           user: buildAnalyzeUser(m),
           tool: TOOL_ANALYZE,
           schema: emailAnalysisOutputSchema,

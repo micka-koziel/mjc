@@ -66,7 +66,13 @@ function useRouterNav() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const view = pathname?.startsWith('/mailbox') ? 'mailbox' : pathname?.startsWith('/todos') ? 'todos' : 'home';
+  const view = pathname?.startsWith('/mailbox')
+    ? 'mailbox'
+    : pathname?.startsWith('/todos')
+      ? 'todos'
+      : pathname?.startsWith('/reglages')
+        ? 'settings'
+        : 'home';
   const openThread = useCallback((threadId) => router.push(`/mailbox?thread=${encodeURIComponent(threadId)}`), [router]);
   const clearThread = useCallback(() => router.replace(pathname, { scroll: false }), [router, pathname]);
   return { view, threadParam: searchParams?.get('thread') || null, openThread, clearThread };

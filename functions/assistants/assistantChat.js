@@ -26,6 +26,8 @@ const {readThreadMessages} = require("../lib/thread-reader");
 const {publicAiError} = require("../lib/text-safe");
 const {MAIL_TOOLS, FINAL_TOOL, createMailToolbox} = require("../lib/mail-assistant-tools");
 const {buildAssistantSystem} = require("../lib/prompts-generic");
+const {loadAiProfile} = require("../lib/ai-profile");
+const {readAssistantSettings, effectiveProfile} = require("../lib/assistant-settings");
 
 const CONVERSATIONS = "assistant_conversations";
 const MAX_HISTORY = 20;
@@ -72,7 +74,11 @@ exports.assistantChat = onRequest(
         const client = await getAnthropicClient();
         const result = await runToolAgent(client, {
           model: MODEL_HAIKU,
-          system: buildAssistantSystem(prefs, {name: String(prefs.name || "Assistant").slice(0, 30), today: new Date().toISOString().slice(0, 10)}),
+          system: buildAssistantSystem(
+              prefs,
+              {name: String(prefs.name || "Assistant").slice(0, 30), today: new Date().toISOString().slice(0, 10)},
+              effectiveProfile(loadAiProfile(), await readAssistantSettings().catch(() => ({}))),
+          ),
           history: (conv.messages || []).slice(-MAX_HISTORY),
           user: question,
           tools: MAIL_TOOLS,

@@ -123,6 +123,11 @@ export function AppShell({ children }) {
         </div>
       )}
       {mode === 'firebase' && !SIMULATED_MAILBOX && <MailboxConnection service={service} />}
+      {!HASH_ROUTING && (
+        <Link href="/reglages" onClick={() => setOpen(false)} className="block font-semibold text-link hover:underline">
+          Réglages de {brandConfig.assistant.name}
+        </Link>
+      )}
       {isAccessAdmin && (
         <button type="button" onClick={() => setAccessOpen(true)} className="block font-semibold text-link hover:underline">
           Gérer les accès

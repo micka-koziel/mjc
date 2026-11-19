@@ -38,6 +38,7 @@ const {publicAiError} = require("../lib/text-safe");
 const {messageDirection} = require("../lib/message-direction");
 const {buildReplySystem, buildThreadUser, TOOL_REPLY} = require("../lib/prompts-generic");
 const {loadAiProfile} = require("../lib/ai-profile");
+const {readAssistantSettings, effectiveProfile} = require("../lib/assistant-settings");
 
 /** Nettoyage typographique léger (sans retirer les espaces réservés). Pur. */
 function tidyDraft(text) {
@@ -102,12 +103,14 @@ exports.generateReplyDraft = onRequest(
         const recipient = t.recipient || "";
         const ccSuggested = suggestReplyCc(target, recipient || target.from || "", ordered);
         const settings = await readResponseSettings().catch(() => ({}));
+        // Profil du questionnaire + réglages de l'utilisatrice (écran Réglages).
+        const profile = effectiveProfile(loadAiProfile(), await readAssistantSettings().catch(() => ({})));
 
         const client = await getAnthropicClient();
         const started = Date.now();
         const draft = await generateStructured(client, {
           model: MODEL_SONNET,
-          system: buildReplySystem(prefs, settings),
+          system: buildReplySystem(prefs, settings, profile),
           user: buildReplyUser({ordered, target, mode, instruction}),
           tool: TOOL_REPLY,
           schema: replyDraftOutputSchema,
@@ -117,7 +120,7 @@ exports.generateReplyDraft = onRequest(
         const body = tidyDraft(draft.body);
         const factWarnings = findUnverifiedFacts(body, {
           // La signature du client (téléphone…) n'est pas un « fait inventé ».
-          texts: [...ordered.map((m) => m.bodyText || m.snippet || ""), instruction, settings.signature || "", loadAiProfile().assistant?.signatureText || ""],
+          texts: [...ordered.map((m) => m.bodyText || m.snippet || ""), instruction, settings.signature || "", profile.assistant?.signatureText || ""],
         });
         const confidence = factWarnings.length ? Math.min(Number(draft.confidence) || 0, 0.4) : draft.confidence;
 

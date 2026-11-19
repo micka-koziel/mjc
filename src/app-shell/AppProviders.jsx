@@ -4,6 +4,8 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { ToastProvider } from '@/shared/components/ToastProvider';
 import { getMailService, DATA_MODE } from '@/services';
 import { groupByThread } from '@/features/mailbox/lib/threads';
+import { brandConfig } from '@/features/brand/brand';
+import { normalizePriorities, normalizeReplies } from '@/features/settings/lib/assistant-settings';
 
 const AppContext = createContext(null);
 
@@ -18,6 +20,8 @@ export function AppProviders({ children }) {
   const [mail, setMail] = useState({ messages: [], loading: true, error: null });
   const [todoState, setTodoState] = useState({ todos: [], loading: true });
   const [initError, setInitError] = useState(null);
+  // Réglages de l'assistant : enregistrés (null si jamais modifiés) + valeurs de départ.
+  const [settingsRaw, setSettingsRaw] = useState({ priorities: null, replies: null, defaults: {} });
 
   useEffect(() => {
     let alive = true;
@@ -42,11 +46,46 @@ export function AppProviders({ children }) {
     };
   }, [service, user]);
 
+  useEffect(() => {
+    if (!service?.getAssistantSettings || !user || user.emailVerified === false) return undefined;
+    let alive = true;
+    service
+      .getAssistantSettings()
+      .then((s) => alive && setSettingsRaw({ priorities: null, replies: null, defaults: {}, ...s }))
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [service, user]);
+
   const threads = useMemo(() => groupByThread(mail.messages), [mail.messages]);
 
+  // Valeurs de départ : questionnaire (expéditeurs importants, consignes), puis
+  // ce que l'utilisatrice a enregistré dans l'écran Réglages.
+  const assistantSettings = useMemo(() => {
+    const d = settingsRaw.defaults || {};
+    const senders = (d.importantSenders?.length ? d.importantSenders : brandConfig.priorities.importantSenders).map((match) => ({
+      match,
+      level: 'important',
+    }));
+    const startPriorities = normalizePriorities({}, { senders, aiRules: d.aiRules || '' });
+    const startReplies = normalizeReplies({}, d.replies || brandConfig.assistant);
+    return {
+      priorities: normalizePriorities(settingsRaw.priorities || {}, startPriorities),
+      replies: normalizeReplies(settingsRaw.replies || {}, startReplies),
+      start: { priorities: startPriorities, replies: startReplies },
+      customized: { priorities: Boolean(settingsRaw.priorities), replies: Boolean(settingsRaw.replies) },
+      async save(kind, value) {
+        const r = await service.saveAssistantSettings(kind, value);
+        setSettingsRaw((prev) => ({ ...prev, [kind]: r.value }));
+        return r;
+      },
+    };
+  }, [settingsRaw, service]);
+
   const value = useMemo(
-    () => ({ service, mode: DATA_MODE, user, ...mail, threads, todos: todoState.todos, todosLoading: todoState.loading }),
-    [service, user, mail, threads, todoState]
+    () => ({ service, mode: DATA_MODE, user, ...mail, threads, todos: todoState.todos, todosLoading: todoState.loading, assistantSettings }),
+    [service, user, mail, threads, todoState, assistantSettings]
   );
 
   if (initError) {

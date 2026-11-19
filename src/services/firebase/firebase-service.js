@@ -107,6 +107,13 @@ export function createFirebaseService() {
       await auth.currentUser.getIdToken(true);
       return auth.currentUser.emailVerified;
     },
+    // Réglages de l'assistant (functions/settings/assistantSettings.js).
+    getAssistantSettings() {
+      return call('assistantSettings', { action: 'get' });
+    },
+    saveAssistantSettings(kind, value) {
+      return call('assistantSettings', { action: 'save', kind, value });
+    },
     // Accès à l'application (administrateur seulement, voir functions/admin/manageAccess.js).
     manageAccess(action, payload = {}) {
       return call('manageAccess', { action, ...payload });

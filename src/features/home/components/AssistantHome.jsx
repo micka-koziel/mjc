@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+import { HASH_ROUTING } from '@/app-shell/nav';
 import { useMemo, useState } from 'react';
 import { useApp } from '@/app-shell/AppProviders';
 import { useToast } from '@/shared/hooks/useToast';
@@ -27,13 +29,14 @@ import { formatDateCompact } from '@/features/mailbox/components/ThreadList';
  * (EmailWorkspace) dans un volet.
  */
 export function AssistantHome() {
-  const { threads, todos, loading, service, user } = useApp();
+  const { threads, todos, loading, service, user, assistantSettings } = useApp();
   const { showToast } = useToast();
   const [openThreadId, setOpenThreadId] = useState(null);
   const [now] = useState(() => Date.now());
   const list = useMemo(
-    () => buildWorkList({ threads, todos, now, importantSenders: brandConfig.priorities.importantSenders }),
-    [threads, todos, now]
+    // Barème réglé par l'utilisatrice (écran Réglages), sinon valeurs de départ.
+    () => buildWorkList({ threads, todos, now, rules: assistantSettings.priorities }),
+    [threads, todos, now, assistantSettings.priorities]
   );
   const openThread = openThreadId ? threads.find((t) => t.threadId === openThreadId) : null;
   // La boîte est celle de sa titulaire (ex. Carine) : c'est elle qu'on accueille,
@@ -61,7 +64,16 @@ export function AssistantHome() {
         <section aria-label="À traiter" className="flex min-h-0 flex-col rounded-2xl border border-border bg-surface p-3">
           <div className="mb-2 flex items-baseline gap-3 px-1">
             <h2 className="text-base font-semibold text-foreground">À traiter</h2>
-            <span className="text-xs text-muted">par priorité · règle provisoire</span>
+            <span className="text-xs text-muted">
+              par priorité ·{' '}
+              {HASH_ROUTING ? (
+                'règles réglables'
+              ) : (
+                <Link href="/reglages" className="font-semibold text-link hover:underline">
+                  régler
+                </Link>
+              )}
+            </span>
           </div>
           {loading ? (
             <p className="flex items-center gap-2 px-1 py-3 text-sm text-muted">

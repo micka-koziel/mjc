@@ -216,6 +216,18 @@ export function createDemoService({ initialState } = {}) {
       return { conversationId: 'demo', text: demoAnswer(question, state.messages), simulated: true };
     },
 
+    // Réglages de l'assistant (démo : gardés dans le navigateur).
+    async getAssistantSettings() {
+      await wait(150);
+      return { priorities: state.settings?.priorities || null, replies: state.settings?.replies || null, defaults: {} };
+    },
+    async saveAssistantSettings(kind, value) {
+      await wait();
+      state = { ...state, settings: { ...(state.settings || {}), [kind]: value } };
+      persist();
+      return { ok: true, value };
+    },
+
     resetDemo() {
       state = freshState();
       persist();
