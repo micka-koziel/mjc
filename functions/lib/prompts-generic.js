@@ -5,8 +5,17 @@
  *
  * Remplace pour le périmètre e-mails : lib/prompts.js (analyse),
  * lib/prompts-reply.js (brouillons) et lib/prompts-alfred.js (assistant).
- * Module PUR : fonctions de construction testables sans appel IA.
+ * Module PUR : fonctions de construction testables sans appel IA. Le profil
+ * du client (lib/ai-profile.js) est passé en paramètre ; par défaut, celui
+ * installé avec les fonctions.
  */
+
+const {EMPTY_PROFILE, loadAiProfile, buildContextBlock, buildPriorityBlock, buildWritingBlock, assistantPrefs} = require("./ai-profile");
+
+/** Assemble des blocs de consignes non vides. */
+function joinBlocks(...blocks) {
+  return blocks.filter(Boolean).join("\n\n");
+}
 
 const TONES = {
   cordial: "chaleureux et cordial, sans familiarité",
@@ -41,8 +50,15 @@ Tu produis :
 - senderCompany : son entreprise, SEULEMENT si elle figure dans l'e-mail (signature, texte, domaine explicite) ; sinon null ;
 - summary1Line : une phrase courte (15 à 30 mots) en français qui dit qui écrit, de quelle entreprise si connue, à quel sujet, et l'action attendue s'il y en a une. Exemple de style : « Jean-Pierre, de Maison Dupont, demande de confirmer la quantité et la date de livraison de sa commande. » ;
 - expectedAction : l'action attendue en quelques mots à l'infinitif (ex. « Confirmer la date de livraison »), ou null ;
-- language : langue principale de l'e-mail.
+- language : langue principale de l'e-mail ;
+- urgent : true si l'e-mail correspond aux priorités ou aux situations à faire remonter décrites par le client (sinon false) ;
+- urgentReason : en quelques mots, pourquoi il est prioritaire (null sinon).
 N'invente jamais d'information absente de l'e-mail. Réponds uniquement via l'outil.`;
+
+/** Consignes d'analyse, complétées par le contexte et les priorités du client. */
+function buildAnalyzeSystem(profile = loadAiProfile()) {
+  return joinBlocks(SYSTEM_ANALYZE, buildContextBlock(profile), buildPriorityBlock(profile));
+}
 
 const TOOL_ANALYZE = {
   name: "analyze_email",
@@ -56,8 +72,10 @@ const TOOL_ANALYZE = {
       summary1Line: {type: "string"},
       expectedAction: {type: ["string", "null"]},
       language: {type: "string", enum: ["fr", "en", "other"]},
+      urgent: {type: "boolean"},
+      urgentReason: {type: ["string", "null"]},
     },
-    required: ["category", "senderName", "senderCompany", "summary1Line", "expectedAction", "language"],
+    required: ["category", "senderName", "senderCompany", "summary1Line", "expectedAction", "language", "urgent", "urgentReason"],
   },
 };
 
@@ -108,16 +126,18 @@ function buildThreadUser(messages, {maxChars = 2500} = {}) {
       .join("\n\n");
 }
 
-function buildReplySystem(prefs, settings = {}) {
-  const st = styleFromPrefs(prefs);
-  return `Tu rédiges, pour la personne qui utilise la messagerie, une proposition de réponse au DERNIER message reçu d'une conversation.
+function buildReplySystem(prefs, settings = {}, profile = loadAiProfile()) {
+  const st = styleFromPrefs(assistantPrefs(prefs, profile));
+  const signature = profile.assistant?.signatureText ? "" : settings.signature;
+  const base = `Tu rédiges, pour la personne qui utilise la messagerie, une proposition de réponse au DERNIER message reçu d'une conversation.
 Règles :
 - Ton : ${st.tone}. Longueur : ${st.length}. Langue : ${st.language}, sauf consigne contraire de l'utilisateur.
 - Réponds aux demandes du dernier message en t'appuyant sur toute la conversation.
 - N'invente AUCUN fait (prix, date, quantité, lien, adresse, engagement) absent de la conversation ou de la consigne. Si une information manque, écris un espace réservé entre crochets, ex. [à compléter : date de livraison] : l’envoi sera bloqué tant qu’il reste.
-- Pas de signature détaillée : termine par une formule de politesse et le prénom si connu${settings.signature ? ` ; signature habituelle : « ${settings.signature} »` : ""}.
+- ${profile.assistant?.signatureText ? "Termine par la signature indiquée dans le style d'écriture du client" : `Pas de signature détaillée : termine par une formule de politesse et le prénom si connu${signature ? ` ; signature habituelle : « ${signature} »` : ""}`}.
 ${settings.rules_avoid ? `- À éviter : ${settings.rules_avoid}\n` : ""}- La personne relira et modifiera le texte avant de l'envoyer.
 Réponds uniquement via l'outil.`;
+  return joinBlocks(base, buildContextBlock(profile), buildWritingBlock(profile));
 }
 
 const TOOL_REPLY = {
@@ -135,18 +155,23 @@ const TOOL_REPLY = {
   },
 };
 
-function buildAssistantSystem(prefs, {name = "Assistant", today = ""} = {}) {
-  const st = styleFromPrefs(prefs);
-  return `Tu es ${name}, l'assistant e-mail d'une petite entreprise. Aujourd'hui : ${today}.
+function buildAssistantSystem(prefs, {name = "Assistant", today = ""} = {}, profile = loadAiProfile()) {
+  const merged = assistantPrefs(prefs, profile);
+  const st = styleFromPrefs(merged);
+  name = merged.name || name;
+  const base = `Tu es ${name}, l'assistant e-mail d'une petite entreprise. Aujourd'hui : ${today}.
 Ton périmètre : la boîte de réception et les tâches (To-do). Tu peux chercher des e-mails, lire une conversation et lister les tâches. Tu ne réalises AUCUNE action (pas d'envoi, pas de suppression) : tu informes et tu orientes vers les écrans de l'application.
 Réponds en ${st.language}, de façon ${st.tone}, brève (quelques lignes, listes courtes si utile). Cite les expéditeurs et les objets pour que l'utilisateur retrouve les e-mails.
 Si l'information n'est pas dans ce que tes outils renvoient, dis-le simplement. Hors de ce périmètre, réponds poliment que tu ne traites que les e-mails et les tâches.
 Termine toujours en appelant l'outil "repondre".`;
+  return joinBlocks(base, buildContextBlock(profile), buildPriorityBlock(profile));
 }
 
 module.exports = {
   styleFromPrefs,
+  EMPTY_PROFILE,
   SYSTEM_ANALYZE,
+  buildAnalyzeSystem,
   TOOL_ANALYZE,
   buildAnalyzeUser,
   SYSTEM_THREAD,

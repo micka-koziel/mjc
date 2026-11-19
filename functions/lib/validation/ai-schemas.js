@@ -18,6 +18,9 @@ const emailAnalysisOutputSchema = z.object({
   summary1Line: z.string().min(1).max(400),
   expectedAction: z.string().max(200).nullable(),
   language: z.enum(["fr", "en", "other"]),
+  // Priorité au regard des règles du client (questionnaire v2) ; absent des anciennes analyses.
+  urgent: z.boolean().default(false),
+  urgentReason: z.string().max(200).nullable().default(null),
 });
 
 // Brouillon de réponse (ai/generateReplyDraft.js) — même forme que Trendl.

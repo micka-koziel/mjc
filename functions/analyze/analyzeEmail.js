@@ -22,9 +22,10 @@ const {getAnthropicClient, MODEL_HAIKU} = require("../lib/anthropic-client");
 const {generateStructured} = require("../lib/ai-provider");
 const {emailAnalysisOutputSchema} = require("../lib/validation/ai-schemas");
 const {messageDirection, isDraftMessage} = require("../lib/message-direction");
-const {SYSTEM_ANALYZE, TOOL_ANALYZE, buildAnalyzeUser} = require("../lib/prompts-generic");
+const {buildAnalyzeSystem, TOOL_ANALYZE, buildAnalyzeUser} = require("../lib/prompts-generic");
 
-const MODEL_VERSION = "khentik-generic-v1";
+// v2 : contexte et priorités du client (questionnaire v2), champ « urgent ».
+const MODEL_VERSION = "khentik-generic-v2";
 
 /** Faut-il analyser ce message ? Pur (exporté pour les tests). */
 function analysisDecision(m) {
@@ -60,7 +61,7 @@ exports.analyzeEmail = onDocumentWritten(
         const client = await getAnthropicClient();
         const out = await generateStructured(client, {
           model: MODEL_HAIKU,
-          system: SYSTEM_ANALYZE,
+          system: buildAnalyzeSystem(),
           user: buildAnalyzeUser(m),
           tool: TOOL_ANALYZE,
           schema: emailAnalysisOutputSchema,

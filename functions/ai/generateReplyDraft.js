@@ -37,6 +37,7 @@ const {findUnverifiedFacts} = require("../lib/draft-facts");
 const {publicAiError} = require("../lib/text-safe");
 const {messageDirection} = require("../lib/message-direction");
 const {buildReplySystem, buildThreadUser, TOOL_REPLY} = require("../lib/prompts-generic");
+const {loadAiProfile} = require("../lib/ai-profile");
 
 /** Nettoyage typographique léger (sans retirer les espaces réservés). Pur. */
 function tidyDraft(text) {
@@ -115,7 +116,8 @@ exports.generateReplyDraft = onRequest(
         });
         const body = tidyDraft(draft.body);
         const factWarnings = findUnverifiedFacts(body, {
-          texts: [...ordered.map((m) => m.bodyText || m.snippet || ""), instruction, settings.signature || ""],
+          // La signature du client (téléphone…) n'est pas un « fait inventé ».
+          texts: [...ordered.map((m) => m.bodyText || m.snippet || ""), instruction, settings.signature || "", loadAiProfile().assistant?.signatureText || ""],
         });
         const confidence = factWarnings.length ? Math.min(Number(draft.confidence) || 0, 0.4) : draft.confidence;
 
