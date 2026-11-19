@@ -10,6 +10,8 @@
  *   questionnaire.xlsx   l'export Excel rempli par le client (ou questionnaire.json) ;
  *   overrides.json       facultatif : les arbitrages validés (couleurs de charte,
  *                        police, documents transmis à l'IA…), avec leur raison ;
+ *   demo-mailbox.json    facultatif : e-mails FICTIFS de la boîte de démonstration
+ *                        (fonctions déployées avec MAILBOX_PROVIDER=simulated) ;
  *   documents/           créé à l'installation : les documents joints au questionnaire.
  * On peut aussi passer directement un fichier .xlsx ou .json (sans arbitrages).
  *
@@ -29,6 +31,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = {
   ui: path.join(ROOT, 'src/config/active.config.json'),
   ai: path.join(ROOT, 'functions/config/ai-profile.json'),
+  demo: path.join(ROOT, 'functions/config/demo-mailbox.json'),
   brand: path.join(ROOT, 'public/brand'),
   backups: path.join(ROOT, 'config/backups'),
 };
@@ -86,12 +89,18 @@ function install({ result, clientDir, answersFile }) {
   for (const f of fs.readdirSync(OUT.brand)) if (f.startsWith('logo-')) fs.rmSync(path.join(OUT.brand, f));
   for (const logo of result.logos) fs.writeFileSync(path.join(OUT.brand, logo.fileName), Buffer.from(logo.base64, 'base64'));
 
+  // Boîte de démonstration du client (sinon : aucune, pour ne jamais garder celle d'un autre client).
+  const demoSrc = clientDir ? path.join(clientDir, 'demo-mailbox.json') : null;
+  if (demoSrc && fs.existsSync(demoSrc)) fs.copyFileSync(demoSrc, OUT.demo);
+  else if (fs.existsSync(OUT.demo)) fs.rmSync(OUT.demo);
+
   if (clientDir && result.documents.length) {
     const dir = path.join(clientDir, 'documents');
     fs.mkdirSync(dir, { recursive: true });
     for (const d of result.documents) fs.writeFileSync(path.join(dir, d.fileName), Buffer.from(d.base64, 'base64'));
   }
   console.log('  → Installée : src/config/active.config.json, functions/config/ai-profile.json, public/brand/.');
+  if (fs.existsSync(OUT.demo)) console.log('  → Boîte de démonstration : functions/config/demo-mailbox.json.');
   console.log('  → Anciennes versions dans config/backups/. Relancez `npm run dev` (ou reconstruisez) pour voir le résultat ;');
   console.log('    redéployez les fonctions pour que l’IA utilise le nouveau profil.');
 }

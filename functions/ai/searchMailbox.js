@@ -14,12 +14,15 @@ const {requireRole} = require("../lib/admin-auth");
 const {ALLOWED_ORIGINS} = require("../lib/cors");
 const {createGmailClientAuto, withGmailBackoff} = require("../lib/gmail-client");
 const {buildGmailQuery, threadIdsFromGmail, MAX_THREADS} = require("../lib/mailbox-search");
+const {db} = require("../lib/firebase-admin");
+const {isSimulatedMailbox, searchSimulated} = require("../lib/simulated-mailbox");
 
 exports.searchMailbox = onRequest(
     {
       region: "europe-west1",
       cors: ALLOWED_ORIGINS,
-      secrets: ["GMAIL_CLIENT_SECRET", "GMAIL_REFRESH_TOKEN"],
+      // Boîte simulée : aucun secret Gmail nécessaire.
+      secrets: isSimulatedMailbox() ? [] : ["GMAIL_CLIENT_SECRET", "GMAIL_REFRESH_TOKEN"],
       timeoutSeconds: 30,
       memory: "256MiB",
     },
@@ -31,6 +34,11 @@ exports.searchMailbox = onRequest(
         await requireRole(req, "admin");
       } catch (authErr) {
         return res.status(authErr.status || 401).json({error: authErr.message});
+      }
+      if (isSimulatedMailbox()) {
+        const raw = String((req.body && req.body.q) || "").slice(0, 200);
+        const snap = await db.collection("messages").limit(800).get();
+        return res.status(200).json({threadIds: searchSimulated(snap.docs.map((d) => d.data()), raw, MAX_THREADS)});
       }
       const q = buildGmailQuery(req.body && req.body.q);
       if (!q) return res.status(200).json({threadIds: []});

@@ -29,7 +29,7 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
-import { onAuthStateChanged, signInWithEmailAndPassword, signOut as fbSignOut } from 'firebase/auth';
+import { onIdTokenChanged, sendEmailVerification, signInWithEmailAndPassword, signOut as fbSignOut } from 'firebase/auth';
 import { ref as storageRef, uploadBytes } from 'firebase/storage';
 import { getFirebase } from './firebase-app';
 import { waitForUndo } from '@/shared/utils/undo-send';
@@ -81,9 +81,28 @@ export function createFirebaseService() {
 
     onAuth(cb) {
       const { auth } = getFirebase();
-      return onAuthStateChanged(auth, (u) =>
-        cb(u ? { uid: u.uid, email: u.email, displayName: u.displayName || u.email } : null)
+      // onIdTokenChanged (et non onAuthStateChanged) : prévenu aussi quand le
+      // jeton est renouvelé après la vérification de l'adresse e-mail.
+      return onIdTokenChanged(auth, (u) =>
+        cb(u ? { uid: u.uid, email: u.email, displayName: u.displayName || u.email, emailVerified: u.emailVerified } : null)
       );
+    },
+    // Les règles d'accès exigent une adresse vérifiée : envoi du lien, puis
+    // relecture du compte (le jeton renouvelé porte la vérification).
+    async sendVerificationEmail() {
+      const { auth } = getFirebase();
+      if (auth.currentUser) await sendEmailVerification(auth.currentUser);
+    },
+    async refreshVerification() {
+      const { auth } = getFirebase();
+      if (!auth.currentUser) return false;
+      await auth.currentUser.reload();
+      await auth.currentUser.getIdToken(true);
+      return auth.currentUser.emailVerified;
+    },
+    // Boîte de démonstration (fonctions déployées avec MAILBOX_PROVIDER=simulated).
+    resetDemo() {
+      return call('resetDemoMailbox', {});
     },
     async signIn({ email, password }) {
       const { auth } = getFirebase();

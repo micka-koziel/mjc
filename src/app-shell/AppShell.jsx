@@ -7,6 +7,8 @@ import { useApp } from './AppProviders';
 import { BrandLogo } from '@/features/brand/BrandLogo';
 import { brandConfig } from '@/features/brand/brand';
 import { LoginScreen } from './LoginScreen';
+import { VerifyEmailScreen } from './VerifyEmailScreen';
+import { SIMULATED_MAILBOX } from '@/services';
 import { cn } from '@/shared/utils/cn';
 import { ConfirmButton } from '@/shared/components/ConfirmButton';
 import { enabledModules, showModuleTitles } from '@/modules/registry';
@@ -53,6 +55,7 @@ export function AppShell({ children }) {
     return <div className="flex min-h-screen items-center justify-center text-sm text-muted">Chargement…</div>;
   }
   if (!user) return <LoginScreen />;
+  if (mode === 'firebase' && user.emailVerified === false) return <VerifyEmailScreen />;
 
   const isActive = (v) => v === view;
   const NavLink = HASH_ROUTING ? 'a' : Link;
@@ -88,10 +91,10 @@ export function AppShell({ children }) {
 
   const footer = (
     <div className="mt-auto space-y-2 border-t border-border pt-3 text-xs text-muted">
-      {mode === 'demo' && (
+      {(mode === 'demo' || SIMULATED_MAILBOX) && (
         <div className="rounded-lg border border-border bg-elevated px-2.5 py-2">
           <p className="font-semibold text-foreground">Mode démonstration</p>
-          <p>Données fictives, rien n’est envoyé.</p>
+          <p>{SIMULATED_MAILBOX ? 'E-mails fictifs, IA réelle, rien n’est envoyé.' : 'Données fictives, rien n’est envoyé.'}</p>
           <div className="mt-1">
             <ConfirmButton
               onConfirm={() => service.resetDemo()}
@@ -104,7 +107,7 @@ export function AppShell({ children }) {
           </div>
         </div>
       )}
-      {mode === 'firebase' && <MailboxConnection service={service} />}
+      {mode === 'firebase' && !SIMULATED_MAILBOX && <MailboxConnection service={service} />}
       <p className="truncate" title={user.email}>{user.displayName || user.email}</p>
       <button type="button" onClick={() => service.signOut()} className="font-semibold text-foreground hover:underline">
         Se déconnecter

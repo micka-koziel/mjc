@@ -46,6 +46,7 @@ const {
   modifyLabels,
 } = require("../lib/gmail-client");
 const {ALLOWED_ORIGINS} = require("../lib/cors");
+const {isSimulatedMailbox, simulateLabels} = require("../lib/simulated-mailbox");
 
 const VALID_ACTIONS = new Set([
   "trash",
@@ -65,7 +66,8 @@ const TRIAGE_REASONS = {
 exports.applyGmailAction = onRequest(
   {
     region: "europe-west1",
-    secrets: ["GMAIL_CLIENT_SECRET", "GMAIL_REFRESH_TOKEN"],
+    // Boîte simulée : aucun secret Gmail nécessaire.
+    secrets: isSimulatedMailbox() ? [] : ["GMAIL_CLIENT_SECRET", "GMAIL_REFRESH_TOKEN"],
     cors: ALLOWED_ORIGINS,
     timeoutSeconds: 30,
     invoker: "public",
@@ -105,13 +107,13 @@ exports.applyGmailAction = onRequest(
       const msg = msgSnap.data();
       const gmailId = msg.gmailId || messageId;
 
-      // 2. Créer client Gmail authentifié
-      // Sprint 82 (B157) — créds résolues via le compte exploitant (repli global).
-      const gmail = await createGmailClientAuto();
+      // 2. Boîte SIMULÉE (démonstration) : seuls les libellés changent, dans Firestore.
+      let resultLabels;
+      const gmail = isSimulatedMailbox() ? null : await createGmailClientAuto();
 
       // 3. Exécuter l'action Gmail correspondante
-      let resultLabels;
-      switch (action) {
+      if (!gmail) resultLabels = simulateLabels(msg.labels || [], action);
+      else switch (action) {
         case "trash": {
           const r = await trashMessage(gmail, gmailId);
           resultLabels = r.labelIds;

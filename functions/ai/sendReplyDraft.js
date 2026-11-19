@@ -47,6 +47,7 @@ const {readResponseSettings} = require("../lib/response-settings");
 const {readThreadMessages, sortThreadChronological, toMillis} = require("../lib/thread-reader");
 const {pickQuotedMessage, pickQuotedThread, exchangesWith, withQuotedHistory, fetchThreadingHeaders} = require("../lib/reply-quote");
 const {findPlaceholders} = require("../lib/draft-facts");
+const {isSimulatedMailbox, buildSentMessage, loadDemoDataset} = require("../lib/simulated-mailbox");
 // KHentik : la branche Trendl « nouvel e-mail de prospection » (Sprint 104,
 // création d'une négociation CRM à l'envoi) est retirée. Cette fonction ne
 // sert qu'à RÉPONDRE dans un fil existant.
@@ -129,7 +130,8 @@ async function loadAttachments(list) {
 exports.sendReplyDraft = onRequest(
   {
     region: "europe-west1",
-    secrets: ["GMAIL_CLIENT_SECRET", "GMAIL_REFRESH_TOKEN"],
+    // Boîte simulée : aucun secret Gmail nécessaire.
+    secrets: isSimulatedMailbox() ? [] : ["GMAIL_CLIENT_SECRET", "GMAIL_REFRESH_TOKEN"],
     cors: ALLOWED_ORIGINS,
     // Sprint 95 (bug du 11/10 : « HTTP 500 — Internal Server Error » avec
     // 5 captures, mail pourtant parti) — un mail avec pièces jointes est
@@ -191,6 +193,43 @@ exports.sendReplyDraft = onRequest(
         return res.status(404).json({error: `Message ${messageId} introuvable`});
       }
       const message = msgSnap.data();
+
+      // Boîte SIMULÉE (démonstration) : rien ne part, le message est rangé
+      // dans le fil comme s'il avait été envoyé (ou mis en brouillon).
+      if (isSimulatedMailbox()) {
+        const holes = findPlaceholders(draftText);
+        if (mode === "send" && holes.length > 0) {
+          return res.status(400).json({
+            error: `Il reste une information à compléter dans le message : ${holes.join(", ")}.`,
+            code: "placeholder_left",
+          });
+        }
+        const sent = buildSentMessage({
+          original: message,
+          text: draftText,
+          subject: subject || deriveReplySubject(message.subject),
+          recipients,
+          cc,
+          mode: mode === "send" ? "send" : "draft",
+          mailboxAddress: (loadDemoDataset() || {}).mailboxAddress,
+        });
+        const {receivedAtMs, ...doc} = sent;
+        const ref = db.collection("messages").doc();
+        await ref.set({...doc, gmailId: ref.id, receivedAt: admin.firestore.Timestamp.fromMillis(receivedAtMs)});
+        const feedback = mode === "send" ? "envoyé" : "brouillon_gmail";
+        await db.collection("message_drafts").doc(messageId).set({
+          last_action: feedback,
+          last_action_at: admin.firestore.FieldValue.serverTimestamp(),
+          last_action_by_uid: adminUid,
+          last_action_by_email: adminEmail,
+          last_gmail_id: ref.id,
+          last_thread_id: doc.threadId,
+          feedback,
+          simulated: true,
+        }, {merge: true});
+        logger.info("sendReplyDraft: envoi simulé", {messageId, mode});
+        return res.status(200).json({ok: true, mode, simulated: true, gmailId: ref.id, messageId: ref.id, threadId: doc.threadId});
+      }
 
       // 2. Récupère le refresh token Gmail (1 seul admin partagé pour V1).
       //    En V2 multi-comptes, on lira un token par admin uid.

@@ -9,15 +9,23 @@ setGlobalOptions({maxInstances: 10});
 
 require("./lib/sentry").initSentry();
 
-// Connexion Gmail (OAuth) — repris
-exports.initOAuth = require("./oauth/initOAuth").initOAuth;
-exports.callbackOAuth = require("./oauth/callbackOAuth").callbackOAuth;
+const {isSimulatedMailbox} = require("./lib/simulated-mailbox");
 
-// Réception des e-mails (Pub/Sub Gmail) — repris
-exports.ingestEmail = require("./ingest/ingestEmail").ingestEmail;
-exports.startWatch = require("./ingest/startWatch").startWatch;
-exports.renewWatch = require("./schedule/renewWatch").renewWatch;
-exports.checkIngestionHealth = require("./schedule/checkIngestionHealth").checkIngestionHealth;
+if (isSimulatedMailbox()) {
+  // Boîte de DÉMONSTRATION (MAILBOX_PROVIDER=simulated) : pas de Gmail ;
+  // jeu d'e-mails fictifs du client, remis à neuf à la demande.
+  exports.resetDemoMailbox = require("./demo/resetDemoMailbox").resetDemoMailbox;
+} else {
+  // Connexion Gmail (OAuth) — repris
+  exports.initOAuth = require("./oauth/initOAuth").initOAuth;
+  exports.callbackOAuth = require("./oauth/callbackOAuth").callbackOAuth;
+
+  // Réception des e-mails (Pub/Sub Gmail) — repris
+  exports.ingestEmail = require("./ingest/ingestEmail").ingestEmail;
+  exports.startWatch = require("./ingest/startWatch").startWatch;
+  exports.renewWatch = require("./schedule/renewWatch").renewWatch;
+  exports.checkIngestionHealth = require("./schedule/checkIngestionHealth").checkIngestionHealth;
+}
 
 // Analyse IA générique de chaque e-mail — adapté
 exports.analyzeEmail = require("./analyze/analyzeEmail").analyzeEmail;

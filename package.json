@@ -15,7 +15,8 @@
     "config:reset": "node scripts/config-cli.mjs reset",
     "check:no-crm": "node scripts/check-no-crm.mjs",
     "test:functions": "vitest run --config vitest.config.functions.mjs",
-    "build:share": "SHARE_EXPORT=1 NEXT_PUBLIC_HASH_ROUTING=1 NEXT_PUBLIC_DATA_MODE=demo next build && node scripts/build-share.mjs"
+    "build:share": "SHARE_EXPORT=1 NEXT_PUBLIC_HASH_ROUTING=1 NEXT_PUBLIC_DATA_MODE=demo next build && node scripts/build-share.mjs",
+    "build:netlify": "STATIC_EXPORT=1 NEXT_PUBLIC_DATA_MODE=firebase NEXT_PUBLIC_MAILBOX=simulated next build"
   },
   "dependencies": {
     "@fontsource/work-sans": "^5.3.0",

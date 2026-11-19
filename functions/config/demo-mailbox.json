@@ -1,0 +1,787 @@
+{
+ "note": "Boîte de démonstration de Mon jardin chocolaté : e-mails FICTIFS (personnes, entreprises et adresses inventées, domaines .example). Seuls les noms d'Annie Do et Bastien Frappart (expéditeurs importants du questionnaire) sont réels ; le contenu de leurs messages est inventé.",
+ "mailboxAddress": "carine@monjardinchocolate.example",
+ "messages": [
+  {
+   "id": "m-annie-1",
+   "threadId": "t-annie",
+   "from": "Annie Do <annie.do@cse-atelier-lumen.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Coffrets de Noël du CSE",
+   "bodyText": "Bonjour Carine,\n\nComme l'an dernier, le CSE de l'Atelier Lumen souhaite offrir vos coffrets aux salariés pour Noël.\n\nNous partirions sur 85 coffrets \"Jardin d'hiver\" à 24 € TTC, livrés à notre siège (12 rue des Tanneurs, 75013 Paris).\n\nPouvez-vous me confirmer la disponibilité et le délai ?\n\nBelle journée,\nAnnie Do\nSecrétaire du CSE - Atelier Lumen",
+   "minutesAgo": 10080,
+   "labels": [
+    "INBOX"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-annie-2",
+   "threadId": "t-annie",
+   "from": "Carine <carine@monjardinchocolate.example>",
+   "to": [
+    "Annie Do <annie.do@cse-atelier-lumen.example>"
+   ],
+   "cc": [],
+   "subject": "Re: Coffrets de Noël du CSE",
+   "bodyText": "Bonjour Annie,\n\nMerci pour votre message, et pour votre fidélité !\n\nC'est noté pour 85 coffrets \"Jardin d'hiver\" à 24 € TTC, soit 2 040 € TTC.\n\nNous pouvons livrer la semaine du 8 décembre.\n\nJe vous envoie la facture d'acompte dès votre confirmation.\n\nCarine, votre chocolatière\n06 61 74 63 54\n\nMon jardin chocolaté",
+   "minutesAgo": 8820,
+   "labels": [
+    "SENT"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-annie-3",
+   "threadId": "t-annie",
+   "from": "Annie Do <annie.do@cse-atelier-lumen.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Re: Coffrets de Noël du CSE",
+   "bodyText": "Bonjour Carine,\n\nParfait, nous confirmons !\n\nDeux points :\n- nous avons 10 nouveaux arrivants, pouvons-nous passer à 95 coffrets ?\n- la livraison doit impérativement arriver avant le vendredi 12 décembre, jour de notre fête de fin d'année. Pouvez-vous nous donner une date précise ?\n\nMerci beaucoup,\nAnnie",
+   "minutesAgo": 35,
+   "labels": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-bastien-1",
+   "threadId": "t-bastien",
+   "from": "Bastien Frappart <b.frappart@cabinet-frappart-associes.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Pièces comptables d'octobre",
+   "bodyText": "Bonjour Carine,\n\nPour clôturer octobre, il me manque encore les relevés bancaires du compte pro et les factures d'achat de cacao.\n\nMerci de les déposer sur l'espace partagé.\n\nBien à vous,\nBastien Frappart\nCabinet Frappart & Associés - Expertise comptable et paie",
+   "minutesAgo": 12960,
+   "labels": [
+    "INBOX"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-bastien-2",
+   "threadId": "t-bastien",
+   "from": "Carine <carine@monjardinchocolate.example>",
+   "to": [
+    "Bastien Frappart <b.frappart@cabinet-frappart-associes.example>"
+   ],
+   "cc": [],
+   "subject": "Re: Pièces comptables d'octobre",
+   "bodyText": "Bonjour Bastien,\n\nC'est déposé : relevés d'octobre et les 4 factures de cacao.\n\nBonne journée,\n\nCarine",
+   "minutesAgo": 11520,
+   "labels": [
+    "SENT"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-bastien-3",
+   "threadId": "t-bastien",
+   "from": "Bastien Frappart <b.frappart@cabinet-frappart-associes.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Paie de novembre : éléments variables",
+   "bodyText": "Bonjour Carine,\n\nJe prépare les bulletins de novembre. Merci de m'envoyer avant vendredi midi :\n- les heures supplémentaires de l'équipe (renfort de Noël inclus) ;\n- les dates d'arrivée des deux extras de décembre, pour leurs contrats ;\n- les éventuelles absences.\n\nSans ces éléments, les salaires ne pourront pas être versés le 30.\n\nBien à vous,\nBastien",
+   "minutesAgo": 120,
+   "labels": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-cacao-1",
+   "threadId": "t-cacao",
+   "from": "Diego Salazar <d.salazar@andino-cacao-import.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Retard de livraison : couverture 70 % Équateur",
+   "bodyText": "Bonjour Madame,\n\nNous vous informons que le conteneur transportant votre commande de couverture noire 70 % Équateur (commande AC-5512, 120 kg) est retenu au port d'Anvers pour un contrôle documentaire.\n\nLa livraison prévue le 21 novembre est décalée au 1er décembre au plus tôt.\n\nNous pouvons vous proposer un dépannage de 40 kg depuis notre stock de Lyon, livrable sous 48 h, au même tarif.\n\nMerci de nous dire si cette solution vous convient.\n\nCordialement,\nDiego Salazar\nAndino Cacao Import",
+   "minutesAgo": 300,
+   "labels": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-colis-1",
+   "threadId": "t-colis",
+   "from": "Hélène Garnier <helene.garnier@mailbox.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Colis reçu abîmé",
+   "bodyText": "Bonjour,\n\nJ'ai reçu ce matin ma commande n° 20481 (6 tablettes et un pot de pâte à tartiner).\n\nLe carton était écrasé : 4 tablettes sont cassées en morceaux et le pot a coulé dans le paquet.\n\nC'était un cadeau pour l'anniversaire de ma mère samedi. Que pouvez-vous faire ?\n\nHélène Garnier",
+   "minutesAgo": 70,
+   "labels": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-mercier-1",
+   "threadId": "t-mercier",
+   "from": "Julien Mercier <julien.mercier@mailbox.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Où en est ma commande ?",
+   "bodyText": "Bonjour,\n\nJ'ai passé commande sur votre site il y a 8 jours (n° 20455, calendrier de l'Avent et ballotin de 24 chocolats) et je n'ai toujours rien reçu, ni numéro de suivi.\n\nLe calendrier doit être là avant le 1er décembre, sinon il ne sert plus à rien.\n\nMerci de me tenir informé.\nJulien Mercier",
+   "minutesAgo": 180,
+   "labels": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-tb-1",
+   "threadId": "t-teambuilding",
+   "from": "Sophie Lambert <s.lambert@studio-orbe.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Atelier team building en janvier",
+   "bodyText": "Bonjour,\n\nNous sommes une agence de design de 12 personnes et nous cherchons une activité d'équipe pour janvier.\n\nVotre atelier de fabrication de tablettes nous tente beaucoup. Est-ce possible pour 12 personnes, un jeudi après-midi ? Quel serait le tarif ?\n\nMerci !\nSophie Lambert\nStudio Orbe",
+   "minutesAgo": 1560,
+   "labels": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-ae-1",
+   "threadId": "t-atelier-enfant",
+   "from": "Nadia Kerroum <nadia.kerroum@mailbox.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Atelier enfants du samedi 29",
+   "bodyText": "Bonjour,\n\nJe souhaite inscrire mes deux enfants (7 et 10 ans) à l'atelier du samedi 29 novembre à 10 h.\n\nReste-t-il de la place ?\n\nNadia",
+   "minutesAgo": 4320,
+   "labels": [
+    "INBOX"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-ae-2",
+   "threadId": "t-atelier-enfant",
+   "from": "Carine <carine@monjardinchocolate.example>",
+   "to": [
+    "Nadia Kerroum <nadia.kerroum@mailbox.example>"
+   ],
+   "cc": [],
+   "subject": "Re: Atelier enfants du samedi 29",
+   "bodyText": "Bonjour Nadia,\n\nOui, il reste 3 places !\n\nJe réserve deux places pour vos enfants. Le tarif est de 35 € par enfant, réglable sur place.\n\nÀ samedi,\n\nCarine, votre chocolatière",
+   "minutesAgo": 4080,
+   "labels": [
+    "SENT"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-ae-3",
+   "threadId": "t-atelier-enfant",
+   "from": "Nadia Kerroum <nadia.kerroum@mailbox.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Re: Atelier enfants du samedi 29",
+   "bodyText": "Merci beaucoup !\n\nPetite question importante : mon fils est allergique aux fruits à coque. Est-ce que l'atelier peut se faire sans noisettes ni amandes, et y a-t-il un risque de traces ?\n\nNadia",
+   "minutesAgo": 240,
+   "labels": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-helios-1",
+   "threadId": "t-helios",
+   "from": "Thomas Roussel <thomas.roussel@cse-groupe-helios.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Demande de devis : 150 ballotins + calendriers",
+   "bodyText": "Bonjour,\n\nLe CSE du Groupe Hélios souhaite un devis pour :\n- 150 ballotins de 12 chocolats ;\n- 40 calendriers de l'Avent.\n\nLivraison sur deux sites (Paris 15e et Montrouge), avant le 15 décembre.\n\nPouvez-vous également prévoir un petit mot personnalisé dans chaque ballotin ?\n\nCordialement,\nThomas Roussel\nTrésorier du CSE - Groupe Hélios",
+   "minutesAgo": 1740,
+   "labels": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-carton-1",
+   "threadId": "t-cartonnerie",
+   "from": "Cartonnerie du Val <facturation@cartonnerie-du-val.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Facture F-2611 : boîtes kraft",
+   "bodyText": "Bonjour,\n\nVeuillez trouver ci-dessous le détail de la facture F-2611 :\n- 2 000 boîtes kraft 12 chocolats x 0,42 € = 840,00 € HT\n- 1 000 boîtes kraft tablette x 0,40 € = 400,00 € HT\nTotal : 1 240,00 € HT, soit 1 488,00 € TTC.\n\nÉchéance : 30 novembre.\n\nCordialement,\nService facturation\nCartonnerie du Val",
+   "minutesAgo": 2940,
+   "labels": [
+    "INBOX"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-rubans-1",
+   "threadId": "t-rubans",
+   "from": "Ninon Ferrand <ninon@papiers-de-ninon.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Rupture du ruban vert sauge",
+   "bodyText": "Bonjour Carine,\n\nMauvaise nouvelle : notre fournisseur ne peut plus livrer le ruban vert sauge avant mi-janvier.\n\nIl me reste 300 mètres, que je peux vous réserver. Sinon, je vous propose un vert olive très proche (échantillon en photo sur demande), disponible immédiatement en 2 000 mètres.\n\nDites-moi ce que vous préférez, je bloque le stock pour vous jusqu'à jeudi.\n\nNinon\nLes Papiers de Ninon",
+   "minutesAgo": 360,
+   "labels": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-sucre-1",
+   "threadId": "t-sucre",
+   "from": "Sucrerie Alter Bio <commandes@sucrerie-alter-bio.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Confirmation de livraison : sucre de canne non raffiné",
+   "bodyText": "Bonjour,\n\nVotre commande SB-882 (200 kg de sucre de canne complet non raffiné, bio) sera livrée jeudi entre 8 h et 12 h.\n\nMerci de prévoir une personne pour la réception.\n\nL'équipe Sucrerie Alter Bio",
+   "minutesAgo": 3180,
+   "labels": [
+    "INBOX"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-ines-1",
+   "threadId": "t-ines",
+   "from": "Inès Belkacem <ines.belkacem@mailbox.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Candidature : renfort de Noël",
+   "bodyText": "Bonjour,\n\nTitulaire d'un CAP chocolatier-confiseur, je suis disponible du 1er au 31 décembre et je serais ravie de rejoindre votre équipe pour la période de Noël.\n\nJ'ai travaillé deux saisons en boutique et en laboratoire. Mon CV est disponible sur simple demande.\n\nBien cordialement,\nInès Belkacem",
+   "minutesAgo": 1920,
+   "labels": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-lucas-1",
+   "threadId": "t-lucas",
+   "from": "Lucas Perrin <lucas.perrin@mailbox.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Recherche d'alternance CAP chocolatier",
+   "bodyText": "Bonjour,\n\nJe commence un CAP chocolatier-confiseur en alternance en janvier et je cherche une entreprise d'accueil à Paris.\n\nVotre démarche bio et vos ateliers me plaisent beaucoup. Accepteriez-vous de me rencontrer ?\n\nLucas Perrin",
+   "minutesAgo": 5760,
+   "labels": [
+    "INBOX"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-att-1",
+   "threadId": "t-attestation",
+   "from": "Espace professionnel <notifications@espace-pro.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Votre attestation de vigilance est disponible",
+   "bodyText": "Bonjour,\n\nVotre attestation de vigilance du mois de novembre est disponible dans votre espace professionnel, rubrique Documents.\n\nCe message est envoyé automatiquement, merci de ne pas y répondre.",
+   "minutesAgo": 4320,
+   "labels": [
+    "INBOX"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-news-1",
+   "threadId": "t-news-bio",
+   "from": "Bio Linéaires Hebdo <newsletter@bio-lineaires.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Les tendances bio des fêtes",
+   "bodyText": "Cette semaine : le chocolat bio progresse de 8 % en magasins spécialisés, focus sur les calendriers de l'Avent zéro plastique, et l'agenda des salons de décembre.\n\nPour vous désinscrire, cliquez ici.",
+   "minutesAgo": 1620,
+   "labels": [
+    "INBOX"
+   ],
+   "has_list_unsubscribe": true
+  },
+  {
+   "id": "m-news-2",
+   "threadId": "t-news-rca",
+   "from": "Rencontres du Chocolat Artisanal <infos@rencontres-chocolat.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Appel à exposants : édition de mars",
+   "bodyText": "Les inscriptions pour l'édition de mars sont ouvertes jusqu'au 15 décembre. Tarif artisan : 290 € HT le stand de 4 m².\n\nVous recevez ce message car vous avez exposé l'an dernier. Se désinscrire.",
+   "minutesAgo": 7200,
+   "labels": [
+    "INBOX"
+   ],
+   "has_list_unsubscribe": true
+  },
+  {
+   "id": "m-spam-1",
+   "threadId": "t-spam-douane",
+   "from": "Service Livraison <alerte@colis-suivi-express.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Votre colis est bloqué : frais de douane à régler",
+   "bodyText": "Votre colis n° FR8812 est en attente. Réglez 1,99 € de frais de douane sous 24 h en cliquant sur le lien suivant, sinon il sera renvoyé à l'expéditeur.",
+   "minutesAgo": 600,
+   "labels": [
+    "SPAM"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-spam-2",
+   "threadId": "t-spam-seo",
+   "from": "Pixelia Web <contact@pixelia-croissance.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Premier sur Google en 30 jours, garanti !",
+   "bodyText": "Bonjour,\n\nVotre site pourrait générer 3 fois plus de ventes. Notre méthode exclusive vous place premier sur Google en 30 jours, garanti ou remboursé.\n\nRéservez votre audit gratuit dès aujourd'hui !",
+   "minutesAgo": 3240,
+   "labels": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-spam-3",
+   "threadId": "t-spam-gain",
+   "from": "Grand Jeu de Noël <gagnant@super-cadeaux-noel.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Félicitations, vous avez gagné un robot pâtissier !",
+   "bodyText": "Vous êtes notre grand gagnant ! Confirmez vos coordonnées bancaires pour recevoir votre lot sous 48 h.",
+   "minutesAgo": 1980,
+   "labels": [
+    "SPAM"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-presse-1",
+   "threadId": "t-presse",
+   "from": "Margaux Delmas <m.delmas@petit-gourmet-parisien.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Guide de Noël : interview et photos",
+   "bodyText": "Bonjour Carine,\n\nJe prépare le guide des chocolatiers de Noël du Petit Gourmet Parisien et j'aimerais vous y consacrer une demi-page.\n\nSeriez-vous disponible pour un échange téléphonique de 20 minutes cette semaine ? J'aurais aussi besoin de 2 photos en haute définition avant lundi.\n\nBien à vous,\nMargaux Delmas",
+   "minutesAgo": 1500,
+   "labels": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-fab-1",
+   "threadId": "t-fabrique",
+   "from": "Paul Ménard <paul@la-fabrique-verte.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Réassort pour la boutique",
+   "bodyText": "Bonjour Carine,\n\nLes fêtes démarrent fort chez nous ! Je voudrais un réassort :\n- 40 tablettes (panaché noir jasmin, lait sarrasin, noir graines de courge) ;\n- 20 pâtes à tartiner ;\n- 15 calendriers de l'Avent.\n\nLivraison possible mardi ? Facturation habituelle à 30 jours.\n\nMerci !\nPaul\nLa Fabrique Verte - épicerie fine",
+   "minutesAgo": 420,
+   "labels": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-marche-1",
+   "threadId": "t-marche",
+   "from": "Association Les Jardins du 14e <bureau@jardins-du-14.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Stand au marché de Noël du 13 décembre",
+   "bodyText": "Bonjour,\n\nL'association organise son marché de Noël solidaire le samedi 13 décembre, place de la Mairie du 14e.\n\nNous serions heureux de vous accueillir. Le stand est gratuit pour les artisans du quartier, en échange d'un lot pour la tombola.\n\nPouvez-vous nous répondre avant le 28 novembre ?\n\nLe bureau de l'association",
+   "minutesAgo": 3000,
+   "labels": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-chloe-1",
+   "threadId": "t-chloe",
+   "from": "Chloé Martin <chloe.martin@mailbox.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Calendriers !",
+   "bodyText": "Coucou Carine,\n\nTu peux me mettre de côté 3 calendriers de l'Avent ? Je passe les chercher à la boutique samedi.\n\nBisous et bon courage pour le rush !\nChloé",
+   "minutesAgo": 20,
+   "labels": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-collins-1",
+   "threadId": "t-collins",
+   "from": "Sarah Collins <s.collins@hotel-belvedere-paris.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Personalised chocolates for our guests",
+   "bodyText": "Dear Carine,\n\nWe are opening a boutique hotel in Paris in January and would love to welcome our guests with a box of 2 organic chocolates in each room.\n\nWe would need around 60 boxes per week, with our logo on the box if possible. Could you send us your prices and lead times?\n\nKind regards,\nSarah Collins\nGuest Experience Manager",
+   "minutesAgo": 540,
+   "labels": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-coursier-1",
+   "threadId": "t-coursier",
+   "from": "Coursier Express - Service clients <service-clients@coursier-express.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Incident de livraison : adresse incomplète",
+   "bodyText": "Bonjour,\n\nNous n'avons pas pu livrer le colis CE-449103 (destinataire : M. Bruno Lefèvre, Lyon) : le numéro de bâtiment est manquant.\n\nLe colis est conservé 5 jours ouvrés dans notre agence. Merci de nous communiquer l'adresse complète en répondant à ce message.\n\nService clients Coursier Express",
+   "minutesAgo": 240,
+   "labels": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-pot-1",
+   "threadId": "t-potager",
+   "from": "Antoine Vidal <antoine@restaurant-le-potager.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Mignardises pour le restaurant",
+   "bodyText": "Bonjour,\n\nNous cherchons des mignardises au chocolat pour accompagner nos cafés, environ 400 pièces par mois. Pourriez-vous nous faire une proposition ?\n\nAntoine Vidal\nRestaurant Le Potager",
+   "minutesAgo": 5760,
+   "labels": [
+    "INBOX"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-pot-2",
+   "threadId": "t-potager",
+   "from": "Carine <carine@monjardinchocolate.example>",
+   "to": [
+    "Antoine Vidal <antoine@restaurant-le-potager.example>"
+   ],
+   "cc": [],
+   "subject": "Re: Mignardises pour le restaurant",
+   "bodyText": "Bonjour Antoine,\n\nMerci pour votre message !\n\nJe vous propose nos mendiants aux graines et fleurs du jardin, à 0,45 € HT la pièce pour 400 pièces par mois, livrés chaque début de mois.\n\nJe peux vous déposer un échantillon cette semaine. Quel jour vous arrange ?\n\nCarine, votre chocolatière\n06 61 74 63 54",
+   "minutesAgo": 2880,
+   "labels": [
+    "SENT"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-hor-1",
+   "threadId": "t-horizon",
+   "from": "Carine <carine@monjardinchocolate.example>",
+   "to": [
+    "Claire Benoît <claire.benoit@cse-mutuelle-horizon.example>"
+   ],
+   "cc": [],
+   "subject": "Étiquettes personnalisées : BAT",
+   "bodyText": "Bonjour Claire,\n\nVous trouverez le BAT des étiquettes personnalisées pour vos 60 coffrets en pièce jointe.\n\nDès votre validation, nous lançons l'impression.\n\nCarine",
+   "minutesAgo": 17280,
+   "labels": [
+    "SENT"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-hor-2",
+   "threadId": "t-horizon",
+   "from": "Claire Benoît <claire.benoit@cse-mutuelle-horizon.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Re: Étiquettes personnalisées : BAT",
+   "bodyText": "Bonjour Carine,\n\nDésolée, je n'avais pas vu votre message. Je ne trouve pas la pièce jointe, pouvez-vous me renvoyer le BAT ?\n\nNous devons valider avant mercredi pour tenir notre calendrier.\n\nClaire",
+   "minutesAgo": 1560,
+   "labels": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-photo-1",
+   "threadId": "t-photos",
+   "from": "Léa Fontaine Photographie <lea@leafontaine-photo.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Photos du shooting de Noël",
+   "bodyText": "Bonjour Carine,\n\nLes 24 photos retouchées du shooting de Noël sont prêtes, en haute définition et en format réseaux sociaux.\n\nJe vous envoie le lien de téléchargement dès réception du solde (180 €).\n\nBelle journée,\nLéa",
+   "minutesAgo": 7200,
+   "labels": [
+    "INBOX"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-ass-1",
+   "threadId": "t-assurance",
+   "from": "Mutuelle des Artisans - Contrats <contrats@mutuelle-artisans.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Renouvellement de votre contrat multirisque",
+   "bodyText": "Madame,\n\nVotre contrat multirisque professionnelle arrive à échéance le 31 décembre. Sans réponse de votre part, il sera reconduit aux mêmes conditions, avec une cotisation annuelle de 1 184 € TTC (+3,2 %).\n\nVotre conseiller reste à votre disposition pour revoir vos garanties.\n\nService Contrats",
+   "minutesAgo": 8640,
+   "labels": [
+    "INBOX"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-merci-1",
+   "threadId": "t-merci",
+   "from": "Jacques Morel <jacques.morel@mailbox.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Merci !",
+   "bodyText": "Bonjour,\n\nJe voulais simplement vous dire que les chocolats au jasmin ont fait sensation au mariage de ma fille samedi. Tout le monde voulait savoir d'où ils venaient !\n\nMerci pour votre travail.\nJacques",
+   "minutesAgo": 3120,
+   "labels": [
+    "INBOX"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-annie-4",
+   "threadId": "t-annie-enfants",
+   "from": "Annie Do <annie.do@cse-atelier-lumen.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Atelier chocolat pour les enfants des salariés ?",
+   "bodyText": "Bonjour Carine,\n\nAutre idée pour l'an prochain : nous aimerions organiser un atelier chocolat pour les enfants des salariés pendant les vacances de février. Une vingtaine d'enfants de 6 à 12 ans.\n\nEst-ce quelque chose que vous proposez ? Pas d'urgence, on en reparle après Noël.\n\nAnnie",
+   "minutesAgo": 4440,
+   "labels": [
+    "INBOX"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-tilia-1",
+   "threadId": "t-tilia",
+   "from": "Romain Giraud <romain.giraud@agence-tilia.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Calendriers de l'Avent pour nos clients",
+   "bodyText": "Bonjour,\n\nNous souhaitons offrir 25 calendriers de l'Avent à nos meilleurs clients. Pouvez-vous les livrer à notre agence (Paris 11e) avant le 28 novembre ?\n\nMerci de m'indiquer le prix unitaire et les frais de livraison.\n\nRomain Giraud\nAgence Tilia",
+   "minutesAgo": 1380,
+   "labels": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-jasmin-1",
+   "threadId": "t-jasmin",
+   "from": "Jardins de Provence Bio <contact@jardins-provence-bio.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Fleurs de jasmin séchées : nouvelle récolte",
+   "bodyText": "Bonjour,\n\nLa nouvelle récolte de fleurs de jasmin séchées est disponible. Le prix passe à 92 € HT le kilo (contre 85 € l'an dernier) en raison d'une récolte plus faible.\n\nSouhaitez-vous que nous vous réservions vos 3 kg habituels ?\n\nL'équipe des Jardins de Provence Bio",
+   "minutesAgo": 1800,
+   "labels": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-equipe-1",
+   "threadId": "t-equipe",
+   "from": "Carine <carine@monjardinchocolate.example>",
+   "to": [
+    "Équipe <equipe@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Planning de la semaine",
+   "bodyText": "Bonjour à tous,\n\nCette semaine, priorité aux coffrets CSE : 85 pour l'Atelier Lumen et 60 pour la Mutuelle Horizon.\n\nAtelier enfants samedi à 10 h : attention, un enfant allergique aux fruits à coque.\n\nMerci !\n\nCarine",
+   "minutesAgo": 2640,
+   "labels": [
+    "SENT"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-banque-1",
+   "threadId": "t-banque",
+   "from": "Conseiller professionnel <conseiller.pro@banque-cooperative.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Rendez-vous annuel",
+   "bodyText": "Bonjour Madame,\n\nJe vous propose notre point annuel pour faire le bilan de l'année et préparer vos projets (investissement en matériel, trésorerie de fin d'année).\n\nSeriez-vous disponible la semaine du 8 décembre ?\n\nVotre conseiller professionnel",
+   "minutesAgo": 5940,
+   "labels": [
+    "INBOX"
+   ],
+   "has_list_unsubscribe": false
+  },
+  {
+   "id": "m-lef-1",
+   "threadId": "t-lefevre",
+   "from": "Bruno Lefèvre <bruno.lefevre@mailbox.example>",
+   "to": [
+    "Carine <carine@monjardinchocolate.example>"
+   ],
+   "cc": [],
+   "subject": "Commande 20470 : suivi",
+   "bodyText": "Bonjour,\n\nLe suivi de ma commande indique \"incident de livraison\". Que se passe-t-il ? J'habite bien au 8 rue Vauban à Lyon, bâtiment C.\n\nBruno Lefèvre",
+   "minutesAgo": 210,
+   "labels": [
+    "INBOX",
+    "UNREAD"
+   ],
+   "has_list_unsubscribe": false
+  }
+ ],
+ "todos": [
+  {
+   "id": "todo-paie",
+   "text": "Envoyer les éléments de paie à Bastien",
+   "details": "Heures sup, arrivée des extras de décembre, absences. Avant vendredi midi.",
+   "todo_kind": "Ponctuel",
+   "dueInDays": 1,
+   "done": false,
+   "source_thread_id": "t-bastien",
+   "source_message_id": "m-bastien-3",
+   "source_subject": "Paie de novembre : éléments variables"
+  },
+  {
+   "id": "todo-cacao",
+   "text": "Répondre à Andino Cacao sur le dépannage de 40 kg",
+   "details": "",
+   "todo_kind": "Ponctuel",
+   "dueInDays": 0,
+   "done": false,
+   "source_thread_id": "t-cacao",
+   "source_message_id": "m-cacao-1",
+   "source_subject": "Retard de livraison : couverture 70 % Équateur"
+  },
+  {
+   "id": "todo-colis",
+   "text": "Préparer les colis de la semaine",
+   "details": "",
+   "todo_kind": "Récurrent",
+   "recurrence": "Hebdomadaire",
+   "anchorDaysAgo": 14
+  },
+  {
+   "id": "todo-tva",
+   "text": "Déclaration de TVA",
+   "details": "Sur l'espace professionnel des impôts.",
+   "todo_kind": "Récurrent",
+   "recurrence": "Mensuel",
+   "anchorDaysAgo": 40
+  },
+  {
+   "id": "todo-vitrine",
+   "text": "Installer la vitrine de Noël",
+   "details": "",
+   "todo_kind": "Ponctuel",
+   "dueInDays": -2,
+   "done": true
+  },
+  {
+   "id": "todo-inventaire",
+   "text": "Inventaire des boîtes kraft et des rubans",
+   "details": "",
+   "todo_kind": "Ponctuel",
+   "dueInDays": 4,
+   "done": false
+  }
+ ]
+}

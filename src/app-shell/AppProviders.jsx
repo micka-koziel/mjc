@@ -32,7 +32,8 @@ export function AppProviders({ children }) {
   useEffect(() => (service ? service.onAuth(setUser) : undefined), [service]);
 
   useEffect(() => {
-    if (!service || !user) return undefined;
+    // Adresse non vérifiée : les règles d'accès refuseraient la lecture.
+    if (!service || !user || user.emailVerified === false) return undefined;
     const u1 = service.subscribeMessages(setMail);
     const u2 = service.subscribeTodos(setTodoState);
     return () => {
